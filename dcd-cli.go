@@ -21,7 +21,7 @@ THE SOFTWARE.
 */
 package main
 
-import "dcd_cli/cmd"
+import "github.com/dolong2/dcd-cli/cmd"
 
 func main() {
 	cmd.Execute()
