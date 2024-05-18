@@ -1,4 +1,4 @@
-module dcd-cli
+module github.com/dolong2/dcd-cli
 
 go 1.21
 
