@@ -22,7 +22,7 @@ var createCmd = &cobra.Command{
 			return
 		}
 		if fileDirectory == "" && template == "" {
-			err := errors.New("There must be required either file flag or template flag")
+			err := errors.New("there must be required either file flag or template flag")
 			cmd.PrintErrln("error:", err)
 			os.Exit(1)
 			return
