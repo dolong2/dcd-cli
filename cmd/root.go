@@ -22,9 +22,10 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"os"
-
+	"errors"
+	cmdError "github.com/dolong2/dcd-cli/err"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -49,7 +50,12 @@ For more information, please visit https://github.com/dolong2/dcd-client
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
-		os.Exit(1)
+		var cmdErr *cmdError.CmdError
+		if errors.As(err, &cmdErr) {
+			os.Exit(cmdErr.Code)
+		} else {
+			os.Exit(1)
+		}
 	}
 }
 
