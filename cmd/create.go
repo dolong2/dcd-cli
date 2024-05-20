@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
+	cmdError "github.com/dolong2/dcd-cli/err"
 	"github.com/spf13/cobra"
 )
 
@@ -17,10 +17,10 @@ var createCmd = &cobra.Command{
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
 		if fileErr != nil || templateErr != nil {
-			return nil
+			return cmdError.NewCmdError(2, "invalid flag")
 		}
 		if fileDirectory == "" && template == "" {
-			err := errors.New("there must be required either file flag or template flag")
+			err := cmdError.NewCmdError(1, "there must be required either file flag or template flag")
 			return err
 		} else if fileDirectory != "" {
 			//TODO 실제로 리소스 생성요청을 보내는 메서드 호출
