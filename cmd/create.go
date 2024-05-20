@@ -3,8 +3,6 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"os"
-
 	"github.com/spf13/cobra"
 )
 
@@ -15,17 +13,15 @@ var createCmd = &cobra.Command{
 	Example: `dcd-cli create [flags]
 	resource type is optional
 `,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
 		if fileErr != nil || templateErr != nil {
-			return
+			return nil
 		}
 		if fileDirectory == "" && template == "" {
 			err := errors.New("there must be required either file flag or template flag")
-			cmd.PrintErrln("error:", err)
-			os.Exit(1)
-			return
+			return err
 		} else if fileDirectory != "" {
 			//TODO 실제로 리소스 생성요청을 보내는 메서드 호출
 			fmt.Println(fileDirectory)
@@ -34,6 +30,7 @@ var createCmd = &cobra.Command{
 			fmt.Println(template)
 		}
 		fmt.Println("create called")
+		return nil
 	},
 }
 
