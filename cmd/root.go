@@ -30,7 +30,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "dcd-cli",
+	Use:   "dcd",
 	Short: "CLI for DCD Service",
 	Long: `#####      ####   #####               ####    ###       ##                         ##
 ## ##    ##  ##   ## ##             ##  ##    ##                                  ##
