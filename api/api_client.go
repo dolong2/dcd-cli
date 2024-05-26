@@ -2,12 +2,18 @@ package api
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"io"
 	"net/http"
 )
 
 var baseUrl = "http://localhost:8081"
+
+type apiErrorResponse struct {
+	Status  int    `json:"status"`
+	Message string `json:"message"`
+}
 
 func SendPost(targetUrl string, header map[string]string, body []byte) ([]byte, error) {
 	httpClient := &http.Client{}
@@ -29,7 +35,13 @@ func SendPost(targetUrl string, header map[string]string, body []byte) ([]byte, 
 
 	// 200번대 응답코드가 아닐때 에러
 	if httpResponse.StatusCode/100 != 2 {
-		return []byte(""), errors.New("response status code is not 2xx")
+		rawErrorResponse, err := io.ReadAll(httpResponse.Body)
+		if err != nil {
+			return []byte(""), err
+		}
+		errorResponse := apiErrorResponse{}
+		json.Unmarshal(rawErrorResponse, &errorResponse)
+		return []byte(""), errors.New(errorResponse.Message)
 	}
 
 	result, err := io.ReadAll(httpResponse.Body)
