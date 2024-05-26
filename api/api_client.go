@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"net/http"
 )
@@ -25,6 +26,11 @@ func SendPost(targetUrl string, header map[string]string, body []byte) ([]byte, 
 		return []byte(""), err
 	}
 	defer httpResponse.Body.Close()
+
+	// 200번대 응답코드가 아닐때 에러
+	if httpResponse.StatusCode/100 != 2 {
+		return []byte(""), errors.New("response status code is not 2xx")
+	}
 
 	result, err := io.ReadAll(httpResponse.Body)
 	if err != nil {
