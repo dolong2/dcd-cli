@@ -6,9 +6,11 @@ import (
 	"net/http"
 )
 
+var baseUrl = "http://localhost:8081"
+
 func SendPost(targetUrl string, header map[string]string, body []byte) ([]byte, error) {
 	httpClient := &http.Client{}
-	request, err := http.NewRequest("POST", targetUrl, bytes.NewBuffer(body))
+	request, err := http.NewRequest("POST", baseUrl+targetUrl, bytes.NewBuffer(body))
 	if err != nil {
 		return []byte(""), err
 	}
