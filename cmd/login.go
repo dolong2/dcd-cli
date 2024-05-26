@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/err"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
@@ -23,13 +24,19 @@ var loginCmd = &cobra.Command{
 		if existsPassword {
 			fmt.Print("Enter password: ")
 			bytePassword, err := term.ReadPassword(int(os.Stdin.Fd()))
+			fmt.Println()
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
 			password = string(bytePassword)
 		}
-		fmt.Println(email)
-		fmt.Println(password)
+
+		tokenRequest := exec.TokenRequest{Email: email, Password: password}
+		err := exec.Login(&tokenRequest)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+
 		return nil
 	},
 }
