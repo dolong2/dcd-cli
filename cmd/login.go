@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
-	cmdError "github.com/dolong2/dcd-cli/err"
+	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 	"os"
