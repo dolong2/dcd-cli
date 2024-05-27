@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	cmdError "github.com/dolong2/dcd-cli/err"
+	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/spf13/cobra"
 )
 

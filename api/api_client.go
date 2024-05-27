@@ -3,7 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	httpErr "github.com/dolong2/dcd-cli/err"
+	httpErr "github.com/dolong2/dcd-cli/api/err"
 	"io"
 	"net/http"
 )
