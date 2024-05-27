@@ -3,7 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
+	httpErr "github.com/dolong2/dcd-cli/err"
 	"io"
 	"net/http"
 )
@@ -41,7 +41,7 @@ func SendPost(targetUrl string, header map[string]string, body []byte) ([]byte, 
 		}
 		errorResponse := apiErrorResponse{}
 		json.Unmarshal(rawErrorResponse, &errorResponse)
-		return []byte(""), errors.New(errorResponse.Message)
+		return []byte(""), httpErr.NewHttpError(errorResponse.Status, errorResponse.Message)
 	}
 
 	result, err := io.ReadAll(httpResponse.Body)
