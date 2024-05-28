@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/dolong2/dcd-cli/api/exec"
 	"os"
 	"time"
 )
@@ -17,7 +18,7 @@ func GetAccessToken() (string, error) {
 	}
 
 	const timeFormat = "2006-01-02T15:04:05"
-
+getTokenInfo:
 	tokenInfoFile, err := os.Open("./dcd-info/token-info.json")
 	if err != nil {
 		return "", err
@@ -46,7 +47,11 @@ func GetAccessToken() (string, error) {
 	// AccessToken이 만료되었을때 토큰 재발급
 	now := time.Now()
 	if now.After(accessTokenExp) {
-		//TODO 토큰 재발급 실행
+		err := exec.ReissueToken(raw["refreshToken"].(string))
+		if err != nil {
+			return "", err
+		}
+		goto getTokenInfo
 	} else if now.After(refreshTokenExp) {
 		return "", errors.New("login info is expired.\nplease retry login.")
 	}
