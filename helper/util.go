@@ -33,19 +33,19 @@ getTokenInfo:
 	}
 
 	// 커스텀 시간 형식 파싱
-	accessTokenExp, err := time.Parse(timeFormat, raw["accessTokenExp"].(string))
+	accessTokenExp, err := time.ParseInLocation(timeFormat, raw["accessTokenExp"].(string), time.Local)
 	if err != nil {
 		fmt.Println("AccessTokenExp 파싱 중 오류 발생:", err)
 		return "", err
 	}
-	refreshTokenExp, err := time.Parse(timeFormat, raw["refreshTokenExp"].(string))
+	refreshTokenExp, err := time.ParseInLocation(timeFormat, raw["refreshTokenExp"].(string), time.Local)
 	if err != nil {
 		fmt.Println("RefreshTokenExp 파싱 중 오류 발생:", err)
 		return "", err
 	}
 
 	// AccessToken이 만료되었을때 토큰 재발급
-	now := time.Now()
+	now := time.Now().Local()
 	if now.After(accessTokenExp) {
 		err := exec.ReissueToken(raw["refreshToken"].(string))
 		if err != nil {
