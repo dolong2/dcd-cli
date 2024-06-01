@@ -1,10 +1,9 @@
-package helper
+package exec
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/dolong2/dcd-cli/api/exec"
 	"os"
 	"time"
 )
@@ -47,7 +46,7 @@ getTokenInfo:
 	// AccessToken이 만료되었을때 토큰 재발급
 	now := time.Now().Local()
 	if now.After(accessTokenExp) {
-		err := exec.ReissueToken(raw["refreshToken"].(string))
+		err := ReissueToken(raw["refreshToken"].(string))
 		if err != nil {
 			return "", err
 		}
