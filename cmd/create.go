@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/spf13/cobra"
 )
@@ -23,13 +24,17 @@ var createCmd = &cobra.Command{
 			err := cmdError.NewCmdError(1, "there must be required either file flag or template flag")
 			return err
 		} else if fileDirectory != "" {
-			//TODO 실제로 리소스 생성요청을 보내는 메서드 호출
-			fmt.Println(fileDirectory)
+			err := exec.CreateByPath(fileDirectory)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		} else if template != "" {
-			//TODO 실제로 리소스 생성요청을 보내는 메서드 호출
-			fmt.Println(template)
+			err := exec.CreateByTemplate(template)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		}
-		fmt.Println("create called")
+		fmt.Println("Successfully created resource!")
 		return nil
 	},
 }
