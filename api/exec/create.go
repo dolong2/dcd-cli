@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/dolong2/dcd-cli/api"
 	"os"
+	"strconv"
 )
 
 type metaData struct {
@@ -25,6 +26,26 @@ type workspaceRequest struct {
 	ResourceType string `json:"resourceType"`
 	Name         string `json:"title"`
 	Description  string `json:"description"`
+}
+
+type applicationTemplate struct {
+	Metadata        metaData          `json:"metadata"`
+	WorkspaceId     int64             `json:"workspaceId"`
+	GithubUrl       string            `json:"githubUrl"`
+	Env             map[string]string `json:"env"`
+	ApplicationType string            `json:"applicationType"`
+	Port            int               `json:"port"`
+	Version         string            `json:"version"`
+}
+
+type applicationRequest struct {
+	Name            string            `json:"title"`
+	Description     string            `json:"description"`
+	GithubUrl       string            `json:"githubUrl"`
+	Env             map[string]string `json:"env"`
+	ApplicationType string            `json:"applicationType"`
+	Port            int               `json:"port"`
+	Version         string            `json:"version"`
 }
 
 func CreateByPath(fileDirectory string) error {
@@ -77,6 +98,30 @@ func create(content []byte) error {
 		}
 
 		_, err = api.SendPost("/workspace", header, request)
+		if err != nil {
+			return err
+		}
+	} else if resourceType == "APPLICATION" {
+		var application applicationTemplate
+		err := json.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := json.Marshal(applicationRequest{
+			Name:            application.Metadata.Name,
+			Description:     application.Metadata.Description,
+			GithubUrl:       application.GithubUrl,
+			Env:             application.Env,
+			ApplicationType: application.ApplicationType,
+			Port:            application.Port,
+			Version:         application.Version,
+		})
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPost("/application/"+strconv.FormatInt(application.WorkspaceId, 10), header, request)
 		if err != nil {
 			return err
 		}
