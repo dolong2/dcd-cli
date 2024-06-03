@@ -6,11 +6,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// workspaceCmd represents the workspace command
-var workspaceCmd = &cobra.Command{
-	Use:   "workspace",
-	Short: "sub command to get workspace",
-	Long:  `this command can be used to get workspace`,
+// workspacesCmd represents the workspace command
+var workspacesCmd = &cobra.Command{
+	Use:   "workspaces",
+	Short: "sub command to get workspaces",
+	Long:  `this command can be used to get workspaces`,
 	Run: func(cmd *cobra.Command, args []string) {
 		workspaceList, err := exec.GetWorkspace()
 		if err != nil {
@@ -23,5 +23,5 @@ var workspaceCmd = &cobra.Command{
 }
 
 func init() {
-	getCmd.AddCommand(workspaceCmd)
+	getCmd.AddCommand(workspacesCmd)
 }
