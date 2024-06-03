@@ -9,8 +9,8 @@ import (
 // workspaceCmd represents the workspace command
 var workspaceCmd = &cobra.Command{
 	Use:   "workspace",
-	Short: "sub command to get workspace",
-	Long:  `this command can be used to get workspace`,
+	Short: "sub command to get workspaces",
+	Long:  `this command can be used to get workspaces`,
 	Run: func(cmd *cobra.Command, args []string) {
 		workspaceList, err := exec.GetWorkspace()
 		if err != nil {
