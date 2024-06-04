@@ -24,4 +24,5 @@ var workspacesCmd = &cobra.Command{
 
 func init() {
 	getCmd.AddCommand(workspacesCmd)
+	workspacesCmd.Flags().StringP("id", "", "", "use this flag to get a workspace by ID")
 }
