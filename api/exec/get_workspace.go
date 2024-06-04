@@ -15,7 +15,7 @@ type WorkspaceResponse struct {
 	Description string `json:"description"`
 }
 
-func GetWorkspace() (*WorkspaceListResponse, error) {
+func GetWorkspaces() (*WorkspaceListResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
