@@ -3,6 +3,7 @@ package api
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	httpErr "github.com/dolong2/dcd-cli/api/err"
 	"io"
 	"net/http"
@@ -15,8 +16,15 @@ type apiErrorResponse struct {
 	Message string `json:"message"`
 }
 
-func SendGet(targetUrl string, header map[string]string) ([]byte, error) {
+func SendGet(targetUrl string, header map[string]string, param map[string]string) ([]byte, error) {
 	httpClient := &http.Client{}
+	if len(param) != 0 {
+		targetUrl += "?"
+	}
+	for key, value := range param {
+		targetUrl += fmt.Sprintf("%s=%s&", key, value)
+	}
+
 	request, err := http.NewRequest("GET", baseUrl+targetUrl, bytes.NewBuffer([]byte("")))
 	if err != nil {
 		return []byte(""), err

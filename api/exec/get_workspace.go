@@ -23,7 +23,7 @@ func GetWorkspaces() (*WorkspaceListResponse, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/workspace", header)
+	response, err := api.SendGet("/workspace", header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func GetWorkspace(id string) (*WorkspaceResponse, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/workspace/"+id, header)
+	response, err := api.SendGet("/workspace/"+id, header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
