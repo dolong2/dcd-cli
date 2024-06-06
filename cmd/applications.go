@@ -15,15 +15,27 @@ var applicationsCmd = &cobra.Command{
 	Long:  `this command can be used to get workspaces`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, existsWorkspaceId := cmd.Flags().GetString("workspace")
-		if existsWorkspaceId != nil || workspaceId == "" {
+		applicationId, existsApplicationId := cmd.Flags().GetString("id")
+		if (existsWorkspaceId != nil || workspaceId == "") && (existsApplicationId != nil || applicationId == "") {
 			return cmdError.NewCmdError(1, "requires workspace flag to get your applications")
 		}
-		applicationListResponse, err := exec.GetApplications(workspaceId)
-		if err != nil {
-			return cmdError.NewCmdError(1, err.Error())
+		if workspaceId != "" && applicationId != "" {
+			return cmdError.NewCmdError(125, "simultaneous use of workspaceId and application is not permitted")
 		}
-		for _, application := range applicationListResponse.Applications {
-			printApplication(application)
+		if workspaceId != "" {
+			applicationListResponse, err := exec.GetApplications(workspaceId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+			for _, application := range applicationListResponse.Applications {
+				printApplication(application)
+			}
+		} else if applicationId != "" {
+			applicationResponse, err := exec.GetApplication(applicationId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+			printApplication(*applicationResponse)
 		}
 		return nil
 	},
