@@ -32,6 +32,7 @@ var applicationsCmd = &cobra.Command{
 func init() {
 	getCmd.AddCommand(applicationsCmd)
 	applicationsCmd.Flags().StringP("workspace", "w", "", "use to identify workspace")
+	applicationsCmd.Flags().StringP("id", "", "", "use to get an application by applicationId")
 }
 
 func printApplication(application exec.ApplicationResponse) {
