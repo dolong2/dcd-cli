@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
+	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 
 	"github.com/spf13/cobra"
 )
@@ -12,14 +13,14 @@ var applicationsCmd = &cobra.Command{
 	Use:   "applications",
 	Short: "sub command to get applications",
 	Long:  `this command can be used to get workspaces`,
-	Run: func(cmd *cobra.Command, args []string) {
-		workspaceId, err2 := cmd.Flags().GetString("workspace")
-		if err2 != nil {
-			fmt.Println(err2)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		workspaceId, existsWorkspaceId := cmd.Flags().GetString("workspace")
+		if existsWorkspaceId != nil || workspaceId == "" {
+			return cmdError.NewCmdError(1, "requires workspace flag to get your applications")
 		}
 		applicationListResponse, err := exec.GetApplications(workspaceId)
 		if err != nil {
-			fmt.Println(err)
+			return cmdError.NewCmdError(1, err.Error())
 		}
 		for _, application := range applicationListResponse.Applications {
 			fmt.Printf("ID: %s\n", application.Id)
@@ -37,6 +38,7 @@ var applicationsCmd = &cobra.Command{
 			fmt.Printf("Version: %s\n", application.Version)
 			fmt.Printf("Status: %s\n", application.Status)
 		}
+		return nil
 	},
 }
 
