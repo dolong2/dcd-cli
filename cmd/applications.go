@@ -23,20 +23,7 @@ var applicationsCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, err.Error())
 		}
 		for _, application := range applicationListResponse.Applications {
-			fmt.Printf("ID: %s\n", application.Id)
-			fmt.Printf("Name: %s\n", application.Name)
-			fmt.Printf("Description: %s\n", application.Description)
-			fmt.Printf("Application Type: %s\n", application.ApplicationType)
-			fmt.Printf("GitHub URL: %s\n", application.GithubUrl)
-			fmt.Printf("Environment Variables: [\n")
-			for key, value := range application.Env {
-				fmt.Printf("  %s: %s\n", key, value)
-			}
-			fmt.Printf("]\n")
-			fmt.Printf("Port: %d\n", application.Port)
-			fmt.Printf("External Port: %d\n", application.ExternalPort)
-			fmt.Printf("Version: %s\n", application.Version)
-			fmt.Printf("Status: %s\n", application.Status)
+			printApplication(application)
 		}
 		return nil
 	},
@@ -45,4 +32,23 @@ var applicationsCmd = &cobra.Command{
 func init() {
 	getCmd.AddCommand(applicationsCmd)
 	applicationsCmd.Flags().StringP("workspace", "w", "", "use to identify workspace")
+}
+
+func printApplication(application exec.ApplicationResponse) {
+	fmt.Printf("ID: %s\n", application.Id)
+	fmt.Printf("Name: %s\n", application.Name)
+	fmt.Printf("Description: %s\n", application.Description)
+	fmt.Printf("Application Type: %s\n", application.ApplicationType)
+	fmt.Printf("GitHub URL: %s\n", application.GithubUrl)
+	fmt.Printf("Environment Variables: [\n")
+	for key, value := range application.Env {
+		fmt.Printf("  %s: %s\n", key, value)
+	}
+	fmt.Printf("]\n")
+	fmt.Printf("Port: %d\n", application.Port)
+	fmt.Printf("External Port: %d\n", application.ExternalPort)
+	fmt.Printf("Version: %s\n", application.Version)
+	fmt.Printf("Status: %s\n", application.Status)
+	fmt.Println()
+	fmt.Println()
 }
