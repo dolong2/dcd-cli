@@ -44,3 +44,25 @@ func GetApplications(workspaceId string) (*ApplicationListResponse, error) {
 
 	return &applicationListResponse, nil
 }
+
+func GetApplication(applicationId string) (*ApplicationResponse, error) {
+	header := make(map[string]string)
+	accessToken, err := GetAccessToken()
+	if err != nil {
+		return nil, err
+	}
+	header["Authorization"] = "Bearer " + accessToken
+
+	response, err := api.SendGet("/application/"+applicationId, header, map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+
+	var applicationResponse ApplicationResponse
+	err = json.Unmarshal(response, &applicationResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &applicationResponse, nil
+}
