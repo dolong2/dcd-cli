@@ -28,7 +28,6 @@ var addCmd = &cobra.Command{
 
 func init() {
 	envCmd.AddCommand(addCmd)
-	addCmd.Flags().StringP("application", "", "", "input application id")
 	addCmd.Flags().StringP("key", "k", "", "environment key")
 	addCmd.Flags().StringP("value", "v", "", "environment value")
 }
