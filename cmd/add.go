@@ -8,7 +8,7 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add <applicationId> [flags]",
 	Short: "use to add an application env",
 	Long:  `this command can be used to add a env to an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
