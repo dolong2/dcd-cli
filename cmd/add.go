@@ -12,11 +12,14 @@ var addCmd = &cobra.Command{
 	Short: "use to add an application env",
 	Long:  `this command can be used to add a env to an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		application, existsAppId := cmd.Flags().GetString("application")
+		if len(args) == 0 {
+			return cmdError.NewCmdError(1, "must specify applicationId")
+		}
+		application := args[0]
 		key, existsKey := cmd.Flags().GetString("key")
 		value, existsValue := cmd.Flags().GetString("value")
-		if application == "" || key == "" || value == "" || existsAppId != nil || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both application and key and value")
+		if key == "" || value == "" || existsKey != nil || existsValue != nil {
+			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
 		}
 		err := exec.AddEnv(application, key, value)
 		if err != nil {
