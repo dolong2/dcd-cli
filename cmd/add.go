@@ -8,15 +8,18 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:   "add",
+	Use:   "add <applicationId> [flags]",
 	Short: "use to add an application env",
 	Long:  `this command can be used to add a env to an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		application, existsAppId := cmd.Flags().GetString("application")
+		if len(args) == 0 {
+			return cmdError.NewCmdError(1, "must specify applicationId")
+		}
+		application := args[0]
 		key, existsKey := cmd.Flags().GetString("key")
 		value, existsValue := cmd.Flags().GetString("value")
-		if application == "" || key == "" || value == "" || existsAppId != nil || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both application and key and value")
+		if key == "" || value == "" || existsKey != nil || existsValue != nil {
+			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
 		}
 		err := exec.AddEnv(application, key, value)
 		if err != nil {
@@ -28,7 +31,6 @@ var addCmd = &cobra.Command{
 
 func init() {
 	envCmd.AddCommand(addCmd)
-	addCmd.Flags().StringP("application", "", "", "input application id")
 	addCmd.Flags().StringP("key", "k", "", "environment key")
 	addCmd.Flags().StringP("value", "v", "", "environment value")
 }

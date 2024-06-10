@@ -8,17 +8,17 @@ import (
 
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
-	Use:   "rm [envKey] [flags]",
+	Use:   "rm <applicationId> [flags]",
 	Short: "use to delete an application's env",
 	Long:  `this command is used to delete an application's env`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "should specify envKey")
+			return cmdError.NewCmdError(1, "must specify applicationId")
 		}
-		envKey := args[0]
-		applicationId, err := cmd.Flags().GetString("application")
-		if err != nil || applicationId == "" {
-			return cmdError.NewCmdError(1, "should specify applicationId")
+		applicationId := args[0]
+		envKey, err := cmd.Flags().GetString("key")
+		if err != nil || envKey == "" {
+			return cmdError.NewCmdError(1, "should specify envKey")
 		}
 
 		err = exec.RemoveEnv(applicationId, envKey)
@@ -33,5 +33,5 @@ var rmCmd = &cobra.Command{
 func init() {
 	envCmd.AddCommand(rmCmd)
 
-	rmCmd.Flags().StringP("application", "", "", "select an application to delete env")
+	rmCmd.Flags().StringP("key", "", "", "select an key to delete")
 }
