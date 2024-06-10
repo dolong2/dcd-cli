@@ -33,5 +33,5 @@ var rmCmd = &cobra.Command{
 func init() {
 	envCmd.AddCommand(rmCmd)
 
-	rmCmd.Flags().StringP("application", "", "", "select an application to delete env")
+	rmCmd.Flags().StringP("key", "", "", "select an key to delete")
 }
