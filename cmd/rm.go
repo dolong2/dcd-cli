@@ -8,7 +8,7 @@ import (
 
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
-	Use:   "rm [envKey] [flags]",
+	Use:   "rm <applicationId> [flags]",
 	Short: "use to delete an application's env",
 	Long:  `this command is used to delete an application's env`,
 	RunE: func(cmd *cobra.Command, args []string) error {
