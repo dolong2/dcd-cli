@@ -17,6 +17,27 @@ resourceType:
 	},
 }
 
+func getWorkspace(cmd *cobra.Command) error {
+	id, existsFlagErr := cmd.Flags().GetString("id")
+	if id == "" || existsFlagErr != nil {
+		workspaceList, err := exec.GetWorkspaces()
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		for _, workspace := range workspaceList.List {
+			fmt.Printf("ID: %s\nTitle: %s\nDescription: %s\n\n", workspace.Id, workspace.Title, workspace.Description)
+		}
+	} else {
+		workspace, err := exec.GetWorkspace(id)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		fmt.Printf("ID: %s\nTitle: %s\nDescription: %s\n\n", workspace.Id, workspace.Title, workspace.Description)
+	}
+	return nil
+}
+}
+
 func init() {
 	rootCmd.AddCommand(getCmd)
 }
