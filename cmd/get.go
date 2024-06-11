@@ -16,7 +16,25 @@ resourceType:
 	workspaces - this resource type refers a resource that has applications and be sectioned networks
 	applications - this resource type refers a resource that works something in a container
 `,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) == 0 {
+			return cmdError.NewCmdError(1, "must specify resource type")
+		}
+		resourceType := args[0]
+
+		if resourceType == "applications" {
+			err, done := getApplication(cmd)
+			if done {
+				return err
+			}
+		} else if resourceType == "workspaces" {
+			err := getWorkspace(cmd)
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
 	},
 }
 
