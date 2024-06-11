@@ -69,6 +69,9 @@ func getApplication(cmd *cobra.Command) (error, bool) {
 
 func init() {
 	rootCmd.AddCommand(getCmd)
+
+	getCmd.Flags().StringP("workspace", "w", "", "used to get resources in a workspace")
+	getCmd.Flags().StringP("id", "", "", "specify resource id")
 }
 
 func printApplication(application exec.ApplicationResponse) {
