@@ -9,7 +9,9 @@ var getCmd = &cobra.Command{
 	Use:   "get <resourceType> [flags]",
 	Short: "command to get resources",
 	Long: `this command is used to get resources.
-for example: dcd get [resourceType] [options]
+resourceType:
+	workspaces - this resource type refers a resource that has applications and be sectioned networks
+	applications - this resource type refers a resource that works something in a container
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 	},
