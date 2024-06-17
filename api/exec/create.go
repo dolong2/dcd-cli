@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/dolong2/dcd-cli/api"
+	"gopkg.in/yaml.v3"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -54,15 +56,27 @@ func CreateByPath(fileDirectory string) error {
 		return err
 	}
 
-	err = create(content)
-	if err != nil {
-		return err
+	ext := filepath.Ext(fileDirectory)
+	switch ext {
+	case ".json":
+		err = createByJson(content)
+		if err != nil {
+			return err
+		}
+	case ".yml", ".yaml":
+		err = createByYml(content)
+		if err != nil {
+			return err
+		}
+	default:
+		return errors.New("invalid file extension")
 	}
+
 	return nil
 }
 
 func CreateByTemplate(rawTemplate string) error {
-	err := create([]byte(rawTemplate))
+	err := createByJson([]byte(rawTemplate))
 	if err != nil {
 		return err
 	}
@@ -70,7 +84,7 @@ func CreateByTemplate(rawTemplate string) error {
 	return nil
 }
 
-func create(content []byte) error {
+func createByJson(content []byte) error {
 	var data parsingMetaData
 	err := json.Unmarshal(content, &data)
 	if err != nil {
@@ -109,6 +123,68 @@ func create(content []byte) error {
 		}
 
 		request, err := json.Marshal(applicationRequest{
+			Name:            application.Metadata.Name,
+			Description:     application.Metadata.Description,
+			GithubUrl:       application.GithubUrl,
+			Env:             application.Env,
+			ApplicationType: application.ApplicationType,
+			Port:            application.Port,
+			Version:         application.Version,
+		})
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPost("/application/"+strconv.FormatInt(application.WorkspaceId, 10), header, request)
+		if err != nil {
+			return err
+		}
+	} else {
+		return errors.New(" this resource type is not supported")
+	}
+
+	return nil
+}
+
+func createByYml(content []byte) error {
+	var data parsingMetaData
+	err := yaml.Unmarshal(content, &data)
+	if err != nil {
+		return err
+	}
+
+	header := make(map[string]string)
+	token, err := GetAccessToken()
+	header["Authorization"] = "Bearer " + token
+	if err != nil {
+		return err
+	}
+
+	resourceType := data.Metadata.ResourceType
+	if resourceType == "WORKSPACE" {
+		var workspace workspaceTemplate
+		err = yaml.Unmarshal(content, &workspace)
+		if err != nil {
+			return err
+		}
+
+		request, err := yaml.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPost("/workspace", header, request)
+		if err != nil {
+			return err
+		}
+	} else if resourceType == "APPLICATION" {
+		var application applicationTemplate
+		err := yaml.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := yaml.Marshal(applicationRequest{
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
 			GithubUrl:       application.GithubUrl,
