@@ -6,6 +6,7 @@ import (
 	"github.com/dolong2/dcd-cli/api"
 	"gopkg.in/yaml.v3"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -55,11 +56,22 @@ func CreateByPath(fileDirectory string) error {
 		return err
 	}
 
-	err = create(content)
-	if err != nil {
-		return err
-	}
+	ext := filepath.Ext(fileDirectory)
+	switch ext {
+	case ".json":
 		err = createByJson(content)
+		if err != nil {
+			return err
+		}
+	case ".yml", ".yaml":
+		err = createByYml(content)
+		if err != nil {
+			return err
+		}
+	default:
+		return errors.New("invalid file extension")
+	}
+
 	return nil
 }
 
