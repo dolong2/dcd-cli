@@ -58,11 +58,12 @@ func CreateByPath(fileDirectory string) error {
 	if err != nil {
 		return err
 	}
+		err = createByJson(content)
 	return nil
 }
 
 func CreateByTemplate(rawTemplate string) error {
-	err := create([]byte(rawTemplate))
+	err := createByJson([]byte(rawTemplate))
 	if err != nil {
 		return err
 	}
@@ -70,7 +71,7 @@ func CreateByTemplate(rawTemplate string) error {
 	return nil
 }
 
-func create(content []byte) error {
+func createByJson(content []byte) error {
 	var data parsingMetaData
 	err := json.Unmarshal(content, &data)
 	if err != nil {
