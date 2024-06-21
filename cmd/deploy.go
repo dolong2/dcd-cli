@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/dolong2/dcd-cli/api/exec"
+	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/spf13/cobra"
 )
 
@@ -12,7 +12,14 @@ var deployCmd = &cobra.Command{
 	Short: "command to deploy an application",
 	Long:  `this command is used to deploy an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		fmt.Println("deploy called")
+		if len(args) == 0 {
+			return cmdError.NewCmdError(1, "must specify applicationId")
+		}
+		applicationId := args[0]
+		err := exec.DeployApplication(applicationId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
 		return nil
 	},
 }
