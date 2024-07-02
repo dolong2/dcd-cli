@@ -7,10 +7,6 @@ import (
 	"os"
 )
 
-type SimpleWorkspaceInfo struct {
-	WorkspaceId string `json:"workspaceId"`
-}
-
 func SaveWorkspaceInfo(workspaceInfo exec.WorkspaceResponse) error {
 	simpleWorkspaceInfo := SimpleWorkspaceInfo{WorkspaceId: workspaceInfo.Id}
 
