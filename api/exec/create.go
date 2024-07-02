@@ -32,7 +32,7 @@ type workspaceRequest struct {
 
 type applicationTemplate struct {
 	Metadata        metaData          `json:"metadata"`
-	WorkspaceId     int64             `json:"workspaceId"`
+	WorkspaceId     string            `json:"workspaceId"`
 	GithubUrl       string            `json:"githubUrl"`
 	Env             map[string]string `json:"env"`
 	ApplicationType string            `json:"applicationType"`
