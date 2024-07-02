@@ -8,7 +8,7 @@ import (
 
 // deployCmd represents the deploy command
 var deployCmd = &cobra.Command{
-	Use:   "deploy <applicationId>",
+	Use:   "deploy <applicationId> [flags]",
 	Short: "command to deploy an application",
 	Long:  `this command is used to deploy an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -26,4 +26,6 @@ var deployCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(deployCmd)
+
+	deployCmd.Flags().StringP("workspace", "w", "", "workspace id")
 }

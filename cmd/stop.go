@@ -27,4 +27,6 @@ var stopCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(stopCmd)
+
+	stopCmd.Flags().StringP("workspace", "w", "", "workspace id")
 }

@@ -33,4 +33,5 @@ func init() {
 	envCmd.AddCommand(addCmd)
 	addCmd.Flags().StringP("key", "k", "", "environment key")
 	addCmd.Flags().StringP("value", "v", "", "environment value")
+	addCmd.Flags().StringP("workspace", "w", "", "workspace id")
 }

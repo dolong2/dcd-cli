@@ -34,4 +34,5 @@ func init() {
 	envCmd.AddCommand(rmCmd)
 
 	rmCmd.Flags().StringP("key", "", "", "select an key to delete")
+	rmCmd.Flags().StringP("workspace", "w", "", "workspace id")
 }

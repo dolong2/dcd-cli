@@ -35,4 +35,5 @@ func init() {
 
 	updateCmd.Flags().StringP("key", "k", "", "environment key")
 	updateCmd.Flags().StringP("value", "v", "", "environment value")
+	updateCmd.Flags().StringP("workspace", "w", "", "workspace id")
 }
