@@ -44,7 +44,7 @@ func GetApplications(workspaceId string) (*ApplicationListResponse, error) {
 	return &applicationListResponse, nil
 }
 
-func GetApplication(applicationId string) (*ApplicationResponse, error) {
+func GetApplication(workspaceId string, applicationId string) (*ApplicationResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -52,7 +52,7 @@ func GetApplication(applicationId string) (*ApplicationResponse, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/application/"+applicationId, header, map[string]string{})
+	response, err := api.SendGet("/"+workspaceId+"/application/"+applicationId, header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
