@@ -63,7 +63,7 @@ func getApplication(cmd *cobra.Command) (error, bool) {
 	workspaceId, err := util.GetWorkspaceId()
 	if err != nil {
 		workspaceFlag, err := cmd.Flags().GetString("workspace")
-		if err != nil {
+		if workspaceFlag != "" || err != nil {
 			return cmdError.NewCmdError(1, "must specify workspace id"), false
 		}
 		workspaceId = workspaceFlag
