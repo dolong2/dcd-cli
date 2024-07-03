@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
+	"github.com/dolong2/dcd-cli/cmd/util"
 	"github.com/spf13/cobra"
 )
 
@@ -59,30 +60,36 @@ func getWorkspace(cmd *cobra.Command) error {
 }
 
 func getApplication(cmd *cobra.Command) (error, bool) {
-	workspaceId, existsWorkspaceId := cmd.Flags().GetString("workspace")
-	applicationId, existsApplicationId := cmd.Flags().GetString("id")
-	if (existsWorkspaceId != nil || workspaceId == "") && (existsApplicationId != nil || applicationId == "") {
-		return cmdError.NewCmdError(1, "requires workspace flag to get your applications"), true
-	}
-	if workspaceId != "" && applicationId != "" {
-		return cmdError.NewCmdError(125, "simultaneous use of workspaceId and application is not permitted"), true
-	}
-	if workspaceId != "" {
-		applicationListResponse, err := exec.GetApplications(workspaceId)
+	workspaceId, err := util.GetWorkspaceId()
+	if err != nil {
+		workspaceFlag, err := cmd.Flags().GetString("workspace")
 		if err != nil {
-			return cmdError.NewCmdError(1, err.Error()), true
+			return cmdError.NewCmdError(1, "must specify workspace id"), false
 		}
-		for _, application := range applicationListResponse.Applications {
-			printApplication(application)
-		}
-	} else if applicationId != "" {
-		applicationResponse, err := exec.GetApplication(applicationId)
-		if err != nil {
-			return cmdError.NewCmdError(1, err.Error()), true
-		}
-		printApplication(*applicationResponse)
+		workspaceId = workspaceFlag
 	}
-	return nil, false
+	applicationId, err := cmd.Flags().GetString("id")
+	if err != nil {
+		return err, false
+	}
+
+	if applicationId == "" {
+		return cmdError.NewCmdError(1, "must specify application id"), false
+	}
+	if workspaceId == "" {
+		return cmdError.NewCmdError(1, "must specify workspace id"), false
+	}
+
+	applications, err := exec.GetApplications(workspaceId)
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error()), false
+	}
+
+	for _, application := range applications.Applications {
+		printApplication(application)
+	}
+
+	return nil, true
 }
 
 func init() {
