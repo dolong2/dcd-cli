@@ -25,7 +25,7 @@ resourceType:
 
 		if resourceType == "applications" {
 			err, done := getApplication(cmd)
-			if done {
+			if !done {
 				return err
 			}
 		} else if resourceType == "workspaces" {
@@ -68,26 +68,27 @@ func getApplication(cmd *cobra.Command) (error, bool) {
 		}
 		workspaceId = workspaceFlag
 	}
+
 	applicationId, err := cmd.Flags().GetString("id")
-	if err != nil {
-		return err, false
+	if applicationId == "" || err != nil {
+		applications, err := exec.GetApplications(workspaceId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error()), false
+		}
+
+		for _, application := range applications.Applications {
+			printApplication(application)
+		}
+
+		return nil, true
 	}
 
-	if applicationId == "" {
-		return cmdError.NewCmdError(1, "must specify application id"), false
-	}
-	if workspaceId == "" {
-		return cmdError.NewCmdError(1, "must specify workspace id"), false
-	}
-
-	applications, err := exec.GetApplications(workspaceId)
+	application, err := exec.GetApplication(workspaceId, applicationId)
 	if err != nil {
 		return cmdError.NewCmdError(1, err.Error()), false
 	}
 
-	for _, application := range applications.Applications {
-		printApplication(application)
-	}
+	printApplication(*application)
 
 	return nil, true
 }
