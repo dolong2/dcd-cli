@@ -4,7 +4,7 @@ import (
 	"github.com/dolong2/dcd-cli/api"
 )
 
-func RemoveEnv(applicationId string, envKey string) error {
+func RemoveEnv(workspaceId string, applicationId string, envKey string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -15,7 +15,7 @@ func RemoveEnv(applicationId string, envKey string) error {
 	params := make(map[string]string)
 	params["key"] = envKey
 
-	_, err = api.SendDelete("/application/"+applicationId+"/env", header, params)
+	_, err = api.SendDelete("/"+workspaceId+"/application/"+applicationId+"/env", header, params)
 	if err != nil {
 		return err
 	}

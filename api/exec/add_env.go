@@ -10,7 +10,7 @@ type envRequest struct {
 	EnvList map[string]string `json:"envList"`
 }
 
-func AddEnv(applicationId string, key string, value string) error {
+func AddEnv(workspaceId string, applicationId string, key string, value string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -26,7 +26,7 @@ func AddEnv(applicationId string, key string, value string) error {
 	fmt.Println(envReq)
 	fmt.Println(string(requestJson))
 
-	_, err = api.SendPost("/application/"+applicationId+"/env", header, requestJson)
+	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/env", header, requestJson)
 	if err != nil {
 		return err
 	}

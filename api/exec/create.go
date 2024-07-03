@@ -7,7 +7,6 @@ import (
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
-	"strconv"
 )
 
 type metaData struct {
@@ -32,7 +31,7 @@ type workspaceRequest struct {
 
 type applicationTemplate struct {
 	Metadata        metaData          `json:"metadata"`
-	WorkspaceId     int64             `json:"workspaceId"`
+	WorkspaceId     string            `json:"workspaceId"`
 	GithubUrl       string            `json:"githubUrl"`
 	Env             map[string]string `json:"env"`
 	ApplicationType string            `json:"applicationType"`
@@ -135,7 +134,7 @@ func createByJson(content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPost("/application/"+strconv.FormatInt(application.WorkspaceId, 10), header, request)
+		_, err = api.SendPost("/"+application.WorkspaceId+"application/", header, request)
 		if err != nil {
 			return err
 		}
@@ -197,7 +196,7 @@ func createByYml(content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPost("/application/"+strconv.FormatInt(application.WorkspaceId, 10), header, request)
+		_, err = api.SendPost("/"+application.WorkspaceId+"/application/", header, request)
 		if err != nil {
 			return err
 		}
