@@ -5,7 +5,7 @@ import (
 	"github.com/dolong2/dcd-cli/api"
 )
 
-func UpdateEnv(applicationId string, key string, value string) error {
+func UpdateEnv(workspaceId string, applicationId string, key string, value string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -18,7 +18,7 @@ func UpdateEnv(applicationId string, key string, value string) error {
 	envReq := envRequest{EnvList: body}
 	requestJson, err := json.Marshal(envReq)
 
-	_, err = api.SendPatch("/application/"+applicationId+"/env/"+key, header, requestJson)
+	_, err = api.SendPatch("/"+workspaceId+"/application/"+applicationId+"/env/"+key, header, requestJson)
 	if err != nil {
 		return err
 	}

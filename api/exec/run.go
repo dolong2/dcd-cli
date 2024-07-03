@@ -1,8 +1,10 @@
 package exec
 
-import "github.com/dolong2/dcd-cli/api"
+import (
+	"github.com/dolong2/dcd-cli/api"
+)
 
-func RunApplication(applicationId string) error {
+func RunApplication(workspaceId string, applicationId string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -10,6 +12,6 @@ func RunApplication(applicationId string) error {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	_, err = api.SendPost("/application/"+applicationId+"/run", header, []byte(""))
+	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/run", header, []byte(""))
 	return err
 }
