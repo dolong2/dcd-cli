@@ -9,7 +9,7 @@ import (
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete <applicationId>",
+	Use:   "delete <applicationId> [flags]",
 	Short: "command to delete an application",
 	Long:  `this command will delete an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {

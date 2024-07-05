@@ -8,7 +8,7 @@ import (
 )
 
 var createCmd = &cobra.Command{
-	Use:   "create",
+	Use:   "create [flags]",
 	Short: "command to create a resource",
 	Long:  `this command is used to create a resource.`,
 	RunE: func(cmd *cobra.Command, args []string) error {

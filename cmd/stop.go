@@ -10,7 +10,7 @@ import (
 
 // stopCmd represents the stop command
 var stopCmd = &cobra.Command{
-	Use:   "stop <applicationId>",
+	Use:   "stop <applicationId> [flags]",
 	Short: "command to stop an application",
 	Long:  `this command is used to stop an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {

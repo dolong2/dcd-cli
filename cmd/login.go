@@ -11,7 +11,7 @@ import (
 
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
-	Use:   "login",
+	Use:   "login [flags]",
 	Short: "Login in to DCD",
 	Long:  `Login to DCD using a email and password`,
 	RunE: func(cmd *cobra.Command, args []string) error {
