@@ -11,9 +11,6 @@ var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "command to create a resource",
 	Long:  `this command is used to create a resource.`,
-	Example: `dcd-cli create [flags]
-	resource type is optional
-`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
