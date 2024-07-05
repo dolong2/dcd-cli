@@ -10,7 +10,7 @@ import (
 
 // runCmd represents the run command
 var runCmd = &cobra.Command{
-	Use:   "run <applicationId>",
+	Use:   "run <applicationId> [flags]",
 	Short: "command to run an application",
 	Long:  `this command is used to run an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
