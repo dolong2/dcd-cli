@@ -8,7 +8,7 @@ import (
 var envCmd = &cobra.Command{
 	Use:   "env",
 	Short: "manage application environment variables",
-	Long:  `a command to manage application env`,
+	Long:  `command to manage application env`,
 	Run: func(cmd *cobra.Command, args []string) {
 	},
 }
