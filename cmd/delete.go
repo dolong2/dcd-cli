@@ -9,28 +9,47 @@ import (
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete <applicationId> [flags]",
-	Short: "command to delete an application",
-	Long:  `this command will delete an application.`,
+	Use:   "delete <resourceType> <resourceId> [flags]",
+	Short: "command to delete an resource",
+	Long:  `this command will delete an resource.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspaceId, err := util.GetWorkspaceId()
-		if err != nil {
-			workspaceFlag, err := cmd.Flags().GetString("workspace")
-			if workspaceFlag != "" || err != nil {
+		if len(args) < 2 {
+			return cmdError.NewCmdError(1, "must enter resource type and resource id")
+		}
+		if args[0] == "" {
+			return cmdError.NewCmdError(1, "must specify a resource type")
+		}
+
+		resourceType := args[0]
+		if resourceType == "workspace" {
+			if args[1] == "" {
 				return cmdError.NewCmdError(1, "must specify workspace id")
 			}
-			workspaceId = workspaceFlag
-		}
 
-		if len(args) == 0 || args[0] == "" {
-			return cmdError.NewCmdError(1, "must specify applicationId")
-		}
+			var workspaceId = args[1]
+			err := exec.DeleteWorkspace(workspaceId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+		} else if resourceType == "application" {
+			workspaceId, err := util.GetWorkspaceId()
+			if err != nil {
+				workspaceFlag, err := cmd.Flags().GetString("workspace")
+				if workspaceFlag != "" || err != nil {
+					return cmdError.NewCmdError(1, "must specify workspace id")
+				}
+				workspaceId = workspaceFlag
+			}
 
-		var applicationId = args[0]
+			if args[1] == "" {
+				return cmdError.NewCmdError(1, "must specify application id")
+			}
 
-		err = exec.DeleteApplication(workspaceId, applicationId)
-		if err != nil {
-			return cmdError.NewCmdError(1, err.Error())
+			var applicationId = args[1]
+			err = exec.DeleteApplication(workspaceId, applicationId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		}
 
 		return nil
