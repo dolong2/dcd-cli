@@ -13,13 +13,9 @@ var addCmd = &cobra.Command{
 	Short: "use to add an application env",
 	Long:  `this command can be used to add a env to an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspaceId, err := util.GetWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
-			workspaceFlag, err := cmd.Flags().GetString("workspace")
-			if workspaceFlag != "" || err != nil {
-				return cmdError.NewCmdError(1, "must specify workspace id")
-			}
-			workspaceId = workspaceFlag
+			return err
 		}
 
 		if len(args) == 0 {

@@ -32,13 +32,9 @@ var deleteCmd = &cobra.Command{
 				return cmdError.NewCmdError(1, err.Error())
 			}
 		} else if resourceType == "application" {
-			workspaceId, err := util.GetWorkspaceId()
+			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
-				workspaceFlag, err := cmd.Flags().GetString("workspace")
-				if workspaceFlag != "" || err != nil {
-					return cmdError.NewCmdError(1, "must specify workspace id")
-				}
-				workspaceId = workspaceFlag
+				return err
 			}
 
 			if args[1] == "" {

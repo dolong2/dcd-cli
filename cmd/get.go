@@ -60,13 +60,9 @@ func getWorkspace(cmd *cobra.Command) error {
 }
 
 func getApplication(cmd *cobra.Command) (error, bool) {
-	workspaceId, err := util.GetWorkspaceId()
+	workspaceId, err := util.GetWorkspaceId(cmd)
 	if err != nil {
-		workspaceFlag, err := cmd.Flags().GetString("workspace")
-		if workspaceFlag != "" || err != nil {
-			return cmdError.NewCmdError(1, "must specify workspace id"), false
-		}
-		workspaceId = workspaceFlag
+		return err, false
 	}
 
 	applicationId, err := cmd.Flags().GetString("id")

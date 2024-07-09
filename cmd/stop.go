@@ -14,13 +14,9 @@ var stopCmd = &cobra.Command{
 	Short: "command to stop an application",
 	Long:  `this command is used to stop an application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspaceId, err := util.GetWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
-			workspaceFlag, err := cmd.Flags().GetString("workspace")
-			if workspaceFlag != "" || err != nil {
-				return cmdError.NewCmdError(1, "must specify workspace id")
-			}
-			workspaceId = workspaceFlag
+			return err
 		}
 
 		if len(args) == 0 {
