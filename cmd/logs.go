@@ -15,13 +15,9 @@ var logsCmd = &cobra.Command{
 	Short: "command to get application logs",
 	Long:  `this command is used to get application logs`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspaceId, err := util.GetWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
-			workspaceFlag, err := cmd.Flags().GetString("workspace")
-			if workspaceFlag != "" || err != nil {
-				return cmdError.NewCmdError(1, "must specify workspace id")
-			}
-			workspaceId = workspaceFlag
+			return err
 		}
 
 		if len(args) == 0 || args[0] == "" {
