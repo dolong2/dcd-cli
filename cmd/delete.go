@@ -14,18 +14,11 @@ var deleteCmd = &cobra.Command{
 	Long:  `this command will delete an resource.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
-			return cmdError.NewCmdError(1, "must enter resource type and resource id")
-		}
-		if args[0] == "" {
-			return cmdError.NewCmdError(1, "must specify a resource type")
+			return cmdError.NewCmdError(1, "must enter both resource type and resource id")
 		}
 
 		resourceType := args[0]
 		if resourceType == "workspace" {
-			if args[1] == "" {
-				return cmdError.NewCmdError(1, "must specify workspace id")
-			}
-
 			var workspaceId = args[1]
 			err := exec.DeleteWorkspace(workspaceId)
 			if err != nil {
@@ -35,10 +28,6 @@ var deleteCmd = &cobra.Command{
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
 				return err
-			}
-
-			if args[1] == "" {
-				return cmdError.NewCmdError(1, "must specify application id")
 			}
 
 			var applicationId = args[1]
