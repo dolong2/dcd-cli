@@ -14,7 +14,7 @@ var deleteCmd = &cobra.Command{
 	Long:  `this command will delete an resource.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
-			return cmdError.NewCmdError(1, "must enter resource type and resource id")
+			return cmdError.NewCmdError(1, "must enter both resource type and resource id")
 		}
 
 		resourceType := args[0]
