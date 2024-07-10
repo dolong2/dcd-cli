@@ -20,7 +20,7 @@ var logsCmd = &cobra.Command{
 			return err
 		}
 
-		if len(args) == 0 || args[0] == "" {
+		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "must specify applicationId")
 		}
 		applicationId := args[0]
