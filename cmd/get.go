@@ -5,7 +5,10 @@ import (
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/util"
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+	"os"
+	"strconv"
 )
 
 // getCmd represents the get command
@@ -113,4 +116,16 @@ func printApplication(application exec.ApplicationResponse) {
 	fmt.Printf("Status: %s\n", application.Status)
 	fmt.Println()
 	fmt.Println()
+}
+
+func printApplicationList(applicationList []exec.ApplicationResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"ID", "Name", "Description", "Application Type", "Github URL", "Port", "External Port", "Version", "Status"})
+
+	for _, application := range applicationList {
+		row := []string{application.Id, application.Name, application.Description, application.ApplicationType, application.GithubUrl, strconv.Itoa(application.Port), strconv.Itoa(application.ExternalPort), application.Version, application.Status}
+		table.Append(row)
+	}
+
+	table.Render()
 }
