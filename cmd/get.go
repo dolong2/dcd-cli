@@ -1,11 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/util"
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+	"os"
+	"strconv"
 )
 
 // getCmd represents the get command
@@ -24,8 +26,8 @@ resourceType:
 		resourceType := args[0]
 
 		if resourceType == "applications" {
-			err, done := getApplication(cmd)
-			if !done {
+			err := getApplication(cmd)
+			if err != nil {
 				return err
 			}
 		} else if resourceType == "workspaces" {
@@ -46,47 +48,48 @@ func getWorkspace(cmd *cobra.Command) error {
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}
-		for _, workspace := range workspaceList.List {
-			fmt.Printf("ID: %s\nTitle: %s\nDescription: %s\n\n", workspace.Id, workspace.Title, workspace.Description)
-		}
-	} else {
-		workspace, err := exec.GetWorkspace(id)
-		if err != nil {
-			return cmdError.NewCmdError(1, err.Error())
-		}
-		fmt.Printf("ID: %s\nTitle: %s\nDescription: %s\n\n", workspace.Id, workspace.Title, workspace.Description)
+
+		printWorkspaceList(workspaceList.List)
+
+		return nil
 	}
+
+	workspace, err := exec.GetWorkspace(id)
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	}
+
+	printWorkspace(*workspace)
+
 	return nil
 }
 
-func getApplication(cmd *cobra.Command) (error, bool) {
+func getApplication(cmd *cobra.Command) error {
 	workspaceId, err := util.GetWorkspaceId(cmd)
 	if err != nil {
-		return err, false
+		return err
 	}
 
 	applicationId, err := cmd.Flags().GetString("id")
 	if applicationId == "" || err != nil {
 		applications, err := exec.GetApplications(workspaceId)
 		if err != nil {
-			return cmdError.NewCmdError(1, err.Error()), false
+			return cmdError.NewCmdError(1, err.Error())
 		}
 
-		for _, application := range applications.Applications {
-			printApplication(application)
-		}
+		printApplicationList(applications.Applications)
 
-		return nil, true
+		return nil
 	}
 
 	application, err := exec.GetApplication(workspaceId, applicationId)
 	if err != nil {
-		return cmdError.NewCmdError(1, err.Error()), false
+		return cmdError.NewCmdError(1, err.Error())
 	}
 
 	printApplication(*application)
 
-	return nil, true
+	return nil
 }
 
 func init() {
@@ -97,20 +100,69 @@ func init() {
 }
 
 func printApplication(application exec.ApplicationResponse) {
-	fmt.Printf("ID: %s\n", application.Id)
-	fmt.Printf("Name: %s\n", application.Name)
-	fmt.Printf("Description: %s\n", application.Description)
-	fmt.Printf("Application Type: %s\n", application.ApplicationType)
-	fmt.Printf("GitHub URL: %s\n", application.GithubUrl)
-	fmt.Printf("Environment Variables: [\n")
+	table := tablewriter.NewWriter(os.Stdout)
+
+	id := []string{"ID", application.Id}
+	name := []string{"Name", application.Name}
+	description := []string{"Description", application.Description}
+	applicationType := []string{"Application Type", application.ApplicationType}
+	githubUrl := []string{"GitHub Url", application.GithubUrl}
+	port := []string{"Port", strconv.Itoa(application.Port)}
+	externalPort := []string{"External Port", strconv.Itoa(application.ExternalPort)}
+	version := []string{"Version", application.Version}
+	status := []string{"Status", application.Status}
+
+	table.Append(id)
+	table.Append(name)
+	table.Append(description)
+	table.Append(applicationType)
+	table.Append(githubUrl)
 	for key, value := range application.Env {
-		fmt.Printf("  %s: %s\n", key, value)
+		env := []string{"ENV", key + " : " + value}
+		table.Append(env)
 	}
-	fmt.Printf("]\n")
-	fmt.Printf("Port: %d\n", application.Port)
-	fmt.Printf("External Port: %d\n", application.ExternalPort)
-	fmt.Printf("Version: %s\n", application.Version)
-	fmt.Printf("Status: %s\n", application.Status)
-	fmt.Println()
-	fmt.Println()
+	table.Append(port)
+	table.Append(externalPort)
+	table.Append(version)
+	table.Append(status)
+
+	table.Render()
+}
+
+func printApplicationList(applicationList []exec.ApplicationResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"ID", "Name", "Description", "Application Type", "Github URL", "Port", "External Port", "Version", "Status"})
+
+	for _, application := range applicationList {
+		row := []string{application.Id, application.Name, application.Description, application.ApplicationType, application.GithubUrl, strconv.Itoa(application.Port), strconv.Itoa(application.ExternalPort), application.Version, application.Status}
+		table.Append(row)
+	}
+
+	table.Render()
+}
+
+func printWorkspace(workspace exec.WorkspaceResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+
+	id := []string{"ID", workspace.Id}
+	title := []string{"Name", workspace.Title}
+	description := []string{"Description", workspace.Description}
+
+	table.Append(id)
+	table.Append(title)
+	table.Append(description)
+
+	table.Render()
+}
+
+func printWorkspaceList(workspaceList []exec.WorkspaceResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"ID", "TITLE", "Description"})
+
+	for _, application := range workspaceList {
+		row := []string{application.Id, application.Title, application.Description}
+		table.Append(row)
+	}
+
+	table.Render()
 }
