@@ -98,22 +98,33 @@ func init() {
 }
 
 func printApplication(application exec.ApplicationResponse) {
-	fmt.Printf("ID: %s\n", application.Id)
-	fmt.Printf("Name: %s\n", application.Name)
-	fmt.Printf("Description: %s\n", application.Description)
-	fmt.Printf("Application Type: %s\n", application.ApplicationType)
-	fmt.Printf("GitHub URL: %s\n", application.GithubUrl)
-	fmt.Printf("Environment Variables: [\n")
+	table := tablewriter.NewWriter(os.Stdout)
+
+	id := []string{"ID", application.Id}
+	name := []string{"Name", application.Name}
+	description := []string{"Description", application.Description}
+	applicationType := []string{"Application Type", application.ApplicationType}
+	githubUrl := []string{"GitHub Url", application.GithubUrl}
+	port := []string{"Port", strconv.Itoa(application.Port)}
+	externalPort := []string{"External Port", strconv.Itoa(application.ExternalPort)}
+	version := []string{"Version", application.Version}
+	status := []string{"Status", application.Status}
+
+	table.Append(id)
+	table.Append(name)
+	table.Append(description)
+	table.Append(applicationType)
+	table.Append(githubUrl)
 	for key, value := range application.Env {
-		fmt.Printf("  %s: %s\n", key, value)
+		env := []string{"ENV", key + " : " + value}
+		table.Append(env)
 	}
-	fmt.Printf("]\n")
-	fmt.Printf("Port: %d\n", application.Port)
-	fmt.Printf("External Port: %d\n", application.ExternalPort)
-	fmt.Printf("Version: %s\n", application.Version)
-	fmt.Printf("Status: %s\n", application.Status)
-	fmt.Println()
-	fmt.Println()
+	table.Append(port)
+	table.Append(externalPort)
+	table.Append(version)
+	table.Append(status)
+
+	table.Render()
 }
 
 func printApplicationList(applicationList []exec.ApplicationResponse) {
