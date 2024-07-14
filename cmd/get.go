@@ -57,7 +57,7 @@ func getWorkspace(cmd *cobra.Command) error {
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}
-		fmt.Printf("ID: %s\nTitle: %s\nDescription: %s\n\n", workspace.Id, workspace.Title, workspace.Description)
+		printWorkspace(*workspace)
 	}
 	return nil
 }
@@ -135,6 +135,20 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 		row := []string{application.Id, application.Name, application.Description, application.ApplicationType, application.GithubUrl, strconv.Itoa(application.Port), strconv.Itoa(application.ExternalPort), application.Version, application.Status}
 		table.Append(row)
 	}
+
+	table.Render()
+}
+
+func printWorkspace(workspace exec.WorkspaceResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+
+	id := []string{"ID", workspace.Id}
+	title := []string{"Name", workspace.Title}
+	description := []string{"Description", workspace.Description}
+
+	table.Append(id)
+	table.Append(title)
+	table.Append(description)
 
 	table.Render()
 }
