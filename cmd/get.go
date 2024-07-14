@@ -75,9 +75,7 @@ func getApplication(cmd *cobra.Command) (error, bool) {
 			return cmdError.NewCmdError(1, err.Error()), false
 		}
 
-		for _, application := range applications.Applications {
-			printApplication(application)
-		}
+		printApplicationList(applications.Applications)
 
 		return nil, true
 	}
