@@ -8,7 +8,7 @@ import (
 
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
-	Use:   "update",
+	Use:   "update <resourceId>",
 	Short: "command to update a resource",
 	Long:  `this command is used to update a resource`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -18,6 +18,4 @@ var updateCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
-
-	updateCmd.Flags().StringP("id", "", "", "resource id")
 }
