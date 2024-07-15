@@ -52,6 +52,15 @@ func SendPatch(targetUrl string, header map[string]string, body []byte) ([]byte,
 	return result, nil
 }
 
+func SendPut(targetUrl string, header map[string]string, body []byte) ([]byte, error) {
+	result, err := sendHttpReq("PUT", targetUrl, header, map[string]string{}, body)
+	if err != nil {
+		return []byte(""), err
+	}
+
+	return result, nil
+}
+
 func sendHttpReq(method string, targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
 	if len(param) != 0 {
 		targetUrl += "?"
