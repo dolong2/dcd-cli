@@ -3,43 +3,48 @@ package cmd
 import (
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
-	"github.com/dolong2/dcd-cli/cmd/util"
-
 	"github.com/spf13/cobra"
 )
 
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
-	Use:   "update <applicationId> [flags]",
-	Short: "use to update an application env",
-	Long:  `this command can be used to update a env to an application.`,
+	Use:   "update <resourceId>",
+	Short: "command to update a resource",
+	Long:  `this command is used to update a resource`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		workspaceId, err := util.GetWorkspaceId(cmd)
-		if err != nil {
-			return err
+		if len(args) < 1 {
+			return cmdError.NewCmdError(1, "must enter both resource type and resource id")
 		}
 
-		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify applicationId")
+		resourceId := args[0]
+
+		fileDirectory, fileErr := cmd.Flags().GetString("file")
+		template, templateErr := cmd.Flags().GetString("template")
+		if fileErr != nil || templateErr != nil {
+			return cmdError.NewCmdError(2, "invalid flag")
 		}
-		application := args[0]
-		key, existsKey := cmd.Flags().GetString("key")
-		value, existsValue := cmd.Flags().GetString("value")
-		if key == "" || value == "" || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+		if fileDirectory == "" && template == "" {
+			err := cmdError.NewCmdError(1, "there must be required either file flag or template flag")
+			return err
+		} else if fileDirectory != "" {
+			err := exec.UpdateByPath(resourceId, fileDirectory)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+		} else if template != "" {
+			err := exec.UpdateByTemplate(resourceId, template)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		}
-		err = exec.UpdateEnv(workspaceId, application, key, value)
-		if err != nil {
-			return cmdError.NewCmdError(1, err.Error())
-		}
+
 		return nil
 	},
 }
 
 func init() {
-	envCmd.AddCommand(updateCmd)
+	rootCmd.AddCommand(updateCmd)
 
-	updateCmd.Flags().StringP("key", "k", "", "environment key")
-	updateCmd.Flags().StringP("value", "v", "", "environment value")
-	updateCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	updateCmd.Flags().StringP("file", "f", "", "file path where a resource format is defined")
+	updateCmd.Flags().StringP("template", "", "", "resource template to json")
 }
