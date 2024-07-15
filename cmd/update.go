@@ -18,4 +18,7 @@ var updateCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(updateCmd)
+
+	updateCmd.Flags().StringP("file", "f", "", "file path where a resource format is defined")
+	updateCmd.Flags().StringP("template", "", "", "resource template to json")
 }
