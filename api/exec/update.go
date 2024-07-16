@@ -113,6 +113,29 @@ func updateByJson(resourceId string, content []byte) error {
 		if err != nil {
 			return err
 		}
+	} else if resourceType == "APPLICATION" {
+		var application updateApplicationTemplate
+		err := yaml.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := yaml.Marshal(updateApplicationRequest{
+			Name:            application.Metadata.Name,
+			Description:     application.Metadata.Description,
+			GithubUrl:       application.GithubUrl,
+			ApplicationType: application.ApplicationType,
+			Port:            application.Port,
+			Version:         application.Version,
+		})
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPatch("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
+		if err != nil {
+			return err
+		}
 	} else {
 		return errors.New(" this resource type is not supported")
 	}
@@ -148,6 +171,29 @@ func updateByYml(resourceId string, content []byte) error {
 		}
 
 		_, err = api.SendPut("/workspace/"+resourceId, header, request)
+		if err != nil {
+			return err
+		}
+	} else if resourceType == "APPLICATION" {
+		var application updateApplicationTemplate
+		err := yaml.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := yaml.Marshal(updateApplicationRequest{
+			Name:            application.Metadata.Name,
+			Description:     application.Metadata.Description,
+			GithubUrl:       application.GithubUrl,
+			ApplicationType: application.ApplicationType,
+			Port:            application.Port,
+			Version:         application.Version,
+		})
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPatch("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
 		if err != nil {
 			return err
 		}
