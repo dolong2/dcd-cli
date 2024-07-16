@@ -134,7 +134,7 @@ func createByJson(content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPost("/"+application.WorkspaceId+"application/", header, request)
+		_, err = api.SendPost("/"+application.WorkspaceId+"/application/", header, request)
 		if err != nil {
 			return err
 		}
