@@ -63,7 +63,7 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 	return nil
 }
 
-func updateByJson(workspaceId string, content []byte) error {
+func updateByJson(resourceId string, content []byte) error {
 	var data parsingUpdateMetaData
 	err := json.Unmarshal(content, &data)
 	if err != nil {
@@ -90,7 +90,7 @@ func updateByJson(workspaceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPut("/workspace/"+workspaceId, header, request)
+		_, err = api.SendPut("/workspace/"+resourceId, header, request)
 		if err != nil {
 			return err
 		}
@@ -101,7 +101,7 @@ func updateByJson(workspaceId string, content []byte) error {
 	return nil
 }
 
-func updateByYml(workspaceId string, content []byte) error {
+func updateByYml(resourceId string, content []byte) error {
 	var data parsingUpdateMetaData
 	err := yaml.Unmarshal(content, &data)
 	if err != nil {
@@ -128,7 +128,7 @@ func updateByYml(workspaceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPut("/workspace/"+workspaceId, header, request)
+		_, err = api.SendPut("/workspace/"+resourceId, header, request)
 		if err != nil {
 			return err
 		}
