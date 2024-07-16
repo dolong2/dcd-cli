@@ -29,6 +29,25 @@ type updateWorkspaceRequest struct {
 	Description  string `json:"description"`
 }
 
+type updateApplicationTemplate struct {
+	Metadata        metaData `json:"metadata"`
+	WorkspaceId     string   `json:"workspaceId"`
+	GithubUrl       string   `json:"githubUrl"`
+	ApplicationType string   `json:"applicationType"`
+	Port            int      `json:"port"`
+	Version         string   `json:"version"`
+}
+
+type updateApplicationRequest struct {
+	Name            string            `json:"title"`
+	Description     string            `json:"description"`
+	GithubUrl       string            `json:"githubUrl"`
+	Env             map[string]string `json:"env"`
+	ApplicationType string            `json:"applicationType"`
+	Port            int               `json:"port"`
+	Version         string            `json:"version"`
+}
+
 func UpdateByTemplate(workspaceId string, rawTemplate string) error {
 	err := updateByJson(workspaceId, []byte(rawTemplate))
 	if err != nil {
@@ -63,7 +82,7 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 	return nil
 }
 
-func updateByJson(workspaceId string, content []byte) error {
+func updateByJson(resourceId string, content []byte) error {
 	var data parsingUpdateMetaData
 	err := json.Unmarshal(content, &data)
 	if err != nil {
@@ -90,7 +109,30 @@ func updateByJson(workspaceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPut("/workspace/"+workspaceId, header, request)
+		_, err = api.SendPut("/workspace/"+resourceId, header, request)
+		if err != nil {
+			return err
+		}
+	} else if resourceType == "APPLICATION" {
+		var application updateApplicationTemplate
+		err := yaml.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := yaml.Marshal(updateApplicationRequest{
+			Name:            application.Metadata.Name,
+			Description:     application.Metadata.Description,
+			GithubUrl:       application.GithubUrl,
+			ApplicationType: application.ApplicationType,
+			Port:            application.Port,
+			Version:         application.Version,
+		})
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPatch("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
 		if err != nil {
 			return err
 		}
@@ -101,7 +143,7 @@ func updateByJson(workspaceId string, content []byte) error {
 	return nil
 }
 
-func updateByYml(workspaceId string, content []byte) error {
+func updateByYml(resourceId string, content []byte) error {
 	var data parsingUpdateMetaData
 	err := yaml.Unmarshal(content, &data)
 	if err != nil {
@@ -128,7 +170,30 @@ func updateByYml(workspaceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPut("/workspace/"+workspaceId, header, request)
+		_, err = api.SendPut("/workspace/"+resourceId, header, request)
+		if err != nil {
+			return err
+		}
+	} else if resourceType == "APPLICATION" {
+		var application updateApplicationTemplate
+		err := yaml.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := yaml.Marshal(updateApplicationRequest{
+			Name:            application.Metadata.Name,
+			Description:     application.Metadata.Description,
+			GithubUrl:       application.GithubUrl,
+			ApplicationType: application.ApplicationType,
+			Port:            application.Port,
+			Version:         application.Version,
+		})
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPatch("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
 		if err != nil {
 			return err
 		}
