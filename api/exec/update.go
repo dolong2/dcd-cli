@@ -29,6 +29,25 @@ type updateWorkspaceRequest struct {
 	Description  string `json:"description"`
 }
 
+type updateApplicationTemplate struct {
+	Metadata        metaData `json:"metadata"`
+	WorkspaceId     string   `json:"workspaceId"`
+	GithubUrl       string   `json:"githubUrl"`
+	ApplicationType string   `json:"applicationType"`
+	Port            int      `json:"port"`
+	Version         string   `json:"version"`
+}
+
+type updateApplicationRequest struct {
+	Name            string            `json:"title"`
+	Description     string            `json:"description"`
+	GithubUrl       string            `json:"githubUrl"`
+	Env             map[string]string `json:"env"`
+	ApplicationType string            `json:"applicationType"`
+	Port            int               `json:"port"`
+	Version         string            `json:"version"`
+}
+
 func UpdateByTemplate(workspaceId string, rawTemplate string) error {
 	err := updateByJson(workspaceId, []byte(rawTemplate))
 	if err != nil {
