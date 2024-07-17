@@ -132,7 +132,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPatch("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
+		_, err = api.SendPut("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
 		if err != nil {
 			return err
 		}
@@ -193,7 +193,7 @@ func updateByYml(resourceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPatch("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
+		_, err = api.SendPut("/"+application.WorkspaceId+"/application/"+resourceId, header, request)
 		if err != nil {
 			return err
 		}
