@@ -49,7 +49,12 @@ func getWorkspace(cmd *cobra.Command) error {
 			return cmdError.NewCmdError(1, err.Error())
 		}
 
-		printWorkspaceList(workspaceList.List)
+		usedWorkspaceId, usedWorkspace := util.GetWorkspaceId(cmd)
+		if usedWorkspace != nil {
+			usedWorkspaceId = ""
+		}
+
+		printWorkspaceList(workspaceList.List, usedWorkspaceId)
 
 		return nil
 	}
