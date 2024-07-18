@@ -155,12 +155,17 @@ func printWorkspace(workspace exec.WorkspaceResponse) {
 	table.Render()
 }
 
-func printWorkspaceList(workspaceList []exec.WorkspaceResponse) {
+func printWorkspaceList(workspaceList []exec.WorkspaceResponse, usedWorkspaceId string) {
 	table := tablewriter.NewWriter(os.Stdout)
-	table.SetHeader([]string{"ID", "TITLE", "Description"})
+	table.SetHeader([]string{" ", "ID", "TITLE", "Description"})
 
-	for _, application := range workspaceList {
-		row := []string{application.Id, application.Title, application.Description}
+	for _, workspace := range workspaceList {
+		usedWorkspace := ""
+		if usedWorkspaceId == workspace.Id {
+			usedWorkspace = "*"
+		}
+
+		row := []string{usedWorkspace, workspace.Id, workspace.Title, workspace.Description}
 		table.Append(row)
 	}
 
