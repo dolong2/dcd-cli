@@ -35,9 +35,45 @@ var addCmd = &cobra.Command{
 	},
 }
 
+// globalAddCmd represents the add command
+var globalAddCmd = &cobra.Command{
+	Use:   "add <workspaceId> [flags]",
+	Short: "use to add a global env",
+	Long:  `this command can be used to add a global env to an application.`,
+	RunE: func(cmd *cobra.Command, args []string) error {
+		workspaceId := ""
+
+		if len(args) == 0 {
+			var err error = nil
+			workspaceId, err = util.GetWorkspaceId(cmd)
+			if err != nil {
+				return err
+			}
+		} else {
+			workspaceId = args[0]
+		}
+
+		application := args[0]
+		key, existsKey := cmd.Flags().GetString("key")
+		value, existsValue := cmd.Flags().GetString("value")
+		if key == "" || value == "" || existsKey != nil || existsValue != nil {
+			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+		}
+		err := exec.AddEnv(workspaceId, application, key, value)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		return nil
+	},
+}
+
 func init() {
 	envCmd.AddCommand(addCmd)
 	addCmd.Flags().StringP("key", "k", "", "environment key")
 	addCmd.Flags().StringP("value", "v", "", "environment value")
 	addCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	globalEnvCmd.AddCommand(globalAddCmd)
+	globalAddCmd.Flags().StringP("key", "k", "", "environment key")
+	globalAddCmd.Flags().StringP("value", "v", "", "environment value")
+	globalAddCmd.Flags().StringP("workspace", "w", "", "workspace id")
 }
