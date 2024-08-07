@@ -75,5 +75,4 @@ func init() {
 	globalEnvCmd.AddCommand(globalAddCmd)
 	globalAddCmd.Flags().StringP("key", "k", "", "environment key")
 	globalAddCmd.Flags().StringP("value", "v", "", "environment value")
-	globalAddCmd.Flags().StringP("workspace", "w", "", "workspace id")
 }
