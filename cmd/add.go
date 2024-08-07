@@ -35,8 +35,8 @@ var addCmd = &cobra.Command{
 	},
 }
 
-// globalAddCmd represents the add command
-var globalAddCmd = &cobra.Command{
+// addGlobalEnvCmd represents the add command
+var addGlobalEnvCmd = &cobra.Command{
 	Use:   "add <workspaceId> [flags]",
 	Short: "use to add a global env",
 	Long:  `this command can be used to add a global env to an application.`,
@@ -72,8 +72,7 @@ func init() {
 	addCmd.Flags().StringP("key", "k", "", "environment key")
 	addCmd.Flags().StringP("value", "v", "", "environment value")
 	addCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	globalEnvCmd.AddCommand(globalAddCmd)
-	globalAddCmd.Flags().StringP("key", "k", "", "environment key")
-	globalAddCmd.Flags().StringP("value", "v", "", "environment value")
-	globalAddCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	globalEnvCmd.AddCommand(addGlobalEnvCmd)
+	addGlobalEnvCmd.Flags().StringP("key", "k", "", "environment key")
+	addGlobalEnvCmd.Flags().StringP("value", "v", "", "environment value")
 }
