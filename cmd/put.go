@@ -53,13 +53,12 @@ var putGlobalCmd = &cobra.Command{
 			workspaceId = args[0]
 		}
 
-		application := args[0]
 		key, existsKey := cmd.Flags().GetString("key")
 		value, existsValue := cmd.Flags().GetString("value")
 		if key == "" || value == "" || existsKey != nil || existsValue != nil {
 			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
 		}
-		err := exec.UpdateGlobalEnv(workspaceId, application, key, value)
+		err := exec.UpdateGlobalEnv(workspaceId, key, value)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}

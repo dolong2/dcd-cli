@@ -5,7 +5,7 @@ import (
 	"github.com/dolong2/dcd-cli/api"
 )
 
-func UpdateGlobalEnv(workspaceId string, applicationId string, key string, value string) error {
+func UpdateGlobalEnv(workspaceId string, key string, value string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
