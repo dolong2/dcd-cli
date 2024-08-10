@@ -15,6 +15,13 @@ type WorkspaceResponse struct {
 	Description string `json:"description"`
 }
 
+type WorkspaceDetailResponse struct {
+	Id          string            `json:"id"`
+	Title       string            `json:"title"`
+	Description string            `json:"description"`
+	GlobalEnv   map[string]string `json:"globalEnv"`
+}
+
 func GetWorkspaces() (*WorkspaceListResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
@@ -37,7 +44,7 @@ func GetWorkspaces() (*WorkspaceListResponse, error) {
 	return &workspaceListResponse, nil
 }
 
-func GetWorkspace(id string) (*WorkspaceResponse, error) {
+func GetWorkspace(id string) (*WorkspaceDetailResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -50,7 +57,7 @@ func GetWorkspace(id string) (*WorkspaceResponse, error) {
 		return nil, err
 	}
 
-	var workspaceResponse WorkspaceResponse
+	var workspaceResponse WorkspaceDetailResponse
 	err = json.Unmarshal(response, &workspaceResponse)
 	if err != nil {
 		return nil, err
