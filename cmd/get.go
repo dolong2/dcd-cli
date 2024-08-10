@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
+	"strings"
 )
 
 // getCmd represents the get command
@@ -146,16 +147,23 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 	table.Render()
 }
 
-func printWorkspace(workspace exec.WorkspaceResponse) {
+func printWorkspace(workspace exec.WorkspaceDetailResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 
 	id := []string{"ID", workspace.Id}
 	title := []string{"Name", workspace.Title}
 	description := []string{"Description", workspace.Description}
+	envString := ""
+	for key, value := range workspace.GlobalEnv {
+		envString += "{ " + key + " : " + value + " } , "
+	}
+	envString = envString[:len(envString)-1]
+	globalEnv := []string{"Global Env", strings.Trim(envString, ",")}
 
 	table.Append(id)
 	table.Append(title)
 	table.Append(description)
+	table.Append(globalEnv)
 
 	table.Render()
 }

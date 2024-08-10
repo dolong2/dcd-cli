@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func SaveWorkspaceInfo(workspaceInfo exec.WorkspaceResponse) error {
+func SaveWorkspaceInfo(workspaceInfo exec.WorkspaceDetailResponse) error {
 	simpleWorkspaceInfo := SimpleWorkspaceInfo{WorkspaceId: workspaceInfo.Id}
 
 	rawResult, err := json.Marshal(simpleWorkspaceInfo)
