@@ -10,6 +10,6 @@ func StopApplication(workspaceId string, applicationId string) error {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/stop", header, []byte(""))
+	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/stop", header, map[string]string{}, []byte(""))
 	return err
 }

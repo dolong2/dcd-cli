@@ -26,7 +26,7 @@ func AddEnv(workspaceId string, applicationId string, key string, value string) 
 	fmt.Println(envReq)
 	fmt.Println(string(requestJson))
 
-	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/env", header, requestJson)
+	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/env", header, map[string]string{}, requestJson)
 	if err != nil {
 		return err
 	}
