@@ -18,7 +18,7 @@ func Login(tokenRequest *TokenRequest) error {
 		return err
 	}
 
-	rawResult, err := api.SendPost("/auth", map[string]string{}, rawTokenRequest)
+	rawResult, err := api.SendPost("/auth", map[string]string{}, map[string]string{}, rawTokenRequest)
 	if err != nil {
 		return err
 	}

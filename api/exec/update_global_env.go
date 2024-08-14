@@ -18,7 +18,10 @@ func UpdateGlobalEnv(workspaceId string, key string, value string) error {
 	envReq := envRequest{EnvList: body}
 	requestJson, err := json.Marshal(envReq)
 
-	_, err = api.SendPatch("/workspace/"+workspaceId+"/env?key="+key, header, requestJson)
+	param := map[string]string{}
+	param["key"] = key
+
+	_, err = api.SendPatch("/workspace/"+workspaceId+"/env", header, param, requestJson)
 	if err != nil {
 		return err
 	}

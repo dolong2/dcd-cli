@@ -9,7 +9,7 @@ import (
 func ReissueToken(refreshToken string) error {
 	header := map[string]string{}
 	header["RefreshToken"] = refreshToken
-	rawResult, err := api.SendPatch("/auth", header, nil)
+	rawResult, err := api.SendPatch("/auth", header, map[string]string{}, nil)
 	if err != nil {
 		return err
 	}

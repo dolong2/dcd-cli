@@ -10,6 +10,6 @@ func DeployApplication(workspaceId string, applicationId string) error {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/deploy", header, []byte(""))
+	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/deploy", header, map[string]string{}, []byte(""))
 	return err
 }

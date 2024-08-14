@@ -25,8 +25,8 @@ func SendGet(targetUrl string, header map[string]string, param map[string]string
 	return result, nil
 }
 
-func SendPost(targetUrl string, header map[string]string, body []byte) ([]byte, error) {
-	result, err := sendHttpReq("POST", targetUrl, header, map[string]string{}, body)
+func SendPost(targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
+	result, err := sendHttpReq("POST", targetUrl, header, param, body)
 	if err != nil {
 		return []byte(""), err
 	}
@@ -43,8 +43,8 @@ func SendDelete(targetUrl string, header map[string]string, param map[string]str
 	return result, nil
 }
 
-func SendPatch(targetUrl string, header map[string]string, body []byte) ([]byte, error) {
-	result, err := sendHttpReq("PATCH", targetUrl, header, map[string]string{}, body)
+func SendPatch(targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
+	result, err := sendHttpReq("PATCH", targetUrl, header, param, body)
 	if err != nil {
 		return []byte(""), err
 	}
@@ -52,8 +52,8 @@ func SendPatch(targetUrl string, header map[string]string, body []byte) ([]byte,
 	return result, nil
 }
 
-func SendPut(targetUrl string, header map[string]string, body []byte) ([]byte, error) {
-	result, err := sendHttpReq("PUT", targetUrl, header, map[string]string{}, body)
+func SendPut(targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
+	result, err := sendHttpReq("PUT", targetUrl, header, param, body)
 	if err != nil {
 		return []byte(""), err
 	}

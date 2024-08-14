@@ -12,6 +12,6 @@ func RunApplication(workspaceId string, applicationId string) error {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/run", header, []byte(""))
+	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/run", header, map[string]string{}, []byte(""))
 	return err
 }

@@ -18,7 +18,7 @@ func addGlobalEnv(workspaceId string, key string, value string) error {
 	envReq := envRequest{EnvList: body}
 	requestJson, err := json.Marshal(envReq)
 
-	_, err = api.SendPost("/workspace/"+workspaceId+"/env", header, requestJson)
+	_, err = api.SendPost("/workspace/"+workspaceId+"/env", header, map[string]string{}, requestJson)
 	if err != nil {
 		return err
 	}
