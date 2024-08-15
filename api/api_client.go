@@ -7,7 +7,7 @@ import (
 	httpErr "github.com/dolong2/dcd-cli/api/err"
 	"io"
 	"net/http"
-	"strings"
+	"net/url"
 )
 
 var baseUrl = "http://localhost:8081"
@@ -63,14 +63,13 @@ func SendPut(targetUrl string, header map[string]string, param map[string]string
 }
 
 func sendHttpReq(method string, targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
-	if len(param) != 0 {
-		targetUrl += "?"
-	}
-	for key, value := range param {
-		targetUrl += fmt.Sprintf("%s=%s&", key, value)
-	}
-	if len(param) != 0 {
-		targetUrl = strings.TrimRight(targetUrl, "&")
+	if len(param) == 0 {
+		query := url.Values{}
+		for key, value := range param {
+			query.Add(key, value)
+		}
+
+		targetUrl = fmt.Sprintf("%s?%s", targetUrl, query.Encode())
 	}
 
 	httpClient := &http.Client{}
