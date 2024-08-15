@@ -7,6 +7,7 @@ import (
 	httpErr "github.com/dolong2/dcd-cli/api/err"
 	"io"
 	"net/http"
+	"strings"
 )
 
 var baseUrl = "http://localhost:8081"
@@ -67,6 +68,9 @@ func sendHttpReq(method string, targetUrl string, header map[string]string, para
 	}
 	for key, value := range param {
 		targetUrl += fmt.Sprintf("%s=%s&", key, value)
+	}
+	if len(param) != 0 {
+		targetUrl = strings.TrimRight(targetUrl, "&")
 	}
 
 	httpClient := &http.Client{}
