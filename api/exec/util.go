@@ -3,7 +3,6 @@ package exec
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 	"time"
 )
@@ -34,13 +33,11 @@ getTokenInfo:
 	// 커스텀 시간 형식 파싱
 	accessTokenExp, err := time.ParseInLocation(timeFormat, raw["accessTokenExp"].(string), time.Local)
 	if err != nil {
-		fmt.Println("AccessTokenExp 파싱 중 오류 발생:", err)
-		return "", err
+		return "", errors.New("RefreshTokenExp 파싱 중 오류 발생")
 	}
 	refreshTokenExp, err := time.ParseInLocation(timeFormat, raw["refreshTokenExp"].(string), time.Local)
 	if err != nil {
-		fmt.Println("RefreshTokenExp 파싱 중 오류 발생:", err)
-		return "", err
+		return "", errors.New("RefreshTokenExp 파싱 중 오류 발생")
 	}
 
 	// AccessToken이 만료되었을때 토큰 재발급

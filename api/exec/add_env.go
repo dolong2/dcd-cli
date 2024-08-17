@@ -2,7 +2,6 @@ package exec
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/dolong2/dcd-cli/api"
 )
 
@@ -22,9 +21,6 @@ func AddEnv(workspaceId string, applicationId string, key string, value string) 
 	body[key] = value
 	envReq := envRequest{EnvList: body}
 	requestJson, err := json.Marshal(envReq)
-
-	fmt.Println(envReq)
-	fmt.Println(string(requestJson))
 
 	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/env", header, map[string]string{}, requestJson)
 	if err != nil {
