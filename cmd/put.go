@@ -35,9 +35,9 @@ var updateEnvCmd = &cobra.Command{
 	},
 }
 
-// putGlobalCmd represents the put command
-var putGlobalCmd = &cobra.Command{
-	Use:   "put",
+// updateGlobalEnvCmd represents the put command
+var updateGlobalEnvCmd = &cobra.Command{
+	Use:   "update",
 	Short: "update a exists global env",
 	Long:  `this command is used to update a exits global env`,
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -72,7 +72,7 @@ func init() {
 	updateEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
 	updateEnvCmd.Flags().StringP("workspace", "w", "", "workspace id")
 
-	globalEnvCmd.AddCommand(putGlobalCmd)
+	globalEnvCmd.AddCommand(updateGlobalEnvCmd)
 
-	putGlobalCmd.Flags().StringP("key", "", "", "select a key to delete")
+	updateGlobalEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
 }
