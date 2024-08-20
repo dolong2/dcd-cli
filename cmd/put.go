@@ -7,10 +7,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// putCmd represents the put command
-var putCmd = &cobra.Command{
-	Use:   "put",
-	Short: "update a exists global env",
+// updateEnvCmd represents the put command
+var updateEnvCmd = &cobra.Command{
+	Use:   "update",
+	Short: "update an exists env",
 	Long:  `this command is used to update a exits global env`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
@@ -67,10 +67,10 @@ var putGlobalCmd = &cobra.Command{
 }
 
 func init() {
-	envCmd.AddCommand(putCmd)
+	envCmd.AddCommand(updateEnvCmd)
 
-	putCmd.Flags().StringP("key", "", "", "select a key to delete")
-	putCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	updateEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
+	updateEnvCmd.Flags().StringP("workspace", "w", "", "workspace id")
 
 	globalEnvCmd.AddCommand(putGlobalCmd)
 
