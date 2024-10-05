@@ -9,13 +9,12 @@ import (
 )
 
 func GetWorkspaceId(cmd *cobra.Command) (string, error) {
-	workspaceId, err := getWorkspaceInfo()
-	if err != nil {
-		workspaceFlag, err := cmd.Flags().GetString("workspace")
-		if workspaceFlag != "" || err != nil {
+	workspaceId, err := cmd.Flags().GetString("workspace")
+	if err != nil || workspaceId == "" {
+		workspaceId, err = getWorkspaceInfo()
+		if err != nil {
 			return "", cmdError.NewCmdError(1, "must specify workspace id")
 		}
-		workspaceId = workspaceFlag
 	}
 	return workspaceId, nil
 }
