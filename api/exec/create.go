@@ -40,7 +40,7 @@ type applicationTemplate struct {
 }
 
 type applicationRequest struct {
-	Name            string            `json:"title"`
+	Name            string            `json:"name"`
 	Description     string            `json:"description"`
 	GithubUrl       string            `json:"githubUrl"`
 	Env             map[string]string `json:"env"`
@@ -133,8 +133,7 @@ func createByJson(content []byte) error {
 		if err != nil {
 			return err
 		}
-
-		_, err = api.SendPost("/"+application.WorkspaceId+"/application/", header, map[string]string{}, request)
+		_, err = api.SendPost("/"+application.WorkspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}
