@@ -10,17 +10,17 @@ import (
 )
 
 type metaData struct {
-	ResourceType string `json:"resourceType"`
-	Name         string `json:"name"`
-	Description  string `json:"description"`
+	ResourceType string `json:"resourceType" yaml:"resourceType"`
+	Name         string `json:"name" yaml:"name"`
+	Description  string `json:"description" yaml:"description"`
 }
 
 type parsingMetaData struct {
-	Metadata metaData `json:"metadata"`
+	Metadata metaData `json:"metadata" yaml:"metadata"`
 }
 
 type workspaceTemplate struct {
-	Metadata metaData `json:"metadata"`
+	Metadata metaData `json:"metadata" yaml:"metadata"`
 }
 
 type workspaceRequest struct {
@@ -30,17 +30,17 @@ type workspaceRequest struct {
 }
 
 type applicationTemplate struct {
-	Metadata        metaData          `json:"metadata"`
-	WorkspaceId     string            `json:"workspaceId"`
-	GithubUrl       string            `json:"githubUrl"`
-	Env             map[string]string `json:"env"`
-	ApplicationType string            `json:"applicationType"`
-	Port            int               `json:"port"`
-	Version         string            `json:"version"`
+	Metadata        metaData          `json:"metadata" yaml:"metadata"`
+	WorkspaceId     string            `json:"workspaceId" yaml:"workspaceId"`
+	GithubUrl       string            `json:"githubUrl" yaml:"githubUrl"`
+	Env             map[string]string `json:"env" yaml:"env"`
+	ApplicationType string            `json:"applicationType" yaml:"applicationType"`
+	Port            int               `json:"port" yaml:"port"`
+	Version         string            `json:"version" yaml:"version"`
 }
 
 type applicationRequest struct {
-	Name            string            `json:"title"`
+	Name            string            `json:"name"`
 	Description     string            `json:"description"`
 	GithubUrl       string            `json:"githubUrl"`
 	Env             map[string]string `json:"env"`
@@ -133,8 +133,7 @@ func createByJson(content []byte) error {
 		if err != nil {
 			return err
 		}
-
-		_, err = api.SendPost("/"+application.WorkspaceId+"/application/", header, map[string]string{}, request)
+		_, err = api.SendPost("/"+application.WorkspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}
@@ -167,7 +166,7 @@ func createByYml(content []byte) error {
 			return err
 		}
 
-		request, err := yaml.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
 		if err != nil {
 			return err
 		}
@@ -183,7 +182,7 @@ func createByYml(content []byte) error {
 			return err
 		}
 
-		request, err := yaml.Marshal(applicationRequest{
+		request, err := json.Marshal(applicationRequest{
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
 			GithubUrl:       application.GithubUrl,
@@ -196,7 +195,7 @@ func createByYml(content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPost("/"+application.WorkspaceId+"/application/", header, map[string]string{}, request)
+		_, err = api.SendPost("/"+application.WorkspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}

@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "resourceType": "APPLICATION",
+    "name": "test-application-with-json",
+    "description": "application created by json"
+  },
+  "workspaceId": "ca5690bb-6525-48aa-93a1-7a24dc0085b6",
+  "githubUrl": "",
+  "env": {
+    "test":  "1234"
+  },
+  "applicationType": "REDIS",
+  "port": 3306,
+  "version": "latest"
+}
