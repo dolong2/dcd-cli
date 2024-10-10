@@ -61,7 +61,7 @@ getTokenInfo:
 	return tokenInfo.AccessToken, nil
 }
 
-func GetWorkspaceId() (string, error) {
+func getWorkspaceId() (string, error) {
 	rawWorkspaceInfo, err := os.ReadFile("./dcd-info/workspace-info.json")
 	if err != nil {
 		return "", errors.New("not found workspace info")
