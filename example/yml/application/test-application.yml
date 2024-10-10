@@ -2,7 +2,6 @@ metadata:
   resourceType: APPLICATION
   name: test-application-with-yml
   description: application created by yml
-workspaceId: 41fc5400-7a5a-4b1b-8a23-53c9c5627be0
 githubUrl: ''
 env:
   test: '1234'
