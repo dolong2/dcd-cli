@@ -31,7 +31,6 @@ type workspaceRequest struct {
 
 type applicationTemplate struct {
 	Metadata        metaData          `json:"metadata" yaml:"metadata"`
-	WorkspaceId     string            `json:"workspaceId" yaml:"workspaceId"`
 	GithubUrl       string            `json:"githubUrl" yaml:"githubUrl"`
 	Env             map[string]string `json:"env" yaml:"env"`
 	ApplicationType string            `json:"applicationType" yaml:"applicationType"`
@@ -133,7 +132,13 @@ func createByJson(content []byte) error {
 		if err != nil {
 			return err
 		}
-		_, err = api.SendPost("/"+application.WorkspaceId+"/application", header, map[string]string{}, request)
+
+		workspaceId, err := getWorkspaceId()
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}
@@ -195,7 +200,12 @@ func createByYml(content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPost("/"+application.WorkspaceId+"/application", header, map[string]string{}, request)
+		workspaceId, err := getWorkspaceId()
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}
