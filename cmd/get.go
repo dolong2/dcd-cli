@@ -127,6 +127,9 @@ func printApplication(application exec.ApplicationResponse) {
 		env := []string{"ENV", key + " : " + value}
 		table.Append(env)
 	}
+	for _, label := range application.Labels {
+		table.Append([]string{"Label", label})
+	}
 	table.Append(port)
 	table.Append(externalPort)
 	table.Append(version)
