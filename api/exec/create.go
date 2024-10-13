@@ -36,6 +36,7 @@ type applicationTemplate struct {
 	ApplicationType string            `json:"applicationType" yaml:"applicationType"`
 	Port            int               `json:"port" yaml:"port"`
 	Version         string            `json:"version" yaml:"version"`
+	Labels          []string          `json:"labels" yaml:"labels"`
 }
 
 type applicationRequest struct {
@@ -46,6 +47,7 @@ type applicationRequest struct {
 	ApplicationType string            `json:"applicationType"`
 	Port            int               `json:"port"`
 	Version         string            `json:"version"`
+	Labels          []string          `json:"labels"`
 }
 
 func CreateByPath(fileDirectory string) error {
@@ -195,6 +197,7 @@ func createByYml(content []byte) error {
 			ApplicationType: application.ApplicationType,
 			Port:            application.Port,
 			Version:         application.Version,
+			Labels:          application.Labels,
 		})
 		if err != nil {
 			return err
