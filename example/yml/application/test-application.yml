@@ -8,3 +8,5 @@ env:
 applicationType: REDIS
 port: 3306
 version: latest
+labels:
+  - test-with-yml

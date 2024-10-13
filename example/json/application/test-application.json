@@ -10,5 +10,8 @@
   },
   "applicationType": "REDIS",
   "port": 3306,
-  "version": "latest"
+  "version": "latest",
+  "labels": [
+    "test-with-json"
+  ]
 }
