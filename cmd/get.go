@@ -77,10 +77,27 @@ func getApplication(cmd *cobra.Command) error {
 	}
 
 	applicationId, err := cmd.Flags().GetString("id")
-	if applicationId == "" || err != nil {
-		applications, err := exec.GetApplications(workspaceId)
-		if err != nil {
-			return cmdError.NewCmdError(1, err.Error())
+
+	if applicationId == "" && err == nil {
+		labels, err := cmd.Flags().GetString("labels")
+
+		var applications *exec.ApplicationListResponse
+
+		// id, labels 플래그 둘다 없을때, 조건 없이 애플리케이션 조회
+		if labels == "" && err != nil {
+			applications, err = exec.GetApplications(workspaceId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+
+			printApplicationList(applications.Applications)
+
+			return nil
+		} else {
+			applications, err = exec.GetApplicationsByLabels(workspaceId, labels)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		}
 
 		printApplicationList(applications.Applications)
@@ -103,6 +120,7 @@ func init() {
 
 	getCmd.Flags().StringP("workspace", "w", "", "used to get resources in a workspace")
 	getCmd.Flags().StringP("id", "", "", "specify resource id")
+	getCmd.Flags().StringP("labels", "l", "", "select labels for applications.\nif use this flag when get workspaces, this flag will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). test-label-1,test-label-2")
 }
 
 func printApplication(application exec.ApplicationResponse) {
