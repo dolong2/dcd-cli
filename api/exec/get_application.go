@@ -45,6 +45,31 @@ func GetApplications(workspaceId string) (*ApplicationListResponse, error) {
 	return &applicationListResponse, nil
 }
 
+func GetApplicationsByLabels(workspaceId string, labels string) (*ApplicationListResponse, error) {
+	header := make(map[string]string)
+	accessToken, err := GetAccessToken()
+	if err != nil {
+		return nil, err
+	}
+	header["Authorization"] = "Bearer " + accessToken
+
+	param := make(map[string]string)
+	param["labels"] = labels
+
+	response, err := api.SendGet("/"+workspaceId+"/application", header, param)
+	if err != nil {
+		return nil, err
+	}
+
+	var applicationListResponse ApplicationListResponse
+	err = json.Unmarshal(response, &applicationListResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &applicationListResponse, nil
+}
+
 func GetApplication(workspaceId string, applicationId string) (*ApplicationResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
