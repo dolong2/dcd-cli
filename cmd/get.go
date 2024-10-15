@@ -84,7 +84,7 @@ func getApplication(cmd *cobra.Command) error {
 		var applications *exec.ApplicationListResponse
 
 		// id, labels 플래그 둘다 없을때, 조건 없이 애플리케이션 조회
-		if labels == "" && err != nil {
+		if labels == "" && err == nil {
 			applications, err = exec.GetApplications(workspaceId)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
