@@ -1,6 +1,9 @@
 package exec
 
-import "github.com/dolong2/dcd-cli/api"
+import (
+	"github.com/dolong2/dcd-cli/api"
+	"strings"
+)
 
 func DeployApplication(workspaceId string, applicationId string) error {
 	header := make(map[string]string)
@@ -14,7 +17,7 @@ func DeployApplication(workspaceId string, applicationId string) error {
 	return err
 }
 
-func DeployApplicationWithLabels(workspaceId string, labels string) error {
+func DeployApplicationWithLabels(workspaceId string, labels []string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -23,7 +26,7 @@ func DeployApplicationWithLabels(workspaceId string, labels string) error {
 	header["Authorization"] = "Bearer " + accessToken
 
 	params := make(map[string]string)
-	params["labels"] = labels
+	params["labels"] = strings.Join(labels, ",")
 	_, err = api.SendPost("/"+workspaceId+"/application/deploy", header, params, []byte(""))
 	return err
 }
