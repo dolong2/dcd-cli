@@ -20,7 +20,11 @@ var runCmd = &cobra.Command{
 		}
 
 		labels, err := cmd.Flags().GetStringArray("labels")
-		if len(labels) != 0 && err == nil {
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+
+		if len(labels) != 0 {
 			err := exec.RunApplicationWithLabels(workspaceId, labels)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())

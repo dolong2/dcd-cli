@@ -3,6 +3,7 @@ package exec
 import (
 	"encoding/json"
 	"github.com/dolong2/dcd-cli/api"
+	"strings"
 )
 
 type ApplicationResponse struct {
@@ -45,7 +46,7 @@ func GetApplications(workspaceId string) (*ApplicationListResponse, error) {
 	return &applicationListResponse, nil
 }
 
-func GetApplicationsByLabels(workspaceId string, labels string) (*ApplicationListResponse, error) {
+func GetApplicationsByLabels(workspaceId string, labels []string) (*ApplicationListResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -54,7 +55,7 @@ func GetApplicationsByLabels(workspaceId string, labels string) (*ApplicationLis
 	header["Authorization"] = "Bearer " + accessToken
 
 	param := make(map[string]string)
-	param["labels"] = labels
+	param["labels"] = strings.Join(labels, ",")
 
 	response, err := api.SendGet("/"+workspaceId+"/application", header, param)
 	if err != nil {
