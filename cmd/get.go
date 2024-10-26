@@ -120,7 +120,7 @@ func init() {
 
 	getCmd.Flags().StringP("workspace", "w", "", "used to get resources in a workspace")
 	getCmd.Flags().StringP("id", "", "", "specify resource id")
-	getCmd.Flags().StringArrayP("labels", "l", []string(nil), "select labels for applications.\nif use this flag when get workspaces, this flag will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). test-label-1,test-label-2")
+	getCmd.Flags().StringArrayP("labels", "l", []string(nil), "select labels for applications.\nif use this flag when get workspaces, this flag will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
 }
 
 func printApplication(application exec.ApplicationResponse) {
