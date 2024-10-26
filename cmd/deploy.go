@@ -19,7 +19,10 @@ var deployCmd = &cobra.Command{
 		}
 
 		labels, err := cmd.Flags().GetStringArray("labels")
-		if len(labels) != 0 && err == nil {
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		if len(labels) != 0 {
 			err := exec.DeployApplicationWithLabels(workspaceId, labels)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
