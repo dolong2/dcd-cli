@@ -48,5 +48,5 @@ func init() {
 	rootCmd.AddCommand(runCmd)
 
 	runCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	runCmd.Flags().StringArrayP("label", "l", []string(nil), "select labels for applications.\nwhen use this flag if you enter application id, application id will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
+	runCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nwhen use this flag if you enter application id, application id will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
 }
