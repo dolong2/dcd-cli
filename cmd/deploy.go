@@ -18,7 +18,7 @@ var deployCmd = &cobra.Command{
 			return err
 		}
 
-		labels, err := cmd.Flags().GetStringArray("labels")
+		labels, err := cmd.Flags().GetStringArray("label")
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}
@@ -46,5 +46,5 @@ func init() {
 	rootCmd.AddCommand(deployCmd)
 
 	deployCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	deployCmd.Flags().StringArrayP("labels", "l", []string(nil), "select labels for applications.\nwhen use this flag if you enter application id, application id will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
+	deployCmd.Flags().StringArrayP("label", "l", []string(nil), "select labels for applications.\nwhen use this flag if you enter application id, application id will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
 }
