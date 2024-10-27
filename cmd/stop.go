@@ -19,6 +19,18 @@ var stopCmd = &cobra.Command{
 			return err
 		}
 
+		labels, err := cmd.Flags().GetStringArray("label")
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		if len(labels) != 0 {
+			err := exec.StopApplicationWithLabels(workspaceId, labels)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+			return nil
+		}
+
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "must specify applicationId")
 		}
