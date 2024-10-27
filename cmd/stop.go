@@ -19,6 +19,18 @@ var stopCmd = &cobra.Command{
 			return err
 		}
 
+		labels, err := cmd.Flags().GetStringArray("label")
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		if len(labels) != 0 {
+			err := exec.StopApplicationWithLabels(workspaceId, labels)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+			return nil
+		}
+
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "must specify applicationId")
 		}
@@ -35,4 +47,5 @@ func init() {
 	rootCmd.AddCommand(stopCmd)
 
 	stopCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	stopCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nwhen use this flag if you enter application id, application id will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
 }

@@ -79,7 +79,7 @@ func getApplication(cmd *cobra.Command) error {
 	applicationId, err := cmd.Flags().GetString("id")
 
 	if applicationId == "" && err == nil {
-		labels, err := cmd.Flags().GetStringArray("labels")
+		labels, err := cmd.Flags().GetStringArray("label")
 
 		var applications *exec.ApplicationListResponse
 
@@ -120,7 +120,7 @@ func init() {
 
 	getCmd.Flags().StringP("workspace", "w", "", "used to get resources in a workspace")
 	getCmd.Flags().StringP("id", "", "", "specify resource id")
-	getCmd.Flags().StringArrayP("labels", "l", []string(nil), "select labels for applications.\nif use this flag when get workspaces, this flag will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
+	getCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag when get workspaces, this flag will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
 }
 
 func printApplication(application exec.ApplicationResponse) {
