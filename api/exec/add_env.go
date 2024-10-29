@@ -23,6 +23,10 @@ func AddEnv(workspaceId string, applicationId string, key string, value string) 
 	envReq := envRequest{EnvList: body}
 	requestJson, err := json.Marshal(envReq)
 
+	if err != nil {
+		return err
+	}
+
 	_, err = api.SendPost("/"+workspaceId+"/application/"+applicationId+"/env", header, map[string]string{}, requestJson)
 	if err != nil {
 		return err
@@ -43,6 +47,10 @@ func AddEnvWithLabels(workspaceId string, labels []string, key string, value str
 	body[key] = value
 	envReq := envRequest{EnvList: body}
 	requestJson, err := json.Marshal(envReq)
+
+	if err != nil {
+		return err
+	}
 
 	params := make(map[string]string)
 	params["labels"] = strings.Join(labels, ",")
