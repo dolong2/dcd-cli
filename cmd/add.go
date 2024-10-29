@@ -18,15 +18,16 @@ var addCmd = &cobra.Command{
 			return err
 		}
 
+		key, keyErr := cmd.Flags().GetString("key")
+		value, valueErr := cmd.Flags().GetString("value")
+		if key == "" || value == "" || keyErr != nil || valueErr != nil {
+			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+		}
+
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "must specify applicationId")
 		}
 		application := args[0]
-		key, existsKey := cmd.Flags().GetString("key")
-		value, existsValue := cmd.Flags().GetString("value")
-		if key == "" || value == "" || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
-		}
 		err = exec.AddEnv(workspaceId, application, key, value)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
