@@ -24,6 +24,20 @@ var addCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
 		}
 
+		labels, err := cmd.Flags().GetStringArray("labels")
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+
+		// label을 하나라도 받았을때 애플리케이션 id를 사용하지 않고, 라벨로 환경변수를 추가
+		if len(labels) != 0 {
+			err := exec.AddEnvWithLabels(workspaceId, labels, key, value)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+			return nil
+		}
+
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "must specify applicationId")
 		}
