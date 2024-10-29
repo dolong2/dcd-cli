@@ -18,15 +18,30 @@ var addCmd = &cobra.Command{
 			return err
 		}
 
+		key, keyErr := cmd.Flags().GetString("key")
+		value, valueErr := cmd.Flags().GetString("value")
+		if key == "" || value == "" || keyErr != nil || valueErr != nil {
+			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+		}
+
+		labels, err := cmd.Flags().GetStringArray("labels")
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+
+		// label을 하나라도 받았을때 애플리케이션 id를 사용하지 않고, 라벨로 환경변수를 추가
+		if len(labels) != 0 {
+			err := exec.AddEnvWithLabels(workspaceId, labels, key, value)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+			return nil
+		}
+
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "must specify applicationId")
 		}
 		application := args[0]
-		key, existsKey := cmd.Flags().GetString("key")
-		value, existsValue := cmd.Flags().GetString("value")
-		if key == "" || value == "" || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
-		}
 		err = exec.AddEnv(workspaceId, application, key, value)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
@@ -72,6 +87,7 @@ func init() {
 	addCmd.Flags().StringP("key", "k", "", "environment key")
 	addCmd.Flags().StringP("value", "v", "", "environment value")
 	addCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	addCmd.Flags().StringArrayP("labels", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
 	globalEnvCmd.AddCommand(addGlobalEnvCmd)
 	addGlobalEnvCmd.Flags().StringP("key", "k", "", "environment key")
 	addGlobalEnvCmd.Flags().StringP("value", "v", "", "environment value")
