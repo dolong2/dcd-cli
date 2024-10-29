@@ -72,6 +72,7 @@ func init() {
 	addCmd.Flags().StringP("key", "k", "", "environment key")
 	addCmd.Flags().StringP("value", "v", "", "environment value")
 	addCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	addCmd.Flags().StringArrayP("labels", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
 	globalEnvCmd.AddCommand(addGlobalEnvCmd)
 	addGlobalEnvCmd.Flags().StringP("key", "k", "", "environment key")
 	addGlobalEnvCmd.Flags().StringP("value", "v", "", "environment value")
