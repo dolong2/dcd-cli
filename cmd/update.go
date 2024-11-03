@@ -109,11 +109,10 @@ func init() {
 	updateCmd.Flags().StringP("template", "", "", "resource template to json")
 
 	envCmd.AddCommand(updateEnvCmd)
-
-	updateEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
 	updateEnvCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	updateEnvCmd.Flags().StringP("key", "", "", "select a key to update")
+	updateEnvCmd.Flags().StringP("value", "", "", "select a value to update")
 
 	globalEnvCmd.AddCommand(updateGlobalEnvCmd)
-
 	updateGlobalEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
 }
