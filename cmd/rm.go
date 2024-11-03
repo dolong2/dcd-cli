@@ -18,14 +18,28 @@ var rmCmd = &cobra.Command{
 			return err
 		}
 
-		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify applicationId")
-		}
-		applicationId := args[0]
 		envKey, err := cmd.Flags().GetString("key")
 		if err != nil || envKey == "" {
 			return cmdError.NewCmdError(1, "should specify envKey")
 		}
+
+		labels, err := cmd.Flags().GetStringArray("label")
+		if err != nil {
+			return err
+		}
+
+		if len(labels) != 0 {
+			err := exec.RemoveEnvWithLabels(workspaceId, labels, envKey)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+
+		if len(args) == 0 {
+			return cmdError.NewCmdError(1, "must specify applicationId")
+		}
+		applicationId := args[0]
 
 		err = exec.RemoveEnv(workspaceId, applicationId, envKey)
 		if err != nil {
