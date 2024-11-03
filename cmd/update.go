@@ -54,15 +54,28 @@ var updateEnvCmd = &cobra.Command{
 			return err
 		}
 
-		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify applicationId")
-		}
-		application := args[0]
 		key, existsKey := cmd.Flags().GetString("key")
 		value, existsValue := cmd.Flags().GetString("value")
 		if key == "" || value == "" || existsKey != nil || existsValue != nil {
 			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
 		}
+
+		labels, err := cmd.Flags().GetStringArray("label")
+		if err != nil {
+			return err
+		}
+		if len(labels) != 0 {
+			err := exec.UpdateEnvWithLabel(workspaceId, labels, key, value)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+
+		if len(args) == 0 {
+			return cmdError.NewCmdError(1, "must specify applicationId")
+		}
+		application := args[0]
 		err = exec.UpdateEnv(workspaceId, application, key, value)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
@@ -109,11 +122,12 @@ func init() {
 	updateCmd.Flags().StringP("template", "", "", "resource template to json")
 
 	envCmd.AddCommand(updateEnvCmd)
-
-	updateEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
 	updateEnvCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	updateEnvCmd.Flags().StringP("key", "", "", "select a key to update")
+	updateEnvCmd.Flags().StringP("value", "", "", "select a value to update")
+	updateEnvCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
 
 	globalEnvCmd.AddCommand(updateGlobalEnvCmd)
-
 	updateGlobalEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
+	updateGlobalEnvCmd.Flags().StringP("value", "", "", "select a value to update")
 }
