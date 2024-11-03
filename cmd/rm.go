@@ -73,6 +73,7 @@ func init() {
 
 	rmCmd.Flags().StringP("key", "", "", "select a key to delete")
 	rmCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	rmCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
 
 	globalEnvCmd.AddCommand(rmGlobalEnvCmd)
 	rmGlobalEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
