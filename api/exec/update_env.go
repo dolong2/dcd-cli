@@ -21,6 +21,10 @@ func UpdateEnv(workspaceId string, applicationId string, key string, value strin
 	updateEnvReq := updateEnvRequest{NewValue: value}
 	requestJson, err := json.Marshal(updateEnvReq)
 
+	if err != nil {
+		return err
+	}
+
 	param := map[string]string{}
 	param["key"] = key
 
@@ -42,6 +46,10 @@ func UpdateEnvWithLabel(workspaceId string, labels []string, key string, value s
 
 	updateEnvReq := updateEnvRequest{NewValue: value}
 	requestJson, err := json.Marshal(updateEnvReq)
+
+	if err != nil {
+		return err
+	}
 
 	param := map[string]string{}
 	param["key"] = key
