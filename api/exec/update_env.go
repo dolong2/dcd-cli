@@ -6,6 +6,10 @@ import (
 	"strings"
 )
 
+type updateEnvRequest struct {
+	NewValue string `json:"newValue"`
+}
+
 func UpdateEnv(workspaceId string, applicationId string, key string, value string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
@@ -14,15 +18,13 @@ func UpdateEnv(workspaceId string, applicationId string, key string, value strin
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	body := map[string]string{}
-	body["newValue"] = value
-	envReq := envRequest{EnvList: body}
-	requestJson, err := json.Marshal(envReq)
+	updateEnvReq := updateEnvRequest{NewValue: value}
+	requestJson, err := json.Marshal(updateEnvReq)
 
 	param := map[string]string{}
 	param["key"] = key
 
-	_, err = api.SendPatch("/"+workspaceId+"/application/"+applicationId+"/env?key="+key, header, param, requestJson)
+	_, err = api.SendPatch("/"+workspaceId+"/application/"+applicationId+"/env", header, param, requestJson)
 	if err != nil {
 		return err
 	}
@@ -38,16 +40,14 @@ func UpdateEnvWithLabel(workspaceId string, labels []string, key string, value s
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	body := map[string]string{}
-	body["newValue"] = value
-	envReq := envRequest{EnvList: body}
-	requestJson, err := json.Marshal(envReq)
+	updateEnvReq := updateEnvRequest{NewValue: value}
+	requestJson, err := json.Marshal(updateEnvReq)
 
 	param := map[string]string{}
 	param["key"] = key
 	param["labels"] = strings.Join(labels, ",")
 
-	_, err = api.SendPatch("/"+workspaceId+"/application/env?key="+key, header, param, requestJson)
+	_, err = api.SendPatch("/"+workspaceId+"/application/env", header, param, requestJson)
 	if err != nil {
 		return err
 	}
