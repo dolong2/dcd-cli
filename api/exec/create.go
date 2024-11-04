@@ -130,6 +130,7 @@ func createByJson(content []byte) error {
 			ApplicationType: application.ApplicationType,
 			Port:            application.Port,
 			Version:         application.Version,
+			Labels:          application.Labels,
 		})
 		if err != nil {
 			return err
