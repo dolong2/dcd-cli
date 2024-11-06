@@ -72,7 +72,7 @@ externally this command
 					}
 					if strings.HasPrefix(message, workingDirPrefix) {
 						workingDir = strings.TrimPrefix(message, workingDirPrefix)
-						break
+						continue
 					} else if strings.HasPrefix(message, endPrefix) {
 						break
 					}
