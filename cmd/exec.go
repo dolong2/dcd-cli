@@ -47,10 +47,6 @@ externally this command
 			for {
 				fmt.Print(workingDir + " > ")
 				input, _, _ := reader.ReadLine() // 사용자 입력 받기
-				err := websocket.SendMessage(conn, string(input))
-				if err != nil {
-					return cmdError.NewCmdError(1, err.Error())
-				}
 
 				// 인터럽트 신호 처리 (Ctrl+C)
 				select {
@@ -63,6 +59,11 @@ externally this command
 				default:
 				}
 
+				err := websocket.SendMessage(conn, string(input))
+				if err != nil {
+					return cmdError.NewCmdError(1, err.Error())
+				}
+
 				for {
 					workingDirPrefix := "current dir = "
 					endPrefix := "cmd end"
@@ -72,7 +73,7 @@ externally this command
 					}
 					if strings.HasPrefix(message, workingDirPrefix) {
 						workingDir = strings.TrimPrefix(message, workingDirPrefix)
-						break
+						continue
 					} else if strings.HasPrefix(message, endPrefix) {
 						break
 					}
