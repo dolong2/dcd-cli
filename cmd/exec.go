@@ -47,10 +47,6 @@ externally this command
 			for {
 				fmt.Print(workingDir + " > ")
 				input, _, _ := reader.ReadLine() // 사용자 입력 받기
-				err := websocket.SendMessage(conn, string(input))
-				if err != nil {
-					return cmdError.NewCmdError(1, err.Error())
-				}
 
 				// 인터럽트 신호 처리 (Ctrl+C)
 				select {
@@ -61,6 +57,11 @@ externally this command
 					}
 					return nil
 				default:
+				}
+
+				err := websocket.SendMessage(conn, string(input))
+				if err != nil {
+					return cmdError.NewCmdError(1, err.Error())
 				}
 
 				for {
