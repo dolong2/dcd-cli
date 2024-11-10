@@ -88,18 +88,18 @@ func CreateByTemplate(rawTemplate string) error {
 	return nil
 }
 
-func createByJson(content []byte) error {
+func createByJson(content []byte) (string, error) {
 	var data parsingMetaData
 	err := json.Unmarshal(content, &data)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	header := make(map[string]string)
 	token, err := GetAccessToken()
 	header["Authorization"] = "Bearer " + token
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	resourceType := data.Metadata.ResourceType
@@ -107,23 +107,23 @@ func createByJson(content []byte) error {
 		var workspace workspaceTemplate
 		err = json.Unmarshal(content, &workspace)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		_, err = api.SendPost("/workspace", header, map[string]string{}, request)
 		if err != nil {
-			return err
+			return "", err
 		}
 	} else if resourceType == "APPLICATION" {
 		var application applicationTemplate
 		err := json.Unmarshal(content, &application)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		request, err := json.Marshal(applicationRequest{
@@ -137,23 +137,29 @@ func createByJson(content []byte) error {
 			Labels:          application.Labels,
 		})
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		workspaceId, err := getWorkspaceId()
 		if err != nil {
-			return err
+			return "", err
 		}
 
-		_, err = api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
+		response, err := api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
-			return err
+			return "", err
 		}
+		var createApplicationResponse createApplicationResponse
+		err = json.Unmarshal(response, &createApplicationResponse)
+		if err != nil {
+			return "", err
+		}
+		return createApplicationResponse.ApplicationId, nil
 	} else {
-		return errors.New(" this resource type is not supported")
+		return "", errors.New(" this resource type is not supported")
 	}
 
-	return nil
+	return "", nil
 }
 
 func createByYml(content []byte) error {
