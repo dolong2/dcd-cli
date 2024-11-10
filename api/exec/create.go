@@ -129,7 +129,7 @@ func createByJson(content []byte) (string, error) {
 		}
 	} else if resourceType == "APPLICATION" {
 		var application applicationTemplate
-		err := json.Unmarshal(content, &application)
+		err = json.Unmarshal(content, &application)
 		if err != nil {
 			return "", err
 		}
