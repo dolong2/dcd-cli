@@ -50,21 +50,26 @@ type applicationRequest struct {
 	Labels          []string          `json:"labels"`
 }
 
+type createApplicationResponse struct {
+	ApplicationId string `json:"applicationId"`
+}
+
 func CreateByPath(fileDirectory string) error {
 	content, err := os.ReadFile(fileDirectory)
 	if err != nil {
 		return err
 	}
 
+	var resourceId = ""
 	ext := filepath.Ext(fileDirectory)
 	switch ext {
 	case ".json":
-		err = createByJson(content)
+		resourceId, err = createByJson(content)
 		if err != nil {
 			return err
 		}
 	case ".yml", ".yaml":
-		err = createByYml(content)
+		resourceId, err = createByYml(content)
 		if err != nil {
 			return err
 		}
@@ -72,11 +77,18 @@ func CreateByPath(fileDirectory string) error {
 		return errors.New("invalid file extension")
 	}
 
+	if resourceId != "" {
+		err := MapFileToResourceId(fileDirectory, resourceId)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
 func CreateByTemplate(rawTemplate string) error {
-	err := createByJson([]byte(rawTemplate))
+	_, err := createByJson([]byte(rawTemplate))
 	if err != nil {
 		return err
 	}
@@ -84,18 +96,18 @@ func CreateByTemplate(rawTemplate string) error {
 	return nil
 }
 
-func createByJson(content []byte) error {
+func createByJson(content []byte) (string, error) {
 	var data parsingMetaData
 	err := json.Unmarshal(content, &data)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	header := make(map[string]string)
 	token, err := GetAccessToken()
 	header["Authorization"] = "Bearer " + token
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	resourceType := data.Metadata.ResourceType
@@ -103,23 +115,23 @@ func createByJson(content []byte) error {
 		var workspace workspaceTemplate
 		err = json.Unmarshal(content, &workspace)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		_, err = api.SendPost("/workspace", header, map[string]string{}, request)
 		if err != nil {
-			return err
+			return "", err
 		}
 	} else if resourceType == "APPLICATION" {
 		var application applicationTemplate
-		err := json.Unmarshal(content, &application)
+		err = json.Unmarshal(content, &application)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		request, err := json.Marshal(applicationRequest{
@@ -133,37 +145,43 @@ func createByJson(content []byte) error {
 			Labels:          application.Labels,
 		})
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		workspaceId, err := getWorkspaceId()
 		if err != nil {
-			return err
+			return "", err
 		}
 
-		_, err = api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
+		response, err := api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
-			return err
+			return "", err
 		}
+		var createApplicationResponse createApplicationResponse
+		err = json.Unmarshal(response, &createApplicationResponse)
+		if err != nil {
+			return "", err
+		}
+		return createApplicationResponse.ApplicationId, nil
 	} else {
-		return errors.New(" this resource type is not supported")
+		return "", errors.New(" this resource type is not supported")
 	}
 
-	return nil
+	return "", nil
 }
 
-func createByYml(content []byte) error {
+func createByYml(content []byte) (string, error) {
 	var data parsingMetaData
 	err := yaml.Unmarshal(content, &data)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	header := make(map[string]string)
 	token, err := GetAccessToken()
 	header["Authorization"] = "Bearer " + token
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	resourceType := data.Metadata.ResourceType
@@ -171,23 +189,23 @@ func createByYml(content []byte) error {
 		var workspace workspaceTemplate
 		err = yaml.Unmarshal(content, &workspace)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		_, err = api.SendPost("/workspace", header, map[string]string{}, request)
 		if err != nil {
-			return err
+			return "", err
 		}
 	} else if resourceType == "APPLICATION" {
 		var application applicationTemplate
 		err := yaml.Unmarshal(content, &application)
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		request, err := json.Marshal(applicationRequest{
@@ -201,21 +219,29 @@ func createByYml(content []byte) error {
 			Labels:          application.Labels,
 		})
 		if err != nil {
-			return err
+			return "", err
 		}
 
 		workspaceId, err := getWorkspaceId()
 		if err != nil {
-			return err
+			return "", err
 		}
 
-		_, err = api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
+		response, err := api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
-			return err
+			return "", err
 		}
+
+		// 애플리케이션 생성후 애플리케이션 아이디를 반환
+		var createApplicationResponse createApplicationResponse
+		err = json.Unmarshal(response, &createApplicationResponse)
+		if err != nil {
+			return "", err
+		}
+		return createApplicationResponse.ApplicationId, nil
 	} else {
-		return errors.New(" this resource type is not supported")
+		return "", errors.New(" this resource type is not supported")
 	}
 
-	return nil
+	return "", nil
 }
