@@ -60,15 +60,16 @@ func CreateByPath(fileDirectory string) error {
 		return err
 	}
 
+	var resourceId = ""
 	ext := filepath.Ext(fileDirectory)
 	switch ext {
 	case ".json":
-		err = createByJson(content)
+		resourceId, err = createByJson(content)
 		if err != nil {
 			return err
 		}
 	case ".yml", ".yaml":
-		err = createByYml(content)
+		resourceId, err = createByYml(content)
 		if err != nil {
 			return err
 		}
@@ -76,11 +77,18 @@ func CreateByPath(fileDirectory string) error {
 		return errors.New("invalid file extension")
 	}
 
+	if resourceId != "" {
+		err := MapFileToResourceId(fileDirectory, resourceId)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
 func CreateByTemplate(rawTemplate string) error {
-	err := createByJson([]byte(rawTemplate))
+	_, err := createByJson([]byte(rawTemplate))
 	if err != nil {
 		return err
 	}
