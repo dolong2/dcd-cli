@@ -81,9 +81,19 @@ func getWorkspaceId() (string, error) {
 }
 
 func MapFileToResourceId(fileDirectory string, resourceId string) error {
-	resourceMappingInfoPath := "./dcd-info/resource-mapping-info.json"
-	fileName := filepath.Base(fileDirectory)
+	if resourceId == "" || fileDirectory == "" {
+		return errors.New("invalid parameter to map resource id")
+	}
 
+	resourceMappingInfoPath := "./dcd-info/resource-mapping-info.json"
+
+	// 디렉토리가 없으면 생성
+	resourceMappingDir := filepath.Dir(resourceMappingInfoPath)
+	if err := os.MkdirAll(resourceMappingDir, 0755); err != nil {
+		return errors.New("failure to create dcd-info directory")
+	}
+
+	fileName := filepath.Base(fileDirectory)
 	// JSON 파일 읽기 또는 파일이 없을 경우 새로 생성
 	file, err := os.ReadFile(resourceMappingInfoPath)
 	var data map[string]string
