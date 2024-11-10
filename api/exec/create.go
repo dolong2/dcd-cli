@@ -50,6 +50,10 @@ type applicationRequest struct {
 	Labels          []string          `json:"labels"`
 }
 
+type createApplicationResponse struct {
+	ApplicationId string `json:"applicationId"`
+}
+
 func CreateByPath(fileDirectory string) error {
 	content, err := os.ReadFile(fileDirectory)
 	if err != nil {
