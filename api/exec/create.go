@@ -210,9 +210,8 @@ func createByYml(content []byte) (string, error) {
 		if err != nil {
 			return "", err
 		}
-
 		createWorkspaceResponse := createWorkspaceResponse{}
-		err = yaml.Unmarshal(response, &createWorkspaceResponse)
+		err = json.Unmarshal(response, &createWorkspaceResponse)
 		if err != nil {
 			return "", err
 		}
