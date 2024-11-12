@@ -127,10 +127,17 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		_, err = api.SendPost("/workspace", header, map[string]string{}, request)
+		response, err := api.SendPost("/workspace", header, map[string]string{}, request)
 		if err != nil {
 			return "", err
 		}
+
+		createWorkspaceResponse := createWorkspaceResponse{}
+		err = json.Unmarshal(response, &createWorkspaceResponse)
+		if err != nil {
+			return "", err
+		}
+		return createWorkspaceResponse.WorkspaceId, nil
 	} else if resourceType == "APPLICATION" {
 		var application applicationTemplate
 		err = json.Unmarshal(content, &application)
@@ -170,8 +177,6 @@ func createByJson(content []byte) (string, error) {
 	} else {
 		return "", errors.New(" this resource type is not supported")
 	}
-
-	return "", nil
 }
 
 func createByYml(content []byte) (string, error) {
