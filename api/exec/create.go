@@ -50,6 +50,10 @@ type applicationRequest struct {
 	Labels          []string          `json:"labels"`
 }
 
+type createWorkspaceResponse struct {
+	WorkspaceId string `json:"workspaceId"`
+}
+
 type createApplicationResponse struct {
 	ApplicationId string `json:"applicationId"`
 }
