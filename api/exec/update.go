@@ -82,6 +82,49 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 	return nil
 }
 
+func UpdateByOnlyPath(fileDirectory string) error {
+	// JSON 파일 경로
+	filePath := "./dcd-info/resource-mapping-info.json"
+
+	// JSON 파일 읽기
+	resourceMappingInfo, err := os.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+
+	// JSON 데이터 언마샬링
+	var data map[string]string
+	if err := json.Unmarshal(resourceMappingInfo, &data); err != nil {
+		return err
+	}
+
+	templateName := filepath.Base(fileDirectory)
+	resourceId := data[templateName]
+
+	content, err := os.ReadFile(fileDirectory)
+	if err != nil {
+		return err
+	}
+
+	ext := filepath.Ext(fileDirectory)
+	switch ext {
+	case ".json":
+		err = updateByJson(resourceId, content)
+		if err != nil {
+			return err
+		}
+	case ".yml", ".yaml":
+		err = updateByYml(resourceId, content)
+		if err != nil {
+			return err
+		}
+	default:
+		return errors.New("invalid file extension")
+	}
+
+	return nil
+}
+
 func updateByJson(resourceId string, content []byte) error {
 	var data parsingUpdateMetaData
 	err := json.Unmarshal(content, &data)
