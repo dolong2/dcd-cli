@@ -10,36 +10,35 @@ import (
 )
 
 type updateMetaData struct {
-	ResourceType string `json:"resourceType"`
-	Name         string `json:"name"`
-	Description  string `json:"description"`
+	ResourceType string `json:"resourceType" yaml:"resourceType"`
+	Name         string `json:"name" yaml:"name"`
+	Description  string `json:"description" yaml:"description"`
 }
 
 type parsingUpdateMetaData struct {
-	Metadata updateMetaData `json:"metadata"`
+	Metadata updateMetaData `json:"metadata" yaml:"metadata"`
 }
 
 type updateWorkspaceTemplate struct {
-	Metadata updateMetaData `json:"metadata"`
+	Metadata updateMetaData `json:"metadata" yaml:"metadata"`
 }
 
 type updateWorkspaceRequest struct {
-	ResourceType string `json:"resourceType"`
-	Name         string `json:"title"`
-	Description  string `json:"description"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 type updateApplicationTemplate struct {
-	Metadata        metaData `json:"metadata"`
-	WorkspaceId     string   `json:"workspaceId"`
-	GithubUrl       string   `json:"githubUrl"`
-	ApplicationType string   `json:"applicationType"`
-	Port            int      `json:"port"`
-	Version         string   `json:"version"`
+	Metadata        metaData `json:"metadata" yaml:"metadata"`
+	WorkspaceId     string   `json:"workspaceId" yaml:"workspaceId"`
+	GithubUrl       string   `json:"githubUrl" yaml:"githubUrl"`
+	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
+	Port            int      `json:"port" yaml:"port"`
+	Version         string   `json:"version" yaml:"version"`
 }
 
 type updateApplicationRequest struct {
-	Name            string            `json:"title"`
+	Name            string            `json:"name"`
 	Description     string            `json:"description"`
 	GithubUrl       string            `json:"githubUrl"`
 	Env             map[string]string `json:"env"`
@@ -82,6 +81,53 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 	return nil
 }
 
+func UpdateByOnlyPath(fileDirectory string) error {
+	// JSON 파일 경로
+	filePath := "./dcd-info/resource-mapping-info.json"
+
+	// JSON 파일 읽기
+	resourceMappingInfo, err := os.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+
+	// JSON 데이터 언마샬링
+	var data map[string]string
+	if err := json.Unmarshal(resourceMappingInfo, &data); err != nil {
+		return err
+	}
+
+	templateName := filepath.Base(fileDirectory)
+	resourceId := data[templateName]
+
+	if resourceId == "" {
+		return errors.New("must enter a resource id")
+	}
+
+	content, err := os.ReadFile(fileDirectory)
+	if err != nil {
+		return err
+	}
+
+	ext := filepath.Ext(fileDirectory)
+	switch ext {
+	case ".json":
+		err = updateByJson(resourceId, content)
+		if err != nil {
+			return err
+		}
+	case ".yml", ".yaml":
+		err = updateByYml(resourceId, content)
+		if err != nil {
+			return err
+		}
+	default:
+		return errors.New("invalid file extension")
+	}
+
+	return nil
+}
+
 func updateByJson(resourceId string, content []byte) error {
 	var data parsingUpdateMetaData
 	err := json.Unmarshal(content, &data)
@@ -104,7 +150,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 
-		request, err := json.Marshal(updateWorkspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		request, err := json.Marshal(updateWorkspaceRequest{Title: workspace.Metadata.Name, Description: workspace.Metadata.Description})
 		if err != nil {
 			return err
 		}
@@ -114,13 +160,18 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 	} else if resourceType == "APPLICATION" {
-		var application updateApplicationTemplate
-		err := yaml.Unmarshal(content, &application)
+		workspaceId, err := getWorkspaceId()
 		if err != nil {
 			return err
 		}
 
-		request, err := yaml.Marshal(updateApplicationRequest{
+		var application updateApplicationTemplate
+		err = json.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := json.Marshal(updateApplicationRequest{
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
 			GithubUrl:       application.GithubUrl,
@@ -132,7 +183,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPut("/"+application.WorkspaceId+"/application/"+resourceId, header, map[string]string{}, request)
+		_, err = api.SendPut("/"+workspaceId+"/application/"+resourceId, header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}
@@ -165,7 +216,7 @@ func updateByYml(resourceId string, content []byte) error {
 			return err
 		}
 
-		request, err := yaml.Marshal(updateWorkspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		request, err := json.Marshal(updateWorkspaceRequest{Title: workspace.Metadata.Name, Description: workspace.Metadata.Description})
 		if err != nil {
 			return err
 		}
@@ -175,13 +226,18 @@ func updateByYml(resourceId string, content []byte) error {
 			return err
 		}
 	} else if resourceType == "APPLICATION" {
-		var application updateApplicationTemplate
-		err := yaml.Unmarshal(content, &application)
+		workspaceId, err := getWorkspaceId()
 		if err != nil {
 			return err
 		}
 
-		request, err := yaml.Marshal(updateApplicationRequest{
+		var application updateApplicationTemplate
+		err = yaml.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := json.Marshal(updateApplicationRequest{
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
 			GithubUrl:       application.GithubUrl,
@@ -193,7 +249,7 @@ func updateByYml(resourceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPut("/"+application.WorkspaceId+"/application/"+resourceId, header, map[string]string{}, request)
+		_, err = api.SendPut("/"+workspaceId+"/application/"+resourceId, header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}

@@ -13,17 +13,23 @@ var updateCmd = &cobra.Command{
 	Short: "command to update a resource",
 	Long:  `this command is used to update a resource`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) < 1 {
-			return cmdError.NewCmdError(1, "must enter both resource type and resource id")
-		}
-
-		resourceId := args[0]
-
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
 		if fileErr != nil || templateErr != nil {
 			return cmdError.NewCmdError(2, "invalid flag")
 		}
+
+		// args가 없다면 파일명에 매핑된 리소스 아이디를 가져오는 메서드 호출
+		if len(args) < 1 {
+			err := exec.UpdateByOnlyPath(fileDirectory)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+			return nil
+		}
+
+		resourceId := args[0]
+
 		if fileDirectory == "" && template == "" {
 			err := cmdError.NewCmdError(1, "there must be required either file flag or template flag")
 			return err
