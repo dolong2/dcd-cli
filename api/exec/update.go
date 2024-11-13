@@ -10,36 +10,35 @@ import (
 )
 
 type updateMetaData struct {
-	ResourceType string `json:"resourceType"`
-	Name         string `json:"name"`
-	Description  string `json:"description"`
+	ResourceType string `json:"resourceType" yaml:"resourceType"`
+	Name         string `json:"name" yaml:"name"`
+	Description  string `json:"description" yaml:"description"`
 }
 
 type parsingUpdateMetaData struct {
-	Metadata updateMetaData `json:"metadata"`
+	Metadata updateMetaData `json:"metadata" yaml:"metadata"`
 }
 
 type updateWorkspaceTemplate struct {
-	Metadata updateMetaData `json:"metadata"`
+	Metadata updateMetaData `json:"metadata" yaml:"metadata"`
 }
 
 type updateWorkspaceRequest struct {
-	ResourceType string `json:"resourceType"`
-	Name         string `json:"title"`
-	Description  string `json:"description"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
 }
 
 type updateApplicationTemplate struct {
-	Metadata        metaData `json:"metadata"`
-	WorkspaceId     string   `json:"workspaceId"`
-	GithubUrl       string   `json:"githubUrl"`
-	ApplicationType string   `json:"applicationType"`
-	Port            int      `json:"port"`
-	Version         string   `json:"version"`
+	Metadata        metaData `json:"metadata" yaml:"metadata"`
+	WorkspaceId     string   `json:"workspaceId" yaml:"workspaceId"`
+	GithubUrl       string   `json:"githubUrl" yaml:"githubUrl"`
+	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
+	Port            int      `json:"port" yaml:"port"`
+	Version         string   `json:"version" yaml:"version"`
 }
 
 type updateApplicationRequest struct {
-	Name            string            `json:"title"`
+	Name            string            `json:"name"`
 	Description     string            `json:"description"`
 	GithubUrl       string            `json:"githubUrl"`
 	Env             map[string]string `json:"env"`
