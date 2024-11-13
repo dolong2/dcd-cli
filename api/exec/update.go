@@ -166,7 +166,7 @@ func updateByJson(resourceId string, content []byte) error {
 		}
 
 		var application updateApplicationTemplate
-		err = yaml.Unmarshal(content, &application)
+		err = json.Unmarshal(content, &application)
 		if err != nil {
 			return err
 		}
