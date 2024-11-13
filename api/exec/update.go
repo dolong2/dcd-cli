@@ -146,7 +146,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 
-		request, err := json.Marshal(updateWorkspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		request, err := json.Marshal(updateWorkspaceRequest{Title: workspace.Metadata.Name, Description: workspace.Metadata.Description})
 		if err != nil {
 			return err
 		}
@@ -156,13 +156,18 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 	} else if resourceType == "APPLICATION" {
-		var application updateApplicationTemplate
-		err := yaml.Unmarshal(content, &application)
+		workspaceId, err := getWorkspaceId()
 		if err != nil {
 			return err
 		}
 
-		request, err := yaml.Marshal(updateApplicationRequest{
+		var application updateApplicationTemplate
+		err = yaml.Unmarshal(content, &application)
+		if err != nil {
+			return err
+		}
+
+		request, err := json.Marshal(updateApplicationRequest{
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
 			GithubUrl:       application.GithubUrl,
@@ -174,7 +179,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 
-		_, err = api.SendPut("/"+application.WorkspaceId+"/application/"+resourceId, header, map[string]string{}, request)
+		_, err = api.SendPut("/"+workspaceId+"/application/"+resourceId, header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}
