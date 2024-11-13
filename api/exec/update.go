@@ -100,6 +100,10 @@ func UpdateByOnlyPath(fileDirectory string) error {
 	templateName := filepath.Base(fileDirectory)
 	resourceId := data[templateName]
 
+	if resourceId == "" {
+		return errors.New("must enter a resource id")
+	}
+
 	content, err := os.ReadFile(fileDirectory)
 	if err != nil {
 		return err
