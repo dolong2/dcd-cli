@@ -126,3 +126,29 @@ func MapFileToResourceId(fileDirectory string, resourceId string) error {
 
 	return nil
 }
+
+func GetResourceIdByFilePath(fileDirectory string) (string, error) {
+	// JSON 파일 경로
+	filePath := "./dcd-info/resource-mapping-info.json"
+
+	// JSON 파일 읽기
+	resourceMappingInfo, err := os.ReadFile(filePath)
+	if err != nil {
+		return "", err
+	}
+
+	// JSON 데이터 언마샬링
+	var data map[string]string
+	if err := json.Unmarshal(resourceMappingInfo, &data); err != nil {
+		return "", err
+	}
+
+	templateName := filepath.Base(fileDirectory)
+	resourceId := data[templateName]
+
+	if resourceId == "" {
+		return "", errors.New("해당 템플릿에 매핑된 리소스 아이디를 찾을 수 없음")
+	}
+
+	return resourceId, nil
+}
