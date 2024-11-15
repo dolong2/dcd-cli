@@ -82,25 +82,9 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 }
 
 func UpdateByOnlyPath(fileDirectory string) error {
-	// JSON 파일 경로
-	filePath := "./dcd-info/resource-mapping-info.json"
+	resourceId, err := GetResourceIdByFilePath(fileDirectory)
 
-	// JSON 파일 읽기
-	resourceMappingInfo, err := os.ReadFile(filePath)
 	if err != nil {
-		return err
-	}
-
-	// JSON 데이터 언마샬링
-	var data map[string]string
-	if err := json.Unmarshal(resourceMappingInfo, &data); err != nil {
-		return err
-	}
-
-	templateName := filepath.Base(fileDirectory)
-	resourceId := data[templateName]
-
-	if resourceId == "" {
 		return errors.New("must enter a resource id")
 	}
 
