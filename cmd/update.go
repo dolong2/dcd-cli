@@ -21,6 +21,9 @@ var updateCmd = &cobra.Command{
 
 		// args가 없다면 파일명에 매핑된 리소스 아이디를 가져오는 메서드 호출
 		if len(args) < 1 {
+			if fileDirectory == "" {
+				return cmdError.NewCmdError(1, "resource id can be omitted only when use a file flag")
+			}
 			err := exec.UpdateByOnlyPath(fileDirectory)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
