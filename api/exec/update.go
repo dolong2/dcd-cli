@@ -85,7 +85,7 @@ func UpdateByOnlyPath(fileDirectory string) error {
 	resourceId, err := GetResourceIdByFilePath(fileDirectory)
 
 	if err != nil {
-		return errors.New("must enter a resource id")
+		return errors.New("there are no files mapped to the resource id")
 	}
 
 	content, err := os.ReadFile(fileDirectory)
