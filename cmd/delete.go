@@ -35,6 +35,8 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+		} else {
+			return cmdError.NewCmdError(1, "invalid resource type")
 		}
 
 		return nil
