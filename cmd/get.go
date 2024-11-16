@@ -36,6 +36,8 @@ resourceType:
 			if err != nil {
 				return err
 			}
+		} else {
+			return cmdError.NewCmdError(1, "invalid resource type")
 		}
 
 		return nil
