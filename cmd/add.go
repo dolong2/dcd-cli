@@ -21,7 +21,7 @@ var addCmd = &cobra.Command{
 		key, keyErr := cmd.Flags().GetString("key")
 		value, valueErr := cmd.Flags().GetString("value")
 		if key == "" || value == "" || keyErr != nil || valueErr != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+			return cmdError.NewCmdError(1, "환경변수의 키와 값이 전부 입력되어야합니다.")
 		}
 
 		labels, err := cmd.Flags().GetStringArray("label")
@@ -39,7 +39,7 @@ var addCmd = &cobra.Command{
 		}
 
 		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify applicationId")
+			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
 		}
 		application := args[0]
 		err = exec.AddEnv(workspaceId, application, key, value)
@@ -72,7 +72,7 @@ var addGlobalEnvCmd = &cobra.Command{
 		key, existsKey := cmd.Flags().GetString("key")
 		value, existsValue := cmd.Flags().GetString("value")
 		if key == "" || value == "" || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+			return cmdError.NewCmdError(1, "환경변수의 키와 값이 전부 입력되어야합니다.")
 		}
 		err := exec.AddEnv(workspaceId, application, key, value)
 		if err != nil {

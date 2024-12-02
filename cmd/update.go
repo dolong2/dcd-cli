@@ -16,13 +16,13 @@ var updateCmd = &cobra.Command{
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
 		if fileErr != nil || templateErr != nil {
-			return cmdError.NewCmdError(2, "invalid flag")
+			return cmdError.NewCmdError(2, "옳바르지 않은 플래그입니다.")
 		}
 
 		// args가 없다면 파일명에 매핑된 리소스 아이디를 가져오는 메서드 호출
 		if len(args) < 1 {
 			if fileDirectory == "" {
-				return cmdError.NewCmdError(1, "resource id can be omitted only when use a file flag")
+				return cmdError.NewCmdError(1, "리소스 아이디는 파일 플래그를 사용할때만 생략할 수 있습니다.")
 			}
 			err := exec.UpdateByOnlyPath(fileDirectory)
 			if err != nil {
@@ -34,7 +34,7 @@ var updateCmd = &cobra.Command{
 		resourceId := args[0]
 
 		if fileDirectory == "" && template == "" {
-			err := cmdError.NewCmdError(1, "there must be required either file flag or template flag")
+			err := cmdError.NewCmdError(1, "파일 플래그나 템플릿 플래그가 있어야합니다.")
 			return err
 		} else if fileDirectory != "" {
 			err := exec.UpdateByPath(resourceId, fileDirectory)
@@ -66,7 +66,7 @@ var updateEnvCmd = &cobra.Command{
 		key, existsKey := cmd.Flags().GetString("key")
 		value, existsValue := cmd.Flags().GetString("value")
 		if key == "" || value == "" || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+			return cmdError.NewCmdError(1, "환경변수의 키와 값이 입력되어야합니다.")
 		}
 
 		labels, err := cmd.Flags().GetStringArray("label")
@@ -82,7 +82,7 @@ var updateEnvCmd = &cobra.Command{
 		}
 
 		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify applicationId")
+			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
 		}
 		application := args[0]
 		err = exec.UpdateEnv(workspaceId, application, key, value)
@@ -114,7 +114,7 @@ var updateGlobalEnvCmd = &cobra.Command{
 		key, existsKey := cmd.Flags().GetString("key")
 		value, existsValue := cmd.Flags().GetString("value")
 		if key == "" || value == "" || existsKey != nil || existsValue != nil {
-			return cmdError.NewCmdError(1, "this command needs to specify both and key and value")
+			return cmdError.NewCmdError(1, "환경변수의 키와 값이 입력되어야합니다.")
 		}
 		err := exec.UpdateGlobalEnv(workspaceId, key, value)
 		if err != nil {

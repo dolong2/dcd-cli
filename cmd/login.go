@@ -17,8 +17,8 @@ var loginCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		email, emailErr := cmd.Flags().GetString("email")
 		existsPassword, passwordErr := cmd.Flags().GetBool("password")
-		if emailErr != nil || passwordErr != nil {
-			return cmdError.NewCmdError(1, "invalid flag")
+		if email == "" || emailErr != nil || passwordErr != nil {
+			return cmdError.NewCmdError(1, "옳바르지 않은 플래그입니다.")
 		}
 		password := ""
 		if existsPassword {

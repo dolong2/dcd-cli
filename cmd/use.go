@@ -14,11 +14,11 @@ var useCmd = &cobra.Command{
 	Long:  `this command can be used to specify which workspace to primarily use.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return cmdError.NewCmdError(1, "must be specify workspaceId")
+			return cmdError.NewCmdError(1, "워크스페이스 아이디가 입력되어야합니다.")
 		}
 		workspaceId := args[0]
 		if workspaceId == "" || workspaceId == " " {
-			return cmdError.NewCmdError(1, "must be specify workspaceId")
+			return cmdError.NewCmdError(1, "워크스페이스 아이디가 입력되어야합니다.")
 		}
 
 		workspace, err := exec.GetWorkspace(workspaceId)

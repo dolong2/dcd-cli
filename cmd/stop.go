@@ -32,7 +32,7 @@ var stopCmd = &cobra.Command{
 		}
 
 		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify applicationId")
+			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
 		}
 		applicationId := args[0]
 		err = exec.StopApplication(workspaceId, applicationId)
