@@ -75,7 +75,7 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 			return err
 		}
 	default:
-		return errors.New("invalid file extension")
+		return errors.New("지원되지 않는 파일 확장자입니다.")
 	}
 
 	return nil
@@ -85,7 +85,7 @@ func UpdateByOnlyPath(fileDirectory string) error {
 	resourceId, err := GetResourceIdByFilePath(fileDirectory)
 
 	if err != nil {
-		return errors.New("there are no files mapped to the resource id")
+		return errors.New("파일이랑 매핑되는 리소스 아이디가 존재하지 않습니다.")
 	}
 
 	content, err := os.ReadFile(fileDirectory)
@@ -106,7 +106,7 @@ func UpdateByOnlyPath(fileDirectory string) error {
 			return err
 		}
 	default:
-		return errors.New("invalid file extension")
+		return errors.New("지원되지 않는 파일 확장자입니다.")
 	}
 
 	return nil
@@ -172,7 +172,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 	} else {
-		return errors.New(" this resource type is not supported")
+		return errors.New("지원되지 않는 리소스 타입입니다.")
 	}
 
 	return nil
@@ -238,7 +238,7 @@ func updateByYml(resourceId string, content []byte) error {
 			return err
 		}
 	} else {
-		return errors.New(" this resource type is not supported")
+		return errors.New("지원되지 않는 리소스 타입입니다.")
 	}
 
 	return nil

@@ -175,7 +175,7 @@ func createByJson(content []byte) (string, error) {
 		}
 		return createApplicationResponse.ApplicationId, nil
 	} else {
-		return "", errors.New(" this resource type is not supported")
+		return "", errors.New("지원되지 않는 리소스 타입입니다.")
 	}
 }
 
@@ -255,6 +255,6 @@ func createByYml(content []byte) (string, error) {
 		}
 		return createApplicationResponse.ApplicationId, nil
 	} else {
-		return "", errors.New(" this resource type is not supported")
+		return "", errors.New("지원되지 않는 리소스 타입입니다.")
 	}
 }
