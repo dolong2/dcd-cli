@@ -20,7 +20,7 @@ var rmCmd = &cobra.Command{
 
 		envKey, err := cmd.Flags().GetString("key")
 		if err != nil || envKey == "" {
-			return cmdError.NewCmdError(1, "should specify envKey")
+			return cmdError.NewCmdError(1, "환경변수 키가 입력되어야합니다.")
 		}
 
 		labels, err := cmd.Flags().GetStringArray("label")
@@ -37,7 +37,7 @@ var rmCmd = &cobra.Command{
 		}
 
 		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify applicationId")
+			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
 		}
 		applicationId := args[0]
 
@@ -70,7 +70,7 @@ var rmGlobalEnvCmd = &cobra.Command{
 
 		envKey, err := cmd.Flags().GetString("key")
 		if err != nil || envKey == "" {
-			return cmdError.NewCmdError(1, "should specify envKey")
+			return cmdError.NewCmdError(1, "환경변수 키가 입력되어야합니다.")
 		}
 
 		err = exec.RemoveGlobalEnv(workspaceId, envKey)

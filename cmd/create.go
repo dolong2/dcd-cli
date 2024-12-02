@@ -15,10 +15,10 @@ var createCmd = &cobra.Command{
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
 		if fileErr != nil || templateErr != nil {
-			return cmdError.NewCmdError(2, "invalid flag")
+			return cmdError.NewCmdError(2, "올바르지 않은 플래그입니다.")
 		}
 		if fileDirectory == "" && template == "" {
-			err := cmdError.NewCmdError(1, "there must be required either file flag or template flag")
+			err := cmdError.NewCmdError(1, "파일 플래그나 템플릿 플래그 중 하나는 입력되어야합니다.")
 			return err
 		} else if fileDirectory != "" {
 			err := exec.CreateByPath(fileDirectory)

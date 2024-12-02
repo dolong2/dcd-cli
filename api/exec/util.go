@@ -65,14 +65,14 @@ getTokenInfo:
 func getWorkspaceId() (string, error) {
 	rawWorkspaceInfo, err := os.ReadFile("./dcd-info/workspace-info.json")
 	if err != nil {
-		return "", errors.New("not found workspace info")
+		return "", errors.New("워크스페이스 정보를 찾을수없습니다.")
 	}
 
 	var workspaceInfo map[string]interface{}
 
 	err = json.Unmarshal(rawWorkspaceInfo, &workspaceInfo)
 	if err != nil {
-		return "", errors.New("invalid workspace info")
+		return "", errors.New("워크스페이스 정보가 올바르지 않습니다.")
 	}
 
 	workspaceId := workspaceInfo["workspaceId"].(string)
@@ -82,7 +82,7 @@ func getWorkspaceId() (string, error) {
 
 func MapFileToResourceId(fileDirectory string, resourceId string) error {
 	if resourceId == "" || fileDirectory == "" {
-		return errors.New("invalid parameter to map resource id")
+		return errors.New("리소스 아이디와 파일경로는 필수적으로 입력되어야합니다.")
 	}
 
 	resourceMappingInfoPath := "./dcd-info/resource-mapping-info.json"
@@ -90,7 +90,7 @@ func MapFileToResourceId(fileDirectory string, resourceId string) error {
 	// 디렉토리가 없으면 생성
 	resourceMappingDir := filepath.Dir(resourceMappingInfoPath)
 	if err := os.MkdirAll(resourceMappingDir, 0755); err != nil {
-		return errors.New("failure to create dcd-info directory")
+		return errors.New("dcd-info 정보 디렉토리를 생성하는데 실패했습니다.")
 	}
 
 	fileName := filepath.Base(fileDirectory)

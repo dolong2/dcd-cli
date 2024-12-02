@@ -22,7 +22,7 @@ resourceType:
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			return cmdError.NewCmdError(1, "must specify resource type")
+			return cmdError.NewCmdError(1, "리소스 타입이 입력되어야 합니다.")
 		}
 		resourceType := args[0]
 
@@ -37,7 +37,7 @@ resourceType:
 				return err
 			}
 		} else {
-			return cmdError.NewCmdError(1, "invalid resource type")
+			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
 		}
 
 		return nil
