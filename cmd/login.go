@@ -18,7 +18,7 @@ var loginCmd = &cobra.Command{
 		email, emailErr := cmd.Flags().GetString("email")
 		existsPassword, passwordErr := cmd.Flags().GetBool("password")
 		if email == "" || emailErr != nil || passwordErr != nil {
-			return cmdError.NewCmdError(1, "옳바르지 않은 플래그입니다.")
+			return cmdError.NewCmdError(1, "올바르지 않은 플래그입니다.")
 		}
 		password := ""
 		if existsPassword {

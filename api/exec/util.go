@@ -72,7 +72,7 @@ func getWorkspaceId() (string, error) {
 
 	err = json.Unmarshal(rawWorkspaceInfo, &workspaceInfo)
 	if err != nil {
-		return "", errors.New("워크스페이스 정보가 옳바르지 않습니다.")
+		return "", errors.New("워크스페이스 정보가 올바르지 않습니다.")
 	}
 
 	workspaceId := workspaceInfo["workspaceId"].(string)

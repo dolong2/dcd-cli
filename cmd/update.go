@@ -16,7 +16,7 @@ var updateCmd = &cobra.Command{
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
 		if fileErr != nil || templateErr != nil {
-			return cmdError.NewCmdError(2, "옳바르지 않은 플래그입니다.")
+			return cmdError.NewCmdError(2, "올바르지 않은 플래그입니다.")
 		}
 
 		// args가 없다면 파일명에 매핑된 리소스 아이디를 가져오는 메서드 호출
