@@ -9,8 +9,8 @@ import (
 
 var createCmd = &cobra.Command{
 	Use:   "create [flags]",
-	Short: "command to create a resource",
-	Long:  `this command is used to create a resource.`,
+	Short: "리소스 생성을 위한 커맨드",
+	Long:  `이 커맨드는 리소스 생성을 위해 생성될 수 있습니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
