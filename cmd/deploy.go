@@ -10,8 +10,8 @@ import (
 // deployCmd represents the deploy command
 var deployCmd = &cobra.Command{
 	Use:   "deploy <applicationId> [flags]",
-	Short: "command to deploy an application",
-	Long:  `this command is used to deploy an application.`,
+	Short: "애플리케이션을 배포하기 위한 커맨드",
+	Long:  `이 커맨드는 애플리케이션을 배포하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
