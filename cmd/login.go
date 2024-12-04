@@ -42,7 +42,7 @@ var loginCmd = &cobra.Command{
 }
 
 func init() {
-	loginCmd.Flags().BoolP("password", "p", false, "this flag is required to enter password")
-	loginCmd.Flags().StringP("email", "e", "", "this flag is used to save user email")
+	loginCmd.Flags().BoolP("password", "p", false, "패스워드 사용여부")
+	loginCmd.Flags().StringP("email", "e", "", "유저 이메일")
 	rootCmd.AddCommand(loginCmd)
 }

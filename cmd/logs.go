@@ -39,5 +39,5 @@ var logsCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(logsCmd)
 
-	logsCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	logsCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 }

@@ -46,5 +46,5 @@ var deleteCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(deleteCmd)
 
-	deleteCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	deleteCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 }

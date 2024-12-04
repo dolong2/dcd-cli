@@ -110,7 +110,7 @@ var execCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(execCmd)
 
-	execCmd.Flags().StringP("command", "c", "", "a command to execute in an application")
-	execCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	execCmd.Flags().Bool("ws", false, "apply websocket")
+	execCmd.Flags().StringP("command", "c", "", "애플리케이션에 실행할 명령")
+	execCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	execCmd.Flags().Bool("ws", false, "웹소켓 사용 여부")
 }

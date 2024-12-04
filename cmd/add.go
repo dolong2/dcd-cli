@@ -84,11 +84,11 @@ var addGlobalEnvCmd = &cobra.Command{
 
 func init() {
 	envCmd.AddCommand(addCmd)
-	addCmd.Flags().StringP("key", "k", "", "environment key")
-	addCmd.Flags().StringP("value", "v", "", "environment value")
-	addCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	addCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
+	addCmd.Flags().StringP("key", "k", "", "환경변수 키")
+	addCmd.Flags().StringP("value", "v", "", "환경변수 값")
+	addCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	addCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n만약 이 플래그를 사용한다면 애플리케이션 아이디를 명시할 필요가 없음\nex). -l test-label-1 -l test-label-2")
 	globalEnvCmd.AddCommand(addGlobalEnvCmd)
-	addGlobalEnvCmd.Flags().StringP("key", "k", "", "environment key")
-	addGlobalEnvCmd.Flags().StringP("value", "v", "", "environment value")
+	addGlobalEnvCmd.Flags().StringP("key", "k", "", "환경변수 키")
+	addGlobalEnvCmd.Flags().StringP("value", "v", "", "환경변수 값")
 }

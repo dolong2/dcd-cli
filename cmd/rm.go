@@ -85,10 +85,10 @@ var rmGlobalEnvCmd = &cobra.Command{
 func init() {
 	envCmd.AddCommand(rmCmd)
 
-	rmCmd.Flags().StringP("key", "", "", "select a key to delete")
-	rmCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	rmCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
+	rmCmd.Flags().StringP("key", "", "", "삭제할 환경변수 키")
+	rmCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	rmCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n만약 이 플래그를 사용한다면 애플리케이션 아이디를 명시할 필요가 없습니다.\nex). -l test-label-1 -l test-label-2")
 
 	globalEnvCmd.AddCommand(rmGlobalEnvCmd)
-	rmGlobalEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
+	rmGlobalEnvCmd.Flags().StringP("key", "", "", "삭제할 환경변수 키")
 }
