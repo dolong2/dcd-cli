@@ -96,7 +96,7 @@ var updateEnvCmd = &cobra.Command{
 // updateGlobalEnvCmd represents the put command
 var updateGlobalEnvCmd = &cobra.Command{
 	Use:   "update",
-	Short: "전역 환경변수를 삭제하는 커맨드",
+	Short: "전역 환경변수를 수정하는 커맨드",
 	Long:  `존재하는 전역 환경변수를 수정하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId := ""
