@@ -10,8 +10,8 @@ import (
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update <resourceId>",
-	Short: "command to update a resource",
-	Long:  `this command is used to update a resource`,
+	Short: "리소스를 수정하는 커맨드",
+	Long:  `리소스 정보를 수정하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
@@ -55,8 +55,8 @@ var updateCmd = &cobra.Command{
 // updateEnvCmd represents the put command
 var updateEnvCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update an exists env",
-	Long:  `this command is used to update a exits global env`,
+	Short: "애플리케이션 환경변수를 수정하는 커맨드",
+	Long:  `애플리케이션의 환경변수를 수정하는 커맨드 입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
@@ -96,8 +96,8 @@ var updateEnvCmd = &cobra.Command{
 // updateGlobalEnvCmd represents the put command
 var updateGlobalEnvCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update a exists global env",
-	Long:  `this command is used to update a exits global env`,
+	Short: "전역 환경변수를 삭제하는 커맨드",
+	Long:  `존재하는 전역 환경변수를 수정하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId := ""
 
