@@ -10,8 +10,8 @@ import (
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
 	Use:   "rm <applicationId> [flags]",
-	Short: "use to delete an application's env",
-	Long:  `this command is used to delete an application's env`,
+	Short: "애플리케이션의 환경변수를 삭제하는 커맨드",
+	Long:  `이 커맨드는 애플리케이션의 환경변수를 삭제하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
@@ -53,8 +53,8 @@ var rmCmd = &cobra.Command{
 // rmGlobalEnvCmd represents the rm command under global-env
 var rmGlobalEnvCmd = &cobra.Command{
 	Use:   "rm <workspaceId> [flags]",
-	Short: "use to delete an application's env",
-	Long:  `this command is used to delete an application's env`,
+	Short: "워크스페이스의 전역 환경변수를 삭제하는 커맨드",
+	Long:  `워크스페이스의 전역 환경변수를 삭제할 수 있는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId := ""
 
@@ -85,10 +85,10 @@ var rmGlobalEnvCmd = &cobra.Command{
 func init() {
 	envCmd.AddCommand(rmCmd)
 
-	rmCmd.Flags().StringP("key", "", "", "select a key to delete")
-	rmCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	rmCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
+	rmCmd.Flags().StringP("key", "", "", "삭제할 환경변수 키")
+	rmCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	rmCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n만약 이 플래그를 사용한다면 애플리케이션 아이디를 명시할 필요가 없습니다.\nex). -l test-label-1 -l test-label-2")
 
 	globalEnvCmd.AddCommand(rmGlobalEnvCmd)
-	rmGlobalEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
+	rmGlobalEnvCmd.Flags().StringP("key", "", "", "삭제할 환경변수 키")
 }

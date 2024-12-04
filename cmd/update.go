@@ -10,8 +10,8 @@ import (
 // updateCmd represents the update command
 var updateCmd = &cobra.Command{
 	Use:   "update <resourceId>",
-	Short: "command to update a resource",
-	Long:  `this command is used to update a resource`,
+	Short: "리소스를 수정하는 커맨드",
+	Long:  `리소스 정보를 수정하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fileDirectory, fileErr := cmd.Flags().GetString("file")
 		template, templateErr := cmd.Flags().GetString("template")
@@ -55,8 +55,8 @@ var updateCmd = &cobra.Command{
 // updateEnvCmd represents the put command
 var updateEnvCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update an exists env",
-	Long:  `this command is used to update a exits global env`,
+	Short: "애플리케이션 환경변수를 수정하는 커맨드",
+	Long:  `애플리케이션의 환경변수를 수정하는 커맨드 입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
@@ -96,8 +96,8 @@ var updateEnvCmd = &cobra.Command{
 // updateGlobalEnvCmd represents the put command
 var updateGlobalEnvCmd = &cobra.Command{
 	Use:   "update",
-	Short: "update a exists global env",
-	Long:  `this command is used to update a exits global env`,
+	Short: "전역 환경변수를 수정하는 커맨드",
+	Long:  `존재하는 전역 환경변수를 수정하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId := ""
 
@@ -127,16 +127,16 @@ var updateGlobalEnvCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(updateCmd)
 
-	updateCmd.Flags().StringP("file", "f", "", "file path where a resource format is defined")
-	updateCmd.Flags().StringP("template", "", "", "resource template to json")
+	updateCmd.Flags().StringP("file", "f", "", "리소스 포맷이 정의된 파일 경로")
+	updateCmd.Flags().StringP("template", "", "", "json 포맷으로 정의된 애플리케이션 템플릿")
 
 	envCmd.AddCommand(updateEnvCmd)
-	updateEnvCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	updateEnvCmd.Flags().StringP("key", "", "", "select a key to update")
-	updateEnvCmd.Flags().StringP("value", "", "", "select a value to update")
-	updateEnvCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag, you are no need to use application id.\nex). -l test-label-1 -l test-label-2")
+	updateEnvCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	updateEnvCmd.Flags().StringP("key", "", "", "수정할 환경변수의 키")
+	updateEnvCmd.Flags().StringP("value", "", "", "수정될 환경변수 값")
+	updateEnvCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n이 플래그를 사용한다면, 애플리케이션 아이디를 명시할 필요는 없음.\nex). -l test-label-1 -l test-label-2")
 
 	globalEnvCmd.AddCommand(updateGlobalEnvCmd)
-	updateGlobalEnvCmd.Flags().StringP("key", "", "", "select a key to delete")
-	updateGlobalEnvCmd.Flags().StringP("value", "", "", "select a value to update")
+	updateGlobalEnvCmd.Flags().StringP("key", "", "", "수정할 환경변수 키")
+	updateGlobalEnvCmd.Flags().StringP("value", "", "", "수정될 환경변수 값")
 }

@@ -31,7 +31,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "dcd",
-	Short: "CLI for DCD Service",
+	Short: "DCD를 사용하기 위한 CLI",
 	Long: `#####      ####   #####               ####    ###       ##                         ##
 ## ##    ##  ##   ## ##             ##  ##    ##                                  ##
 ##  ##  ##        ##  ##           ##         ##      ###      ####    #####     #####
@@ -41,7 +41,7 @@ var rootCmd = &cobra.Command{
 #####      ####   #####               ####    ####     ####     #####   ##  ##      ###
 
 DCD CLI is client for DCD Service.
-For more information, please visit https://github.com/dolong2/dcd-client
+For more information, please visit https://github.com/dolong2/dcd-cli
 `,
 }
 

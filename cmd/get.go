@@ -14,11 +14,11 @@ import (
 // getCmd represents the get command
 var getCmd = &cobra.Command{
 	Use:   "get <resourceType> [flags]",
-	Short: "command to get resources",
-	Long: `this command is used to get resources.
-resourceType:
-	workspaces - this resource type refers a resource that has applications and be sectioned networks
-	applications - this resource type refers a resource that works something in a container
+	Short: "리소스를 조회하는 커맨드",
+	Long: `이 커맨드는 리소스를 조회하기 위해서 사용됩니다.
+리소스 타입:
+	workspaces - 이 리소스 타입은 여러 애플리케이션을 가지고, 작업구역(네트워크)를 나눌때 사용합니다.
+	applications - 이 리소스 타입은 특정 라이브러리 혹은 프레임워크가 컨테이너에서 동작하게 하는 리소스 타입입니다.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
@@ -120,9 +120,9 @@ func getApplication(cmd *cobra.Command) error {
 func init() {
 	rootCmd.AddCommand(getCmd)
 
-	getCmd.Flags().StringP("workspace", "w", "", "used to get resources in a workspace")
-	getCmd.Flags().StringP("id", "", "", "specify resource id")
-	getCmd.Flags().StringArrayP("label", "l", []string{}, "select labels for applications.\nif use this flag when get workspaces, this flag will be ignored.\nif used together with the Id flag, this flag will be ignored\nex). -l test-label-1 -l test-label-2")
+	getCmd.Flags().StringP("workspace", "w", "", "리소스를 가져올 워크스페이스 아이디")
+	getCmd.Flags().StringP("id", "", "", "리소스 아이디")
+	getCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n워크스페이스를 가져올때 해당 플래그를 사용하면, 해당 플래그는 무시됩니다.\n리소스 아이디를 사용한다면, 이 커맨드는 무시됩니다.\nex). -l test-label-1 -l test-label-2")
 }
 
 func printApplication(application exec.ApplicationResponse) {

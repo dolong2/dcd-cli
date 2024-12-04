@@ -16,10 +16,9 @@ import (
 // execCmd represents the exec command
 var execCmd = &cobra.Command{
 	Use:   "exec <applicationId> [flags]",
-	Short: "a command to execute a command in an application",
-	Long: `this command is able to execute a command in an application.
-it also can be supported to web socket.
-externally this command
+	Short: "애플리케이션 내부에서 커맨드를 실행하기 위한 커멘드",
+	Long: `이 커맨드는 애플리케이션에 커맨드를 실행할 수 있는 커맨드입니다.
+웹소켓을 통해서 애플리케이션 내부에 접근할 수 있습니다.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
@@ -111,7 +110,7 @@ externally this command
 func init() {
 	rootCmd.AddCommand(execCmd)
 
-	execCmd.Flags().StringP("command", "c", "", "a command to execute in an application")
-	execCmd.Flags().StringP("workspace", "w", "", "workspace id")
-	execCmd.Flags().Bool("ws", false, "apply websocket")
+	execCmd.Flags().StringP("command", "c", "", "애플리케이션에 실행할 명령")
+	execCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	execCmd.Flags().Bool("ws", false, "웹소켓 사용 여부")
 }

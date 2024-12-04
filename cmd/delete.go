@@ -10,8 +10,8 @@ import (
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
 	Use:   "delete <resourceType> <resourceId> [flags]",
-	Short: "command to delete an resource",
-	Long:  `this command will delete an resource.`,
+	Short: "리소스를 삭제하기 위한 커맨드",
+	Long:  `이 커맨드는 리소스를 삭제하기 위해 사용되는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 2 {
 			return cmdError.NewCmdError(1, "리소스 타입과 리소스 아이디가 입력되어야합니다.")
@@ -46,5 +46,5 @@ var deleteCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(deleteCmd)
 
-	deleteCmd.Flags().StringP("workspace", "w", "", "workspace id")
+	deleteCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 }
