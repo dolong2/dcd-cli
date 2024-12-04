@@ -12,8 +12,8 @@ import (
 // logsCmd represents the logs command
 var logsCmd = &cobra.Command{
 	Use:   "logs",
-	Short: "command to get application logs",
-	Long:  `this command is used to get application logs`,
+	Short: "애플리케이션의 로그를 조회하는 커맨드",
+	Long:  `애플리케이션의 로그를 조회하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
