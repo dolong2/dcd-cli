@@ -11,8 +11,8 @@ import (
 // runCmd represents the run command
 var runCmd = &cobra.Command{
 	Use:   "run <applicationId> [flags]",
-	Short: "command to run an application",
-	Long:  `this command is used to run an application.`,
+	Short: "애플리케이션을 실행하는 커맨드",
+	Long:  `애플리케이션을 실행시키는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
