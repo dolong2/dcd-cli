@@ -10,8 +10,8 @@ import (
 // useCmd represents the use command
 var useCmd = &cobra.Command{
 	Use:   "use <workspaceId>",
-	Short: "command to specify which workspace to primarily use",
-	Long:  `this command can be used to specify which workspace to primarily use.`,
+	Short: "사용하는 워크스페이스를 지정하기 위한 커맨드",
+	Long:  `작업하기 위해서 사용할 워크스페이스를 지정하기 위한 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return cmdError.NewCmdError(1, "워크스페이스 아이디가 입력되어야합니다.")
