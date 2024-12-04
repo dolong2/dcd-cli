@@ -12,8 +12,8 @@ import (
 // loginCmd represents the login command
 var loginCmd = &cobra.Command{
 	Use:   "login [flags]",
-	Short: "Login in to DCD",
-	Long:  `Login to DCD using a email and password`,
+	Short: "DCD에 로그인하는 커맨드",
+	Long:  `이메일과 패스워드를 사용해서 DCD에 로그인하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		email, emailErr := cmd.Flags().GetString("email")
 		existsPassword, passwordErr := cmd.Flags().GetBool("password")
