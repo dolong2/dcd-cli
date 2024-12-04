@@ -11,8 +11,8 @@ import (
 // stopCmd represents the stop command
 var stopCmd = &cobra.Command{
 	Use:   "stop <applicationId> [flags]",
-	Short: "command to stop an application",
-	Long:  `this command is used to stop an application.`,
+	Short: "애플리케이션의 동작을 정지하는 커맨드",
+	Long:  `애플리케이션이 현재 동작한다면 애플리케이션의 동작을 정지시키는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
