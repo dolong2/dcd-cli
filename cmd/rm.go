@@ -10,8 +10,8 @@ import (
 // rmCmd represents the rm command
 var rmCmd = &cobra.Command{
 	Use:   "rm <applicationId> [flags]",
-	Short: "use to delete an application's env",
-	Long:  `this command is used to delete an application's env`,
+	Short: "애플리케이션의 환경변수를 삭제하는 커맨드",
+	Long:  `이 커맨드는 애플리케이션의 환경변수를 삭제하는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
@@ -53,8 +53,8 @@ var rmCmd = &cobra.Command{
 // rmGlobalEnvCmd represents the rm command under global-env
 var rmGlobalEnvCmd = &cobra.Command{
 	Use:   "rm <workspaceId> [flags]",
-	Short: "use to delete an application's env",
-	Long:  `this command is used to delete an application's env`,
+	Short: "워크스페이스의 전역 환경변수를 삭제하는 커맨드",
+	Long:  `워크스페이스의 전역 환경변수를 삭제할 수 있는 커맨드입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId := ""
 
