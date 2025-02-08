@@ -17,6 +17,7 @@ type ApplicationResponse struct {
 	ExternalPort    int               `json:"externalPort"`
 	Version         string            `json:"version"`
 	Status          string            `json:"status"`
+	FailureReason   string            `json:"failureReason"`
 	Labels          []string          `json:"labels"`
 }
 

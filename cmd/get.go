@@ -137,6 +137,7 @@ func printApplication(application exec.ApplicationResponse) {
 	externalPort := []string{"External Port", strconv.Itoa(application.ExternalPort)}
 	version := []string{"Version", application.Version}
 	status := []string{"Status", application.Status}
+	failureReason := []string{"Failure Reason", application.FailureReason}
 
 	table.Append(id)
 	table.Append(name)
@@ -154,6 +155,7 @@ func printApplication(application exec.ApplicationResponse) {
 	table.Append(externalPort)
 	table.Append(version)
 	table.Append(status)
+	table.Append(failureReason)
 
 	table.Render()
 }
