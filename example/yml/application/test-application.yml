@@ -1,6 +1,6 @@
 metadata:
   resourceType: APPLICATION
-  name: test-application-with-yml
+  name: test application with yml
   description: application created by yml
 githubUrl: ''
 env:
