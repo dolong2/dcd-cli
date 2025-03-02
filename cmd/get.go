@@ -19,6 +19,7 @@ var getCmd = &cobra.Command{
 리소스 타입:
 	workspaces - 이 리소스 타입은 여러 애플리케이션을 가지고, 작업구역(네트워크)를 나눌때 사용합니다.
 	applications - 이 리소스 타입은 특정 라이브러리 혹은 프레임워크가 컨테이너에서 동작하게 하는 리소스 타입입니다.
+	types - 애플리케이션의 타입 종류를 나타내는 리소스 타입입니다.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
@@ -35,6 +36,11 @@ var getCmd = &cobra.Command{
 			err := getWorkspace(cmd)
 			if err != nil {
 				return err
+			}
+		} else if resourceType == "types" {
+			err := printApplicationTypes()
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
 			}
 		} else {
 			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
@@ -208,4 +214,23 @@ func printWorkspaceList(workspaceList []exec.WorkspaceResponse, usedWorkspaceId 
 	}
 
 	table.Render()
+}
+
+func printApplicationTypes() error {
+	types, err := exec.GetTypes()
+
+	if err != nil {
+		return err
+	}
+
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Types"})
+
+	for _, typeValue := range types {
+		table.Append([]string{typeValue})
+	}
+
+	table.Render()
+
+	return nil
 }
