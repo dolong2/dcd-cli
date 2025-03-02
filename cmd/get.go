@@ -36,6 +36,11 @@ var getCmd = &cobra.Command{
 			if err != nil {
 				return err
 			}
+		} else if resourceType == "types" {
+			err := printApplicationTypes()
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		} else {
 			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
 		}
