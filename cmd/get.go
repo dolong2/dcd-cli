@@ -209,3 +209,22 @@ func printWorkspaceList(workspaceList []exec.WorkspaceResponse, usedWorkspaceId 
 
 	table.Render()
 }
+
+func printApplicationTypes() error {
+	types, err := exec.GetTypes()
+
+	if err != nil {
+		return err
+	}
+
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetHeader([]string{"Types"})
+
+	for _, typeValue := range types {
+		table.Append([]string{typeValue})
+	}
+
+	table.Render()
+
+	return nil
+}
