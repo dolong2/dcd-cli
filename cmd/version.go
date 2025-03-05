@@ -31,6 +31,7 @@ var versionCmd = &cobra.Command{
 			table.Append([]string{versionValue})
 		}
 
+		table.SetColumnAlignment([]int{tablewriter.ALIGN_LEFT})
 		table.Render()
 
 		return nil
