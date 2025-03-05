@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
+	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 // versionCmd represents the version command
@@ -23,9 +24,14 @@ var versionCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, err.Error())
 		}
 
-		for _, version := range versionList {
-			fmt.Println(version)
+		table := tablewriter.NewWriter(os.Stdout)
+		table.SetHeader([]string{resourceType + " Version List"})
+
+		for _, versionValue := range versionList {
+			table.Append([]string{versionValue})
 		}
+
+		table.Render()
 
 		return nil
 	},
