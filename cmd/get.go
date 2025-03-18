@@ -171,6 +171,13 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 	table.SetHeader([]string{"ID", "Name", "Description", "Application Type", "Github URL", "Port", "External Port", "Version", "Status", "Labels"})
 
 	for _, application := range applicationList {
+		labels := application.Labels
+		labelLen := len(labels)
+		if labelLen > 3 {
+			labelLen = 3
+		}
+		labels = labels[:labelLen]
+
 		row := []string{
 			application.Id,
 			application.Name,
@@ -181,7 +188,7 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 			strconv.Itoa(application.ExternalPort),
 			application.Version,
 			application.Status,
-			strings.Join(application.Labels, ", "),
+			strings.Join(labels, ", "),
 		}
 		table.Append(row)
 	}
