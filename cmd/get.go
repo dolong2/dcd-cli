@@ -172,11 +172,15 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 
 	for _, application := range applicationList {
 		labels := application.Labels
+		labelStr := ""
+
 		labelLen := len(labels)
-		if labelLen > 3 {
-			labelLen = 3
+		if labelLen > 2 {
+			labelStr = strings.Join(labels[:2], ", ")
+			labelStr += " ..."
+		} else {
+			labelStr = strings.Join(labels[:labelLen], ", ")
 		}
-		labels = labels[:labelLen]
 
 		row := []string{
 			application.Id,
@@ -188,7 +192,7 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 			strconv.Itoa(application.ExternalPort),
 			application.Version,
 			application.Status,
-			strings.Join(labels, ", "),
+			labelStr,
 		}
 		table.Append(row)
 	}
