@@ -179,7 +179,7 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 			labelStr = strings.Join(labels[:2], ", ")
 			labelStr += " ..."
 		} else {
-			labelStr = strings.Join(labels[:labelLen], ", ")
+			labelStr = strings.Join(labels, ", ")
 		}
 
 		row := []string{
