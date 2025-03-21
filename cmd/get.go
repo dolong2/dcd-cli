@@ -174,8 +174,7 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 		labels := application.Labels
 
 		labelStr := ""
-		labelLen := len(labels)
-		if labelLen > 2 {
+		if len(labels) > 2 {
 			labelStr = strings.Join(labels[:2], ", ")
 			labelStr += " ..."
 		} else {
