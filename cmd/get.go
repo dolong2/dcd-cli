@@ -133,6 +133,7 @@ func init() {
 
 func printApplication(application exec.ApplicationResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
 
 	id := []string{"ID", application.Id}
 	name := []string{"Name", application.Name}
