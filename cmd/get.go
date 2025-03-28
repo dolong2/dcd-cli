@@ -134,6 +134,7 @@ func init() {
 func printApplication(application exec.ApplicationResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
 
 	id := []string{"ID", application.Id}
 	name := []string{"Name", application.Name}
