@@ -229,6 +229,9 @@ func printWorkspace(workspace exec.WorkspaceDetailResponse) {
 
 func printWorkspaceList(workspaceList []exec.WorkspaceResponse, usedWorkspaceId string) {
 	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+
 	table.SetHeader([]string{" ", "ID", "TITLE", "Description"})
 
 	for _, workspace := range workspaceList {
