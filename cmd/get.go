@@ -207,7 +207,7 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 func printWorkspace(workspace exec.WorkspaceDetailResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
-	table.SetAlignment(tablewriter.ALIGN_CENTER)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
 
 	id := []string{"ID", workspace.Id}
 	title := []string{"Name", workspace.Title}
@@ -230,7 +230,7 @@ func printWorkspace(workspace exec.WorkspaceDetailResponse) {
 func printWorkspaceList(workspaceList []exec.WorkspaceResponse, usedWorkspaceId string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_CENTER)
 
 	table.SetHeader([]string{" ", "ID", "TITLE", "Description"})
 
