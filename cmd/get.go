@@ -206,6 +206,8 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 
 func printWorkspace(workspace exec.WorkspaceDetailResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_CENTER)
 
 	id := []string{"ID", workspace.Id}
 	title := []string{"Name", workspace.Title}
