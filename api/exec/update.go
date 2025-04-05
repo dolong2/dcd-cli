@@ -29,22 +29,24 @@ type updateWorkspaceRequest struct {
 }
 
 type updateApplicationTemplate struct {
-	Metadata        metaData `json:"metadata" yaml:"metadata"`
-	WorkspaceId     string   `json:"workspaceId" yaml:"workspaceId"`
-	GithubUrl       string   `json:"githubUrl" yaml:"githubUrl"`
-	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
-	Port            int      `json:"port" yaml:"port"`
-	Version         string   `json:"version" yaml:"version"`
+	Metadata metaData                      `json:"metadata" yaml:"metadata"`
+	Spec     updateApplicationSpecTemplate `json:"spec" yaml:"spec"`
+}
+
+type updateApplicationSpecTemplate struct {
+	GithubUrl       string `json:"githubUrl" yaml:"githubUrl"`
+	ApplicationType string `json:"applicationType" yaml:"applicationType"`
+	Port            int    `json:"port" yaml:"port"`
+	Version         string `json:"version" yaml:"version"`
 }
 
 type updateApplicationRequest struct {
-	Name            string            `json:"name"`
-	Description     string            `json:"description"`
-	GithubUrl       string            `json:"githubUrl"`
-	Env             map[string]string `json:"env"`
-	ApplicationType string            `json:"applicationType"`
-	Port            int               `json:"port"`
-	Version         string            `json:"version"`
+	Name            string `json:"name"`
+	Description     string `json:"description"`
+	GithubUrl       string `json:"githubUrl"`
+	ApplicationType string `json:"applicationType"`
+	Port            int    `json:"port"`
+	Version         string `json:"version"`
 }
 
 func UpdateByTemplate(workspaceId string, rawTemplate string) error {
