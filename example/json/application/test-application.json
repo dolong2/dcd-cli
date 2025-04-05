@@ -4,14 +4,16 @@
     "name": "test application with json",
     "description": "application created by json"
   },
-  "githubUrl": "",
-  "env": {
-    "test":  "1234"
-  },
-  "applicationType": "REDIS",
-  "port": 3306,
-  "version": "latest",
-  "labels": [
-    "test-with-json"
-  ]
+  "spec": {
+    "githubUrl": "",
+    "env": {
+      "test":  "1234"
+    },
+    "applicationType": "REDIS",
+    "port": 3306,
+    "version": "latest",
+    "labels": [
+      "test-with-json"
+    ]
+  }
 }

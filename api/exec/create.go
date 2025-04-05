@@ -30,7 +30,11 @@ type workspaceRequest struct {
 }
 
 type applicationTemplate struct {
-	Metadata        metaData          `json:"metadata" yaml:"metadata"`
+	Metadata metaData                `json:"metadata" yaml:"metadata"`
+	Spec     applicationSpecTemplate `json:"spec" yaml:"spec"`
+}
+
+type applicationSpecTemplate struct {
 	GithubUrl       string            `json:"githubUrl" yaml:"githubUrl"`
 	Env             map[string]string `json:"env" yaml:"env"`
 	ApplicationType string            `json:"applicationType" yaml:"applicationType"`
@@ -148,12 +152,12 @@ func createByJson(content []byte) (string, error) {
 		request, err := json.Marshal(applicationRequest{
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
-			GithubUrl:       application.GithubUrl,
-			Env:             application.Env,
-			ApplicationType: application.ApplicationType,
-			Port:            application.Port,
-			Version:         application.Version,
-			Labels:          application.Labels,
+			GithubUrl:       application.Spec.GithubUrl,
+			Env:             application.Spec.Env,
+			ApplicationType: application.Spec.ApplicationType,
+			Port:            application.Spec.Port,
+			Version:         application.Spec.Version,
+			Labels:          application.Spec.Labels,
 		})
 		if err != nil {
 			return "", err
@@ -226,12 +230,12 @@ func createByYml(content []byte) (string, error) {
 		request, err := json.Marshal(applicationRequest{
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
-			GithubUrl:       application.GithubUrl,
-			Env:             application.Env,
-			ApplicationType: application.ApplicationType,
-			Port:            application.Port,
-			Version:         application.Version,
-			Labels:          application.Labels,
+			GithubUrl:       application.Spec.GithubUrl,
+			Env:             application.Spec.Env,
+			ApplicationType: application.Spec.ApplicationType,
+			Port:            application.Spec.Port,
+			Version:         application.Spec.Version,
+			Labels:          application.Spec.Labels,
 		})
 		if err != nil {
 			return "", err
