@@ -30,7 +30,11 @@ type workspaceRequest struct {
 }
 
 type applicationTemplate struct {
-	Metadata        metaData          `json:"metadata" yaml:"metadata"`
+	Metadata metaData                `json:"metadata" yaml:"metadata"`
+	Spec     applicationSpecTemplate `json:"spec" yaml:"spec"`
+}
+
+type applicationSpecTemplate struct {
 	GithubUrl       string            `json:"githubUrl" yaml:"githubUrl"`
 	Env             map[string]string `json:"env" yaml:"env"`
 	ApplicationType string            `json:"applicationType" yaml:"applicationType"`
