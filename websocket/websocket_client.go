@@ -10,7 +10,7 @@ import (
 )
 
 func Connect(applicationId string) (*websocket.Conn, error) {
-	serverUrl := "ws://dcd-api.dolong2.co.kr/application/exec?applicationId=" + applicationId
+	serverUrl := "wss://dcd-api.dolong2.co.kr/application/exec?applicationId=" + applicationId
 
 	header := http.Header{}
 	accessToken, err := exec.GetAccessToken()
