@@ -80,7 +80,7 @@ var execCmd = &cobra.Command{
 					fmt.Print(message)
 				}
 
-				fmt.Println("")
+				fmt.Println()
 			}
 		} else {
 			workspaceId, err := util.GetWorkspaceId(cmd)
