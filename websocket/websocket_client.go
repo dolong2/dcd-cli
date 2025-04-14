@@ -38,7 +38,7 @@ func SendMessage(conn *websocket.Conn, message string) error {
 
 	select {
 	case <-interrupt:
-		fmt.Println("Interrupt signal received. Closing connection...")
+		fmt.Println("인터럽트 신호를 받았습니다.\n커넥션을 종료합니다...")
 		err := conn.Close()
 		if err != nil {
 			return err
