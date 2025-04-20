@@ -41,8 +41,7 @@ var rootCmd = &cobra.Command{
 #####      ####   #####               ####    ####     ####     #####   ##  ##      ###
 
 DCD CLI is client for DCD Service.
-For more information, please visit https://github.com/dolong2/dcd-cli
-`,
+For more information, please visit https://github.com/dolong2/dcd-cli`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
