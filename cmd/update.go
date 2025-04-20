@@ -131,12 +131,14 @@ func init() {
 	updateCmd.Flags().StringP("template", "", "", "json 포맷으로 정의된 애플리케이션 템플릿")
 
 	envCmd.AddCommand(updateEnvCmd)
+
 	updateEnvCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 	updateEnvCmd.Flags().StringP("key", "", "", "수정할 환경변수의 키")
 	updateEnvCmd.Flags().StringP("value", "", "", "수정될 환경변수 값")
 	updateEnvCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n이 플래그를 사용한다면, 애플리케이션 아이디를 명시할 필요는 없음.\nex). -l test-label-1 -l test-label-2")
 
 	globalEnvCmd.AddCommand(updateGlobalEnvCmd)
+
 	updateGlobalEnvCmd.Flags().StringP("key", "", "", "수정할 환경변수 키")
 	updateGlobalEnvCmd.Flags().StringP("value", "", "", "수정될 환경변수 값")
 }
