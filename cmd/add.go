@@ -53,8 +53,8 @@ var addCmd = &cobra.Command{
 // addGlobalEnvCmd represents the add command
 var addGlobalEnvCmd = &cobra.Command{
 	Use:   "add <workspaceId> [flags]",
-	Short: "use to add a global env",
-	Long:  `this command can be used to add a global env to an application.`,
+	Short: "전역 환경변수를 추가하는 커맨드",
+	Long:  `워크스페이스에 전역 환경변수를 추가합니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId := ""
 
