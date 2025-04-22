@@ -32,7 +32,8 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "dcd",
 	Short: "DCD를 사용하기 위한 CLI",
-	Long: `#####      ####   #####               ####    ###       ##                         ##
+	Long: `
+#####      ####   #####               ####    ###       ##                         ##
 ## ##    ##  ##   ## ##             ##  ##    ##                                  ##
 ##  ##  ##        ##  ##           ##         ##      ###      ####    #####     #####
 ##  ##  ##        ##  ##           ##         ##       ##     ##  ##   ##  ##     ##
@@ -40,8 +41,8 @@ var rootCmd = &cobra.Command{
 ## ##    ##  ##   ## ##             ##  ##    ##       ##     ##       ##  ##     ## ##
 #####      ####   #####               ####    ####     ####     #####   ##  ##      ###
 
-DCD CLI is client for DCD Service.
-For more information, please visit https://github.com/dolong2/dcd-cli`,
+DCD를 사용하기 위한 CLI입니다.
+더 많은 정보는 github 링크를 참고해주세요. https://github.com/dolong2/dcd-cli`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -56,6 +57,7 @@ func Execute() {
 			os.Exit(1)
 		}
 	}
+	os.Exit(0)
 }
 
 func init() {
