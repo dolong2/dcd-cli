@@ -127,7 +127,7 @@ func init() {
 
 	getCmd.Flags().StringP("workspace", "w", "", "리소스를 가져올 워크스페이스 아이디")
 	getCmd.Flags().StringP("id", "", "", "리소스 아이디")
-	getCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n워크스페이스를 가져올때 해당 플래그를 사용하면, 해당 플래그는 무시됩니다.\n리소스 아이디를 사용한다면, 이 커맨드는 무시됩니다.\nex). -l test-label-1 -l test-label-2")
+	getCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n워크스페이스를 가져올때 해당 플래그를 사용하면, 해당 플래그는 무시됩니다.\n리소스 아이디를 사용한다면, 이 플래그는 무시됩니다.\nex). -l test-label-1 -l test-label-2")
 }
 
 func printApplication(application exec.ApplicationResponse) {
