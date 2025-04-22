@@ -57,6 +57,7 @@ func Execute() {
 			os.Exit(1)
 		}
 	}
+	os.Exit(0)
 }
 
 func init() {
