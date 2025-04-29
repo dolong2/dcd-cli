@@ -10,9 +10,9 @@ import (
 )
 
 type metaData struct {
-	ResourceType string `json:"resourceType" yaml:"resourceType"`
-	Name         string `json:"name" yaml:"name"`
-	Description  string `json:"description" yaml:"description"`
+	ResourceType string  `json:"resourceType" yaml:"resourceType"`
+	Name         *string `json:"name,omitempty" yaml:"name,omitempty"`
+	Description  *string `json:"description,omitempty" yaml:"description,omitempty"`
 }
 
 type parsingMetaData struct {
@@ -24,9 +24,9 @@ type workspaceTemplate struct {
 }
 
 type workspaceRequest struct {
-	ResourceType string `json:"resourceType"`
-	Name         string `json:"title"`
-	Description  string `json:"description"`
+	ResourceType string  `json:"resourceType"`
+	Name         *string `json:"title"`
+	Description  *string `json:"description"`
 }
 
 type applicationTemplate struct {
@@ -35,23 +35,21 @@ type applicationTemplate struct {
 }
 
 type applicationSpecTemplate struct {
-	GithubUrl       string            `json:"githubUrl" yaml:"githubUrl"`
-	Env             map[string]string `json:"env" yaml:"env"`
-	ApplicationType string            `json:"applicationType" yaml:"applicationType"`
-	Port            int               `json:"port" yaml:"port"`
-	Version         string            `json:"version" yaml:"version"`
-	Labels          []string          `json:"labels" yaml:"labels"`
+	GithubUrl       string   `json:"githubUrl" yaml:"githubUrl"`
+	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
+	Port            int      `json:"port" yaml:"port"`
+	Version         string   `json:"version" yaml:"version"`
+	Labels          []string `json:"labels" yaml:"labels"`
 }
 
 type applicationRequest struct {
-	Name            string            `json:"name"`
-	Description     string            `json:"description"`
-	GithubUrl       string            `json:"githubUrl"`
-	Env             map[string]string `json:"env"`
-	ApplicationType string            `json:"applicationType"`
-	Port            int               `json:"port"`
-	Version         string            `json:"version"`
-	Labels          []string          `json:"labels"`
+	Name            *string  `json:"name"`
+	Description     *string  `json:"description"`
+	GithubUrl       string   `json:"githubUrl"`
+	ApplicationType string   `json:"applicationType"`
+	Port            int      `json:"port"`
+	Version         string   `json:"version"`
+	Labels          []string `json:"labels"`
 }
 
 type createWorkspaceResponse struct {
