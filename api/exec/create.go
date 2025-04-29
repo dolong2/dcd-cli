@@ -376,6 +376,74 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 		return createApplicationResponse.ApplicationId, nil
+	} else if resourceType == "ENV" {
+		var envTemplate envTemplate
+		err := yaml.Unmarshal(content, &envTemplate)
+		if err != nil {
+			return "", err
+		}
+
+		var envRequestList []envPutRequest
+		for _, template := range envTemplate.Spec.EnvList {
+			envRequestList = append(envRequestList, envPutRequest{
+				Key:        template.Key,
+				Value:      template.Value,
+				Encryption: template.Encryption,
+			})
+		}
+
+		request, err := json.Marshal(envPutListRequest{EnvList: envRequestList})
+
+		if err != nil {
+			return "", err
+		}
+
+		if envTemplate.Spec.Labels == nil && envTemplate.Spec.ApplicationId == nil {
+			return "", errors.New("애플리케이션 아이디 혹은 라벨이 입력되어야함")
+		} else if envTemplate.Spec.Labels != nil {
+			param := map[string]string{"labels": strings.Join(envTemplate.Spec.Labels, ",")}
+
+			_, err := api.SendPut("/application/env", header, param, request)
+			if err != nil {
+				return "", err
+			}
+		} else if envTemplate.Spec.ApplicationId != nil {
+			applicationId := *envTemplate.Spec.ApplicationId
+			_, err := api.SendPut("/application"+applicationId+"/env", header, map[string]string{}, request)
+			if err != nil {
+				return "", err
+			}
+		}
+
+		return "", nil
+	} else if resourceType == "GLOBAL_ENV" || resourceType == "GE" {
+		var globalEnvTemplate globalEnvTemplate
+		err := yaml.Unmarshal(content, &globalEnvTemplate)
+		if err != nil {
+			return "", err
+		}
+
+		var globalEnvRequestList []globalEnvPutRequest
+		for _, template := range globalEnvTemplate.Spec.EnvList {
+			globalEnvRequestList = append(globalEnvRequestList, globalEnvPutRequest{
+				Key:        template.Key,
+				Value:      template.Value,
+				Encryption: template.Encryption,
+			})
+		}
+
+		request, err := json.Marshal(globalEnvPutListRequest{EnvList: globalEnvRequestList})
+
+		if err != nil {
+			return "", err
+		}
+
+		_, err = api.SendPut("/workspace"+globalEnvTemplate.Spec.WorkspaceId+"/env", header, map[string]string{}, request)
+		if err != nil {
+			return "", err
+		}
+
+		return "", nil
 	} else {
 		return "", errors.New("지원되지 않는 리소스 타입입니다.")
 	}
