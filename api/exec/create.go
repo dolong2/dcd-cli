@@ -269,6 +269,34 @@ func createByJson(content []byte) (string, error) {
 		}
 
 		return "", nil
+	} else if resourceType == "GLOBAL_ENV" || resourceType == "GE" {
+		var globalEnvTemplate globalEnvTemplate
+		err := json.Unmarshal(content, &globalEnvTemplate)
+		if err != nil {
+			return "", err
+		}
+
+		var globalEnvRequestList []globalEnvPutRequest
+		for _, template := range globalEnvTemplate.Spec.EnvList {
+			globalEnvRequestList = append(globalEnvRequestList, globalEnvPutRequest{
+				Key:        template.Key,
+				Value:      template.Value,
+				Encryption: template.Encryption,
+			})
+		}
+
+		request, err := json.Marshal(globalEnvPutListRequest{EnvList: globalEnvRequestList})
+
+		if err != nil {
+			return "", err
+		}
+
+		_, err = api.SendPut("/workspace"+globalEnvTemplate.Spec.WorkspaceId+"/env", header, map[string]string{}, request)
+		if err != nil {
+			return "", err
+		}
+
+		return "", nil
 	} else {
 		return "", errors.New("지원되지 않는 리소스 타입입니다.")
 	}
