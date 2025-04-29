@@ -69,6 +69,16 @@ type envListTemplate struct {
 	Encryption bool   `json:"encryption" yaml:"encryption"`
 }
 
+type envPutRequest struct {
+	Key        string `json:"key"`
+	Value      string `json:"value"`
+	Encryption bool   `json:"encryption"`
+}
+
+type envPutListRequest struct {
+	EnvList []envPutRequest `json:"envList"`
+}
+
 type createWorkspaceResponse struct {
 	WorkspaceId string `json:"workspaceId"`
 }
