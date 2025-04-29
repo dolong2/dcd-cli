@@ -4,8 +4,6 @@ metadata:
   description: application created by yml
 spec:
   githubUrl: ''
-  env:
-    test: '1234'
   applicationType: REDIS
   port: 3306
   version: latest
