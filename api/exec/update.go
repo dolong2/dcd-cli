@@ -158,8 +158,8 @@ func updateByJson(resourceId string, content []byte) error {
 		}
 
 		request, err := json.Marshal(updateApplicationRequest{
-			Name:            application.Metadata.Name,
-			Description:     application.Metadata.Description,
+			Name:            *application.Metadata.Name,
+			Description:     *application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
@@ -224,8 +224,8 @@ func updateByYml(resourceId string, content []byte) error {
 		}
 
 		request, err := json.Marshal(updateApplicationRequest{
-			Name:            application.Metadata.Name,
-			Description:     application.Metadata.Description,
+			Name:            *application.Metadata.Name,
+			Description:     *application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
