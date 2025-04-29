@@ -7,6 +7,7 @@ import (
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type metaData struct {
@@ -178,7 +179,6 @@ func createByJson(content []byte) (string, error) {
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
-			Env:             application.Spec.Env,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
 			Version:         application.Spec.Version,
@@ -203,6 +203,46 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 		return createApplicationResponse.ApplicationId, nil
+	} else if resourceType == "ENV" {
+		var envTemplate envTemplate
+		err := json.Unmarshal(content, &envTemplate)
+		if err != nil {
+			return "", err
+		}
+
+		var envRequestList []envPutRequest
+		for _, template := range envTemplate.Spec.EnvList {
+			envRequestList = append(envRequestList, envPutRequest{
+				Key:        template.Key,
+				Value:      template.Value,
+				Encryption: template.Encryption,
+			})
+		}
+
+		request, err := json.Marshal(envPutListRequest{EnvList: envRequestList})
+
+		if err != nil {
+			return "", err
+		}
+
+		if envTemplate.Spec.Labels == nil && envTemplate.Spec.ApplicationId == nil {
+			return "", errors.New("애플리케이션 아이디 혹은 라벨이 입력되어야함")
+		} else if envTemplate.Spec.Labels != nil {
+			param := map[string]string{"labels": strings.Join(envTemplate.Spec.Labels, ",")}
+
+			_, err := api.SendPut("/application/env", header, param, request)
+			if err != nil {
+				return "", err
+			}
+		} else if envTemplate.Spec.ApplicationId != nil {
+			applicationId := *envTemplate.Spec.ApplicationId
+			_, err := api.SendPut("/application"+applicationId+"/env", header, map[string]string{}, request)
+			if err != nil {
+				return "", err
+			}
+		}
+
+		return "", nil
 	} else {
 		return "", errors.New("지원되지 않는 리소스 타입입니다.")
 	}
@@ -256,7 +296,6 @@ func createByYml(content []byte) (string, error) {
 			Name:            application.Metadata.Name,
 			Description:     application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
-			Env:             application.Spec.Env,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
 			Version:         application.Spec.Version,
