@@ -403,18 +403,23 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
+		workspaceId, err := getWorkspaceId()
+		if err != nil {
+			return "", err
+		}
+
 		if envTemplate.Spec.Labels == nil && envTemplate.Spec.ApplicationId == nil {
 			return "", errors.New("애플리케이션 아이디 혹은 라벨이 입력되어야함")
 		} else if envTemplate.Spec.Labels != nil {
 			param := map[string]string{"labels": strings.Join(envTemplate.Spec.Labels, ",")}
 
-			_, err := api.SendPut("/application/env", header, param, request)
+			_, err := api.SendPut("/"+workspaceId+"/application/env", header, param, request)
 			if err != nil {
 				return "", err
 			}
 		} else if envTemplate.Spec.ApplicationId != nil {
 			applicationId := *envTemplate.Spec.ApplicationId
-			_, err := api.SendPut("/application"+applicationId+"/env", header, map[string]string{}, request)
+			_, err := api.SendPut("/"+workspaceId+"/application"+applicationId+"/env", header, map[string]string{}, request)
 			if err != nil {
 				return "", err
 			}
