@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "resourceType": "ENV"
+  },
+  "spec": {
+    "labels": ["test-with-json"],
+    "envList": [
+      {
+        "key": "test",
+        "value": "1234",
+        "encryption": false
+      },
+      {
+        "key": "encodeData",
+        "value": "test123!",
+        "encryption": true
+      }
+    ]
+  }
+}

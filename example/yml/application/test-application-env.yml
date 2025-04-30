@@ -1,0 +1,11 @@
+metadata:
+  "resourceType": ENV
+spec:
+  applicationId: 63383664-6230-3236-2d61-6235312d3464
+  envList:
+    - key: test
+      value: '1234'
+      encryption: false
+    - key: encodeData
+      value: 'test123!'
+      encryption: true
