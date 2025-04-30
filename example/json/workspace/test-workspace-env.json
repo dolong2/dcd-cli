@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "resourceType": "GE"
+  },
+  "spec": {
+    "workspaceId": "63613536-3930-6262-2d36-3532352d3438",
+    "envList": [
+      {
+        "key": "globalEnvTest",
+        "value": "1234",
+        "encryption": false
+      },
+      {
+        "key": "globalEnvEncodedData",
+        "value": "test123!",
+        "encryption": true
+      }
+    ]
+  }
+}
