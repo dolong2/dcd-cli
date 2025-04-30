@@ -419,7 +419,7 @@ func createByYml(content []byte) (string, error) {
 			}
 		} else if envTemplate.Spec.ApplicationId != nil {
 			applicationId := *envTemplate.Spec.ApplicationId
-			_, err := api.SendPut("/"+workspaceId+"/application"+applicationId+"/env", header, map[string]string{}, request)
+			_, err := api.SendPut("/"+workspaceId+"/application/"+applicationId+"/env", header, map[string]string{}, request)
 			if err != nil {
 				return "", err
 			}
