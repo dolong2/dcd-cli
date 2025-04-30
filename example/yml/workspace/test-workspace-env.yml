@@ -1,0 +1,11 @@
+metadata:
+  resourceType: GE
+spec:
+  workspaceId: 32613132-3035-3039-2d34-3363352d3431
+  envList:
+    - key: globalEnvTest
+      value: '1234'
+      encryption: false
+    - key: globalEnvEncodedData
+      value: 'test123!'
+      encryption: true
