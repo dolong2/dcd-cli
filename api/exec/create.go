@@ -448,7 +448,7 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		_, err = api.SendPut("/workspace"+globalEnvTemplate.Spec.WorkspaceId+"/env", header, map[string]string{}, request)
+		_, err = api.SendPut("/workspace/"+globalEnvTemplate.Spec.WorkspaceId+"/env", header, map[string]string{}, request)
 		if err != nil {
 			return "", err
 		}
