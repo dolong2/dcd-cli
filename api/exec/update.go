@@ -102,7 +102,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 
-		request, err := json.Marshal(updateWorkspaceRequest{Title: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
+		request, err := json.Marshal(workspace.ToRequest())
 		if err != nil {
 			return err
 		}
@@ -123,14 +123,7 @@ func updateByJson(resourceId string, content []byte) error {
 			return err
 		}
 
-		request, err := json.Marshal(updateApplicationRequest{
-			Name:            *application.Metadata.Name,
-			Description:     *application.Metadata.Description,
-			GithubUrl:       application.Spec.GithubUrl,
-			ApplicationType: application.Spec.ApplicationType,
-			Port:            application.Spec.Port,
-			Version:         application.Spec.Version,
-		})
+		request, err := json.Marshal(application.ToRequest())
 		if err != nil {
 			return err
 		}
@@ -173,7 +166,7 @@ func updateByYml(resourceId string, content []byte) error {
 			return err
 		}
 
-		request, err := json.Marshal(updateWorkspaceRequest{Title: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
+		request, err := json.Marshal(workspace.ToRequest())
 		if err != nil {
 			return err
 		}
@@ -194,14 +187,7 @@ func updateByYml(resourceId string, content []byte) error {
 			return err
 		}
 
-		request, err := json.Marshal(updateApplicationRequest{
-			Name:            *application.Metadata.Name,
-			Description:     *application.Metadata.Description,
-			GithubUrl:       application.Spec.GithubUrl,
-			ApplicationType: application.Spec.ApplicationType,
-			Port:            application.Spec.Port,
-			Version:         application.Spec.Version,
-		})
+		request, err := json.Marshal(application.ToRequest())
 		if err != nil {
 			return err
 		}

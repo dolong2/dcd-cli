@@ -1,6 +1,9 @@
 package template
 
-import "errors"
+import (
+	"errors"
+	"github.com/dolong2/dcd-cli/api/exec/request"
+)
 
 type ApplicationTemplate struct {
 	Metadata metaData                `json:"metadata" yaml:"metadata"`
@@ -21,4 +24,16 @@ type applicationSpecTemplate struct {
 	Port            int      `json:"port" yaml:"port"`
 	Version         string   `json:"version" yaml:"version"`
 	Labels          []string `json:"labels" yaml:"labels"`
+}
+
+func (template ApplicationTemplate) ToRequest() request.ApplicationRequest {
+	return request.ApplicationRequest{
+		Name:            *template.Metadata.Name,
+		Description:     *template.Metadata.Description,
+		GithubUrl:       template.Spec.GithubUrl,
+		ApplicationType: template.Spec.ApplicationType,
+		Port:            template.Spec.Port,
+		Version:         template.Spec.Version,
+		Labels:          template.Spec.Labels,
+	}
 }

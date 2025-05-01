@@ -88,7 +88,7 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(workspaceRequest{Name: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
+		request, err := json.Marshal(workspace.ToRequest())
 		if err != nil {
 			return "", err
 		}
@@ -116,15 +116,7 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(applicationRequest{
-			Name:            *application.Metadata.Name,
-			Description:     *application.Metadata.Description,
-			GithubUrl:       application.Spec.GithubUrl,
-			ApplicationType: application.Spec.ApplicationType,
-			Port:            application.Spec.Port,
-			Version:         application.Spec.Version,
-			Labels:          application.Spec.Labels,
-		})
+		request, err := json.Marshal(application.ToRequest())
 		if err != nil {
 			return "", err
 		}
@@ -151,16 +143,7 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		var envRequestList []envPutRequest
-		for _, template := range envTemplate.Spec.EnvList {
-			envRequestList = append(envRequestList, envPutRequest{
-				Key:        template.Key,
-				Value:      template.Value,
-				Encryption: template.Encryption,
-			})
-		}
-
-		request, err := json.Marshal(envPutListRequest{EnvList: envRequestList})
+		request, err := json.Marshal(envTemplate.ToRequest())
 
 		if err != nil {
 			return "", err
@@ -196,16 +179,7 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		var globalEnvRequestList []globalEnvPutRequest
-		for _, template := range globalEnvTemplate.Spec.EnvList {
-			globalEnvRequestList = append(globalEnvRequestList, globalEnvPutRequest{
-				Key:        template.Key,
-				Value:      template.Value,
-				Encryption: template.Encryption,
-			})
-		}
-
-		request, err := json.Marshal(globalEnvPutListRequest{EnvList: globalEnvRequestList})
+		request, err := json.Marshal(globalEnvTemplate.ToRequest())
 
 		if err != nil {
 			return "", err
@@ -249,7 +223,7 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(workspaceRequest{Name: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
+		request, err := json.Marshal(workspace.ToRequest())
 		if err != nil {
 			return "", err
 		}
@@ -276,15 +250,7 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(applicationRequest{
-			Name:            *application.Metadata.Name,
-			Description:     *application.Metadata.Description,
-			GithubUrl:       application.Spec.GithubUrl,
-			ApplicationType: application.Spec.ApplicationType,
-			Port:            application.Spec.Port,
-			Version:         application.Spec.Version,
-			Labels:          application.Spec.Labels,
-		})
+		request, err := json.Marshal(application.ToRequest())
 		if err != nil {
 			return "", err
 		}
@@ -313,16 +279,7 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		var envRequestList []envPutRequest
-		for _, template := range envTemplate.Spec.EnvList {
-			envRequestList = append(envRequestList, envPutRequest{
-				Key:        template.Key,
-				Value:      template.Value,
-				Encryption: template.Encryption,
-			})
-		}
-
-		request, err := json.Marshal(envPutListRequest{EnvList: envRequestList})
+		request, err := json.Marshal(envTemplate.ToRequest())
 
 		if err != nil {
 			return "", err
@@ -358,16 +315,7 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		var globalEnvRequestList []globalEnvPutRequest
-		for _, template := range globalEnvTemplate.Spec.EnvList {
-			globalEnvRequestList = append(globalEnvRequestList, globalEnvPutRequest{
-				Key:        template.Key,
-				Value:      template.Value,
-				Encryption: template.Encryption,
-			})
-		}
-
-		request, err := json.Marshal(globalEnvPutListRequest{EnvList: globalEnvRequestList})
+		request, err := json.Marshal(globalEnvTemplate.ToRequest())
 
 		if err != nil {
 			return "", err

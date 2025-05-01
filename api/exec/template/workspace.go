@@ -1,6 +1,9 @@
 package template
 
-import "errors"
+import (
+	"errors"
+	"github.com/dolong2/dcd-cli/api/exec/request"
+)
 
 type WorkspaceTemplate struct {
 	Metadata metaData `json:"metadata" yaml:"metadata"`
@@ -12,4 +15,11 @@ func (template WorkspaceTemplate) ValidateMetadata() error {
 	}
 
 	return nil
+}
+
+func (template WorkspaceTemplate) ToRequest() request.WorkspaceRequest {
+	return request.WorkspaceRequest{
+		Name:        *template.Metadata.Name,
+		Description: *template.Metadata.Description,
+	}
 }
