@@ -3,29 +3,11 @@ package exec
 import (
 	"encoding/json"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 	"strings"
 )
 
-type ApplicationResponse struct {
-	Id              string            `json:"id"`
-	Name            string            `json:"name"`
-	Description     string            `json:"description"`
-	ApplicationType string            `json:"applicationType"`
-	GithubUrl       string            `json:"githubUrl"`
-	Env             map[string]string `json:"env"`
-	Port            int               `json:"port"`
-	ExternalPort    int               `json:"externalPort"`
-	Version         string            `json:"version"`
-	Status          string            `json:"status"`
-	FailureReason   string            `json:"failureReason"`
-	Labels          []string          `json:"labels"`
-}
-
-type ApplicationListResponse struct {
-	Applications []ApplicationResponse `json:"list"`
-}
-
-func GetApplications(workspaceId string) (*ApplicationListResponse, error) {
+func GetApplications(workspaceId string) (*response.ApplicationListResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -33,13 +15,13 @@ func GetApplications(workspaceId string) (*ApplicationListResponse, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/"+workspaceId+"/application", header, map[string]string{})
+	result, err := api.SendGet("/"+workspaceId+"/application", header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
-	var applicationListResponse ApplicationListResponse
-	err = json.Unmarshal(response, &applicationListResponse)
+	var applicationListResponse response.ApplicationListResponse
+	err = json.Unmarshal(result, &applicationListResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +29,7 @@ func GetApplications(workspaceId string) (*ApplicationListResponse, error) {
 	return &applicationListResponse, nil
 }
 
-func GetApplicationsByLabels(workspaceId string, labels []string) (*ApplicationListResponse, error) {
+func GetApplicationsByLabels(workspaceId string, labels []string) (*response.ApplicationListResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -58,13 +40,13 @@ func GetApplicationsByLabels(workspaceId string, labels []string) (*ApplicationL
 	param := make(map[string]string)
 	param["labels"] = strings.Join(labels, ",")
 
-	response, err := api.SendGet("/"+workspaceId+"/application", header, param)
+	result, err := api.SendGet("/"+workspaceId+"/application", header, param)
 	if err != nil {
 		return nil, err
 	}
 
-	var applicationListResponse ApplicationListResponse
-	err = json.Unmarshal(response, &applicationListResponse)
+	var applicationListResponse response.ApplicationListResponse
+	err = json.Unmarshal(result, &applicationListResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +54,7 @@ func GetApplicationsByLabels(workspaceId string, labels []string) (*ApplicationL
 	return &applicationListResponse, nil
 }
 
-func GetApplication(workspaceId string, applicationId string) (*ApplicationResponse, error) {
+func GetApplication(workspaceId string, applicationId string) (*response.ApplicationResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -80,13 +62,13 @@ func GetApplication(workspaceId string, applicationId string) (*ApplicationRespo
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/"+workspaceId+"/application/"+applicationId, header, map[string]string{})
+	result, err := api.SendGet("/"+workspaceId+"/application/"+applicationId, header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
-	var applicationResponse ApplicationResponse
-	err = json.Unmarshal(response, &applicationResponse)
+	var applicationResponse response.ApplicationResponse
+	err = json.Unmarshal(result, &applicationResponse)
 	if err != nil {
 		return nil, err
 	}

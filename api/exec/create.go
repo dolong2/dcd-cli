@@ -4,20 +4,13 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 	"github.com/dolong2/dcd-cli/api/exec/template"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
 	"strings"
 )
-
-type createWorkspaceResponse struct {
-	WorkspaceId string `json:"workspaceId"`
-}
-
-type createApplicationResponse struct {
-	ApplicationId string `json:"applicationId"`
-}
 
 func CreateByPath(fileDirectory string) error {
 	content, err := os.ReadFile(fileDirectory)
@@ -93,13 +86,13 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		response, err := api.SendPost("/workspace", header, map[string]string{}, request)
+		result, err := api.SendPost("/workspace", header, map[string]string{}, request)
 		if err != nil {
 			return "", err
 		}
 
-		createWorkspaceResponse := createWorkspaceResponse{}
-		err = json.Unmarshal(response, &createWorkspaceResponse)
+		createWorkspaceResponse := response.CreateWorkspaceResponse{}
+		err = json.Unmarshal(result, &createWorkspaceResponse)
 		if err != nil {
 			return "", err
 		}
@@ -126,12 +119,12 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		response, err := api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
+		result, err := api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
 			return "", err
 		}
-		var createApplicationResponse createApplicationResponse
-		err = json.Unmarshal(response, &createApplicationResponse)
+		createApplicationResponse := response.CreateApplicationResponse{}
+		err = json.Unmarshal(result, &createApplicationResponse)
 		if err != nil {
 			return "", err
 		}
@@ -228,12 +221,12 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		response, err := api.SendPost("/workspace", header, map[string]string{}, request)
+		result, err := api.SendPost("/workspace", header, map[string]string{}, request)
 		if err != nil {
 			return "", err
 		}
-		createWorkspaceResponse := createWorkspaceResponse{}
-		err = json.Unmarshal(response, &createWorkspaceResponse)
+		createWorkspaceResponse := response.CreateWorkspaceResponse{}
+		err = json.Unmarshal(result, &createWorkspaceResponse)
 		if err != nil {
 			return "", err
 		}
@@ -260,14 +253,14 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		response, err := api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
+		result, err := api.SendPost("/"+workspaceId+"/application", header, map[string]string{}, request)
 		if err != nil {
 			return "", err
 		}
 
 		// 애플리케이션 생성후 애플리케이션 아이디를 반환
-		var createApplicationResponse createApplicationResponse
-		err = json.Unmarshal(response, &createApplicationResponse)
+		createApplicationResponse := response.CreateApplicationResponse{}
+		err = json.Unmarshal(result, &createApplicationResponse)
 		if err != nil {
 			return "", err
 		}

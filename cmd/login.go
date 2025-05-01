@@ -31,8 +31,7 @@ var loginCmd = &cobra.Command{
 			password = string(bytePassword)
 		}
 
-		tokenRequest := exec.TokenRequest{Email: email, Password: password}
-		err := exec.Login(&tokenRequest)
+		err := exec.Login(email, password)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}

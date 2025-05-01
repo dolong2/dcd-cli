@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/dolong2/dcd-cli/api/exec"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/util"
 	"github.com/olekukonko/tablewriter"
@@ -88,7 +89,7 @@ func getApplication(cmd *cobra.Command) error {
 	if applicationId == "" && err == nil {
 		labels, err := cmd.Flags().GetStringArray("label")
 
-		var applications *exec.ApplicationListResponse
+		var applications *response.ApplicationListResponse
 
 		// id, labels 플래그 둘다 없을때, 조건 없이 애플리케이션 조회
 		if len(labels) == 0 || err != nil {
@@ -130,7 +131,7 @@ func init() {
 	getCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n워크스페이스를 가져올때 해당 플래그를 사용하면, 해당 플래그는 무시됩니다.\n리소스 아이디를 사용한다면, 이 플래그는 무시됩니다.\nex). -l test-label-1 -l test-label-2")
 }
 
-func printApplication(application exec.ApplicationResponse) {
+func printApplication(application response.ApplicationResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
@@ -167,7 +168,7 @@ func printApplication(application exec.ApplicationResponse) {
 	table.Render()
 }
 
-func printApplicationList(applicationList []exec.ApplicationResponse) {
+func printApplicationList(applicationList []response.ApplicationResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
 	table.SetAlignment(tablewriter.ALIGN_CENTER)
@@ -203,7 +204,7 @@ func printApplicationList(applicationList []exec.ApplicationResponse) {
 	table.Render()
 }
 
-func printWorkspace(workspace exec.WorkspaceDetailResponse) {
+func printWorkspace(workspace response.WorkspaceDetailResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
@@ -223,7 +224,7 @@ func printWorkspace(workspace exec.WorkspaceDetailResponse) {
 	table.Render()
 }
 
-func printWorkspaceList(workspaceList []exec.WorkspaceResponse, usedWorkspaceId string) {
+func printWorkspaceList(workspaceList []response.WorkspaceResponse, usedWorkspaceId string) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
 	table.SetAlignment(tablewriter.ALIGN_CENTER)

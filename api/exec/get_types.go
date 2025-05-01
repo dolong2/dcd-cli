@@ -3,11 +3,8 @@ package exec
 import (
 	"encoding/json"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 )
-
-type getTypesResponse struct {
-	List []string `json:"list"`
-}
 
 func GetTypes() ([]string, error) {
 	header := make(map[string]string)
@@ -17,13 +14,13 @@ func GetTypes() ([]string, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/application/types", header, map[string]string{})
+	result, err := api.SendGet("/application/types", header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
-	var typesResponse getTypesResponse
-	err = json.Unmarshal(response, &typesResponse)
+	var typesResponse response.GetTypesResponse
+	err = json.Unmarshal(result, &typesResponse)
 	if err != nil {
 		return nil, err
 	}

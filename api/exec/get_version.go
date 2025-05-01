@@ -3,11 +3,8 @@ package exec
 import (
 	"encoding/json"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 )
-
-type resourceVersion struct {
-	VersionList []string `json:"version"`
-}
 
 func GetVersion(resourceType string) ([]string, error) {
 	header := make(map[string]string)
@@ -17,13 +14,13 @@ func GetVersion(resourceType string) ([]string, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/application/"+resourceType+"/version", header, map[string]string{})
+	result, err := api.SendGet("/application/"+resourceType+"/version", header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
-	var resourceVersion resourceVersion
-	err = json.Unmarshal(response, &resourceVersion)
+	var resourceVersion response.ResourceVersion
+	err = json.Unmarshal(result, &resourceVersion)
 	if err != nil {
 		return nil, err
 	}
