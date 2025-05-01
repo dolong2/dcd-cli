@@ -24,6 +24,14 @@ type workspaceTemplate struct {
 	Metadata metaData `json:"metadata" yaml:"metadata"`
 }
 
+func (template workspaceTemplate) validateMetadata() error {
+	if template.Metadata.Name == nil || template.Metadata.Description == nil {
+		return errors.New("워크스페이스 메타데이터 정보가 올바르지 않습니다")
+	}
+
+	return nil
+}
+
 type workspaceRequest struct {
 	ResourceType string `json:"resourceType"`
 	Name         string `json:"title"`
@@ -33,6 +41,14 @@ type workspaceRequest struct {
 type applicationTemplate struct {
 	Metadata metaData                `json:"metadata" yaml:"metadata"`
 	Spec     applicationSpecTemplate `json:"spec" yaml:"spec"`
+}
+
+func (template applicationTemplate) validateMetadata() error {
+	if template.Metadata.Name == nil || template.Metadata.Description == nil {
+		return errors.New("애플리케이션 메타데이터 정보가 올바르지 않습니다")
+	}
+
+	return nil
 }
 
 type applicationSpecTemplate struct {
