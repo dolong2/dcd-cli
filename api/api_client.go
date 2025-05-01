@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-var baseUrl = "http://localhost:8081"
+var baseUrl = "https://dcd-api.dolong2.co.kr"
 
 type apiErrorResponse struct {
 	Status  int    `json:"status"`
