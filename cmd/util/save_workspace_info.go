@@ -3,11 +3,11 @@ package util
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/dolong2/dcd-cli/api/exec"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 	"os"
 )
 
-func SaveWorkspaceInfo(workspaceInfo exec.WorkspaceDetailResponse) error {
+func SaveWorkspaceInfo(workspaceInfo response.WorkspaceDetailResponse) error {
 	simpleWorkspaceInfo := SimpleWorkspaceInfo{WorkspaceId: workspaceInfo.Id}
 
 	rawResult, err := json.Marshal(simpleWorkspaceInfo)

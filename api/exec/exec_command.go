@@ -3,15 +3,9 @@ package exec
 import (
 	"encoding/json"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/request"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 )
-
-type CommandRequest struct {
-	Command string `json:"command"`
-}
-
-type CommandResult struct {
-	Output []string `json:"result"`
-}
 
 func ExecCommand(workspaceId string, applicationId string, command string) ([]string, error) {
 	header := make(map[string]string)
@@ -21,19 +15,19 @@ func ExecCommand(workspaceId string, applicationId string, command string) ([]st
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	commandRequest := CommandRequest{Command: command}
+	commandRequest := request.CommandRequest{Command: command}
 	requestBody, err := json.Marshal(commandRequest)
 	if err != nil {
 		return nil, err
 	}
 
-	response, err := api.SendPost("/"+workspaceId+"/application/"+applicationId+"/exec", header, map[string]string{}, requestBody)
+	result, err := api.SendPost("/"+workspaceId+"/application/"+applicationId+"/exec", header, map[string]string{}, requestBody)
 	if err != nil {
 		return nil, err
 	}
 
-	var commandResult CommandResult
-	err = json.Unmarshal(response, &commandResult)
+	var commandResult response.CommandResult
+	err = json.Unmarshal(result, &commandResult)
 	if err != nil {
 		return nil, err
 	}

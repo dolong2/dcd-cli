@@ -3,26 +3,10 @@ package exec
 import (
 	"encoding/json"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/response"
 )
 
-type WorkspaceListResponse struct {
-	List []WorkspaceResponse `json:"list"`
-}
-
-type WorkspaceResponse struct {
-	Id          string `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-}
-
-type WorkspaceDetailResponse struct {
-	Id          string            `json:"id"`
-	Title       string            `json:"title"`
-	Description string            `json:"description"`
-	GlobalEnv   map[string]string `json:"globalEnv"`
-}
-
-func GetWorkspaces() (*WorkspaceListResponse, error) {
+func GetWorkspaces() (*response.WorkspaceListResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -30,13 +14,13 @@ func GetWorkspaces() (*WorkspaceListResponse, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/workspace", header, map[string]string{})
+	result, err := api.SendGet("/workspace", header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
-	var workspaceListResponse WorkspaceListResponse
-	err = json.Unmarshal(response, &workspaceListResponse)
+	var workspaceListResponse response.WorkspaceListResponse
+	err = json.Unmarshal(result, &workspaceListResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +28,7 @@ func GetWorkspaces() (*WorkspaceListResponse, error) {
 	return &workspaceListResponse, nil
 }
 
-func GetWorkspace(id string) (*WorkspaceDetailResponse, error) {
+func GetWorkspace(id string) (*response.WorkspaceDetailResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -52,13 +36,13 @@ func GetWorkspace(id string) (*WorkspaceDetailResponse, error) {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	response, err := api.SendGet("/workspace/"+id, header, map[string]string{})
+	result, err := api.SendGet("/workspace/"+id, header, map[string]string{})
 	if err != nil {
 		return nil, err
 	}
 
-	var workspaceResponse WorkspaceDetailResponse
-	err = json.Unmarshal(response, &workspaceResponse)
+	var workspaceResponse response.WorkspaceDetailResponse
+	err = json.Unmarshal(result, &workspaceResponse)
 	if err != nil {
 		return nil, err
 	}

@@ -4,16 +4,12 @@ import (
 	"bufio"
 	"encoding/json"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/request"
 	"os"
 )
 
-type TokenRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-func Login(tokenRequest *TokenRequest) error {
-	rawTokenRequest, err := json.Marshal(tokenRequest)
+func Login(email string, password string) error {
+	rawTokenRequest, err := json.Marshal(request.TokenRequest{Email: email, Password: password})
 	if err != nil {
 		return err
 	}
