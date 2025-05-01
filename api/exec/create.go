@@ -4,59 +4,17 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/template"
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-type metaData struct {
-	ResourceType string  `json:"resourceType" yaml:"resourceType"`
-	Name         *string `json:"name,omitempty" yaml:"name,omitempty"`
-	Description  *string `json:"description,omitempty" yaml:"description,omitempty"`
-}
-
-type parsingMetaData struct {
-	Metadata metaData `json:"metadata" yaml:"metadata"`
-}
-
-type workspaceTemplate struct {
-	Metadata metaData `json:"metadata" yaml:"metadata"`
-}
-
-func (template workspaceTemplate) validateMetadata() error {
-	if template.Metadata.Name == nil || template.Metadata.Description == nil {
-		return errors.New("워크스페이스 메타데이터 정보가 올바르지 않습니다")
-	}
-
-	return nil
-}
-
 type workspaceRequest struct {
 	ResourceType string `json:"resourceType"`
 	Name         string `json:"title"`
 	Description  string `json:"description"`
-}
-
-type applicationTemplate struct {
-	Metadata metaData                `json:"metadata" yaml:"metadata"`
-	Spec     applicationSpecTemplate `json:"spec" yaml:"spec"`
-}
-
-func (template applicationTemplate) validateMetadata() error {
-	if template.Metadata.Name == nil || template.Metadata.Description == nil {
-		return errors.New("애플리케이션 메타데이터 정보가 올바르지 않습니다")
-	}
-
-	return nil
-}
-
-type applicationSpecTemplate struct {
-	GithubUrl       string   `json:"githubUrl" yaml:"githubUrl"`
-	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
-	Port            int      `json:"port" yaml:"port"`
-	Version         string   `json:"version" yaml:"version"`
-	Labels          []string `json:"labels" yaml:"labels"`
 }
 
 type applicationRequest struct {
@@ -69,23 +27,6 @@ type applicationRequest struct {
 	Labels          []string `json:"labels"`
 }
 
-type envTemplate struct {
-	Metadata metaData        `json:"metadata" yaml:"metadata"`
-	Spec     envSpecTemplate `json:"spec" yaml:"spec"`
-}
-
-type envSpecTemplate struct {
-	EnvList       []envListTemplate `json:"envList" yaml:"envList"`
-	Labels        []string          `json:"labels" yaml:"labels"`
-	ApplicationId *string           `json:"applicationId,omitempty" yaml:"applicationId,omitempty"`
-}
-
-type envListTemplate struct {
-	Key        string `json:"key" yaml:"key"`
-	Value      string `json:"value" yaml:"value"`
-	Encryption bool   `json:"encryption" yaml:"encryption"`
-}
-
 type envPutRequest struct {
 	Key        string `json:"key"`
 	Value      string `json:"value"`
@@ -94,22 +35,6 @@ type envPutRequest struct {
 
 type envPutListRequest struct {
 	EnvList []envPutRequest `json:"envList"`
-}
-
-type globalEnvTemplate struct {
-	Metadata metaData              `json:"metadata" yaml:"metadata"`
-	Spec     globalEnvSpecTemplate `json:"spec" yaml:"spec"`
-}
-
-type globalEnvSpecTemplate struct {
-	EnvList     []globalEnvListTemplate `json:"envList" yaml:"envList"`
-	WorkspaceId string                  `json:"workspaceId" yaml:"workspaceId"`
-}
-
-type globalEnvListTemplate struct {
-	Key        string `json:"key" yaml:"key"`
-	Value      string `json:"value" yaml:"value"`
-	Encryption bool   `json:"encryption" yaml:"encryption"`
 }
 
 type globalEnvPutRequest struct {
@@ -173,7 +98,7 @@ func CreateByTemplate(rawTemplate string) error {
 }
 
 func createByJson(content []byte) (string, error) {
-	var data parsingMetaData
+	var data template.ParsingMetaData
 	err := json.Unmarshal(content, &data)
 	if err != nil {
 		return "", err
@@ -188,13 +113,13 @@ func createByJson(content []byte) (string, error) {
 
 	resourceType := data.Metadata.ResourceType
 	if resourceType == "WORKSPACE" {
-		var workspace workspaceTemplate
+		var workspace template.WorkspaceTemplate
 		err = json.Unmarshal(content, &workspace)
 		if err != nil {
 			return "", err
 		}
 
-		err = workspace.validateMetadata()
+		err = workspace.ValidateMetadata()
 		if err != nil {
 			return "", err
 		}
@@ -216,13 +141,13 @@ func createByJson(content []byte) (string, error) {
 		}
 		return createWorkspaceResponse.WorkspaceId, nil
 	} else if resourceType == "APPLICATION" {
-		var application applicationTemplate
+		var application template.ApplicationTemplate
 		err = json.Unmarshal(content, &application)
 		if err != nil {
 			return "", err
 		}
 
-		err = application.validateMetadata()
+		err = application.ValidateMetadata()
 		if err != nil {
 			return "", err
 		}
@@ -256,7 +181,7 @@ func createByJson(content []byte) (string, error) {
 		}
 		return createApplicationResponse.ApplicationId, nil
 	} else if resourceType == "ENV" {
-		var envTemplate envTemplate
+		var envTemplate template.EnvTemplate
 		err := json.Unmarshal(content, &envTemplate)
 		if err != nil {
 			return "", err
@@ -301,7 +226,7 @@ func createByJson(content []byte) (string, error) {
 
 		return "", nil
 	} else if resourceType == "GLOBAL_ENV" || resourceType == "GE" {
-		var globalEnvTemplate globalEnvTemplate
+		var globalEnvTemplate template.GlobalEnvTemplate
 		err := json.Unmarshal(content, &globalEnvTemplate)
 		if err != nil {
 			return "", err
@@ -334,7 +259,7 @@ func createByJson(content []byte) (string, error) {
 }
 
 func createByYml(content []byte) (string, error) {
-	var data parsingMetaData
+	var data template.ParsingMetaData
 	err := yaml.Unmarshal(content, &data)
 	if err != nil {
 		return "", err
@@ -349,13 +274,13 @@ func createByYml(content []byte) (string, error) {
 
 	resourceType := data.Metadata.ResourceType
 	if resourceType == "WORKSPACE" {
-		var workspace workspaceTemplate
+		var workspace template.WorkspaceTemplate
 		err = yaml.Unmarshal(content, &workspace)
 		if err != nil {
 			return "", err
 		}
 
-		err = workspace.validateMetadata()
+		err = workspace.ValidateMetadata()
 		if err != nil {
 			return "", err
 		}
@@ -376,13 +301,13 @@ func createByYml(content []byte) (string, error) {
 		}
 		return createWorkspaceResponse.WorkspaceId, nil
 	} else if resourceType == "APPLICATION" {
-		var application applicationTemplate
+		var application template.ApplicationTemplate
 		err := yaml.Unmarshal(content, &application)
 		if err != nil {
 			return "", err
 		}
 
-		err = application.validateMetadata()
+		err = application.ValidateMetadata()
 		if err != nil {
 			return "", err
 		}
@@ -418,7 +343,7 @@ func createByYml(content []byte) (string, error) {
 		}
 		return createApplicationResponse.ApplicationId, nil
 	} else if resourceType == "ENV" {
-		var envTemplate envTemplate
+		var envTemplate template.EnvTemplate
 		err := yaml.Unmarshal(content, &envTemplate)
 		if err != nil {
 			return "", err
@@ -463,7 +388,7 @@ func createByYml(content []byte) (string, error) {
 
 		return "", nil
 	} else if resourceType == "GLOBAL_ENV" || resourceType == "GE" {
-		var globalEnvTemplate globalEnvTemplate
+		var globalEnvTemplate template.GlobalEnvTemplate
 		err := yaml.Unmarshal(content, &globalEnvTemplate)
 		if err != nil {
 			return "", err
