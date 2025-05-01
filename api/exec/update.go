@@ -11,7 +11,7 @@ import (
 )
 
 func UpdateByTemplate(workspaceId string, rawTemplate string) error {
-	err := updateByJson(workspaceId, []byte(rawTemplate))
+	err := update(workspaceId, []byte(rawTemplate), json.Unmarshal)
 	if err != nil {
 		return err
 	}
@@ -28,12 +28,12 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 	ext := filepath.Ext(fileDirectory)
 	switch ext {
 	case ".json":
-		err = updateByJson(workspaceId, content)
+		err = update(workspaceId, content, json.Unmarshal)
 		if err != nil {
 			return err
 		}
 	case ".yml", ".yaml":
-		err = updateByYml(workspaceId, content)
+		err = update(workspaceId, content, yaml.Unmarshal)
 		if err != nil {
 			return err
 		}
@@ -59,12 +59,12 @@ func UpdateByOnlyPath(fileDirectory string) error {
 	ext := filepath.Ext(fileDirectory)
 	switch ext {
 	case ".json":
-		err = updateByJson(resourceId, content)
+		err = update(resourceId, content, json.Unmarshal)
 		if err != nil {
 			return err
 		}
 	case ".yml", ".yaml":
-		err = updateByYml(resourceId, content)
+		err = update(resourceId, content, yaml.Unmarshal)
 		if err != nil {
 			return err
 		}
@@ -75,9 +75,9 @@ func UpdateByOnlyPath(fileDirectory string) error {
 	return nil
 }
 
-func updateByJson(resourceId string, content []byte) error {
+func update(resourceId string, content []byte, unmarshal func([]byte, interface{}) (err error)) error {
 	var data template.ParsingMetaData
-	err := json.Unmarshal(content, &data)
+	err := unmarshal(content, &data)
 	if err != nil {
 		return err
 	}
@@ -92,7 +92,7 @@ func updateByJson(resourceId string, content []byte) error {
 	resourceType := data.Metadata.ResourceType
 	if resourceType == "WORKSPACE" {
 		var workspace template.WorkspaceTemplate
-		err = json.Unmarshal(content, &workspace)
+		err = unmarshal(content, &workspace)
 		if err != nil {
 			return err
 		}
@@ -118,71 +118,7 @@ func updateByJson(resourceId string, content []byte) error {
 		}
 
 		var application template.ApplicationTemplate
-		err = json.Unmarshal(content, &application)
-		if err != nil {
-			return err
-		}
-
-		request, err := json.Marshal(application.ToRequest())
-		if err != nil {
-			return err
-		}
-
-		_, err = api.SendPut("/"+workspaceId+"/application/"+resourceId, header, map[string]string{}, request)
-		if err != nil {
-			return err
-		}
-	} else {
-		return errors.New("지원되지 않는 리소스 타입입니다.")
-	}
-
-	return nil
-}
-
-func updateByYml(resourceId string, content []byte) error {
-	var data template.ParsingMetaData
-	err := yaml.Unmarshal(content, &data)
-	if err != nil {
-		return err
-	}
-
-	header := make(map[string]string)
-	token, err := GetAccessToken()
-	header["Authorization"] = "Bearer " + token
-	if err != nil {
-		return err
-	}
-
-	resourceType := data.Metadata.ResourceType
-	if resourceType == "WORKSPACE" {
-		var workspace template.WorkspaceTemplate
-		err = yaml.Unmarshal(content, &workspace)
-		if err != nil {
-			return err
-		}
-
-		err = workspace.ValidateMetadata()
-		if err != nil {
-			return err
-		}
-
-		request, err := json.Marshal(workspace.ToRequest())
-		if err != nil {
-			return err
-		}
-
-		_, err = api.SendPut("/workspace/"+resourceId, header, map[string]string{}, request)
-		if err != nil {
-			return err
-		}
-	} else if resourceType == "APPLICATION" {
-		workspaceId, err := getWorkspaceId()
-		if err != nil {
-			return err
-		}
-
-		var application template.ApplicationTemplate
-		err = yaml.Unmarshal(content, &application)
+		err = unmarshal(content, &application)
 		if err != nil {
 			return err
 		}
