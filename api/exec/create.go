@@ -25,9 +25,9 @@ type workspaceTemplate struct {
 }
 
 type workspaceRequest struct {
-	ResourceType string  `json:"resourceType"`
-	Name         *string `json:"title"`
-	Description  *string `json:"description"`
+	ResourceType string `json:"resourceType"`
+	Name         string `json:"title"`
+	Description  string `json:"description"`
 }
 
 type applicationTemplate struct {
@@ -44,8 +44,8 @@ type applicationSpecTemplate struct {
 }
 
 type applicationRequest struct {
-	Name            *string  `json:"name"`
-	Description     *string  `json:"description"`
+	Name            string   `json:"name"`
+	Description     string   `json:"description"`
 	GithubUrl       string   `json:"githubUrl"`
 	ApplicationType string   `json:"applicationType"`
 	Port            int      `json:"port"`
