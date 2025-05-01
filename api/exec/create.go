@@ -24,15 +24,31 @@ type workspaceTemplate struct {
 	Metadata metaData `json:"metadata" yaml:"metadata"`
 }
 
+func (template workspaceTemplate) validateMetadata() error {
+	if template.Metadata.Name == nil || template.Metadata.Description == nil {
+		return errors.New("워크스페이스 메타데이터 정보가 올바르지 않습니다")
+	}
+
+	return nil
+}
+
 type workspaceRequest struct {
-	ResourceType string  `json:"resourceType"`
-	Name         *string `json:"title"`
-	Description  *string `json:"description"`
+	ResourceType string `json:"resourceType"`
+	Name         string `json:"title"`
+	Description  string `json:"description"`
 }
 
 type applicationTemplate struct {
 	Metadata metaData                `json:"metadata" yaml:"metadata"`
 	Spec     applicationSpecTemplate `json:"spec" yaml:"spec"`
+}
+
+func (template applicationTemplate) validateMetadata() error {
+	if template.Metadata.Name == nil || template.Metadata.Description == nil {
+		return errors.New("애플리케이션 메타데이터 정보가 올바르지 않습니다")
+	}
+
+	return nil
 }
 
 type applicationSpecTemplate struct {
@@ -44,8 +60,8 @@ type applicationSpecTemplate struct {
 }
 
 type applicationRequest struct {
-	Name            *string  `json:"name"`
-	Description     *string  `json:"description"`
+	Name            string   `json:"name"`
+	Description     string   `json:"description"`
 	GithubUrl       string   `json:"githubUrl"`
 	ApplicationType string   `json:"applicationType"`
 	Port            int      `json:"port"`
@@ -178,7 +194,12 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		err = workspace.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
+		request, err := json.Marshal(workspaceRequest{Name: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
 		if err != nil {
 			return "", err
 		}
@@ -201,9 +222,14 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
+		err = application.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
 		request, err := json.Marshal(applicationRequest{
-			Name:            application.Metadata.Name,
-			Description:     application.Metadata.Description,
+			Name:            *application.Metadata.Name,
+			Description:     *application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
@@ -329,7 +355,12 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		err = workspace.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
+		request, err := json.Marshal(workspaceRequest{Name: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
 		if err != nil {
 			return "", err
 		}
@@ -351,9 +382,14 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
+		err = application.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
 		request, err := json.Marshal(applicationRequest{
-			Name:            application.Metadata.Name,
-			Description:     application.Metadata.Description,
+			Name:            *application.Metadata.Name,
+			Description:     *application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
