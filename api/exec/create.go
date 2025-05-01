@@ -194,7 +194,12 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		err = workspace.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
+		request, err := json.Marshal(workspaceRequest{Name: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
 		if err != nil {
 			return "", err
 		}
@@ -217,9 +222,14 @@ func createByJson(content []byte) (string, error) {
 			return "", err
 		}
 
+		err = application.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
 		request, err := json.Marshal(applicationRequest{
-			Name:            application.Metadata.Name,
-			Description:     application.Metadata.Description,
+			Name:            *application.Metadata.Name,
+			Description:     *application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
@@ -345,7 +355,12 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
-		request, err := json.Marshal(workspaceRequest{Name: workspace.Metadata.Name, Description: workspace.Metadata.Description})
+		err = workspace.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
+		request, err := json.Marshal(workspaceRequest{Name: *workspace.Metadata.Name, Description: *workspace.Metadata.Description})
 		if err != nil {
 			return "", err
 		}
@@ -367,9 +382,14 @@ func createByYml(content []byte) (string, error) {
 			return "", err
 		}
 
+		err = application.validateMetadata()
+		if err != nil {
+			return "", err
+		}
+
 		request, err := json.Marshal(applicationRequest{
-			Name:            application.Metadata.Name,
-			Description:     application.Metadata.Description,
+			Name:            *application.Metadata.Name,
+			Description:     *application.Metadata.Description,
 			GithubUrl:       application.Spec.GithubUrl,
 			ApplicationType: application.Spec.ApplicationType,
 			Port:            application.Spec.Port,
