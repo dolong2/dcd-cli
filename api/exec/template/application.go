@@ -1,0 +1,24 @@
+package template
+
+import "errors"
+
+type ApplicationTemplate struct {
+	Metadata metaData                `json:"metadata" yaml:"metadata"`
+	Spec     applicationSpecTemplate `json:"spec" yaml:"spec"`
+}
+
+func (template ApplicationTemplate) ValidateMetadata() error {
+	if template.Metadata.Name == nil || template.Metadata.Description == nil {
+		return errors.New("애플리케이션 메타데이터 정보가 올바르지 않습니다")
+	}
+
+	return nil
+}
+
+type applicationSpecTemplate struct {
+	GithubUrl       string   `json:"githubUrl" yaml:"githubUrl"`
+	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
+	Port            int      `json:"port" yaml:"port"`
+	Version         string   `json:"version" yaml:"version"`
+	Labels          []string `json:"labels" yaml:"labels"`
+}
