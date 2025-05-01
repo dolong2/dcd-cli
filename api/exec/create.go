@@ -11,42 +11,6 @@ import (
 	"strings"
 )
 
-type workspaceRequest struct {
-	ResourceType string `json:"resourceType"`
-	Name         string `json:"title"`
-	Description  string `json:"description"`
-}
-
-type applicationRequest struct {
-	Name            string   `json:"name"`
-	Description     string   `json:"description"`
-	GithubUrl       string   `json:"githubUrl"`
-	ApplicationType string   `json:"applicationType"`
-	Port            int      `json:"port"`
-	Version         string   `json:"version"`
-	Labels          []string `json:"labels"`
-}
-
-type envPutRequest struct {
-	Key        string `json:"key"`
-	Value      string `json:"value"`
-	Encryption bool   `json:"encryption"`
-}
-
-type envPutListRequest struct {
-	EnvList []envPutRequest `json:"envList"`
-}
-
-type globalEnvPutRequest struct {
-	Key        string `json:"key"`
-	Value      string `json:"value"`
-	Encryption bool   `json:"encryption"`
-}
-
-type globalEnvPutListRequest struct {
-	EnvList []globalEnvPutRequest `json:"envList"`
-}
-
 type createWorkspaceResponse struct {
 	WorkspaceId string `json:"workspaceId"`
 }
