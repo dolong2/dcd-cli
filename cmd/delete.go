@@ -68,6 +68,18 @@ var deleteCmd = &cobra.Command{
 					return err
 				}
 			}
+		} else if resourceType == "global_env" || resourceType == "ge" {
+			workspaceId, err := util.GetWorkspaceId(cmd)
+			if err != nil {
+				return err
+			}
+
+			envKey := args[1]
+
+			err = exec.DeleteGlobalEnv(envKey, workspaceId)
+			if err != nil {
+				return err
+			}
 		} else {
 			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
 		}
