@@ -27,7 +27,7 @@ var deleteCmd = &cobra.Command{
 		} else if resourceType == "application" {
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
-				return err
+				return cmdError.NewCmdError(1, err.Error())
 			}
 
 			var applicationId = args[1]
@@ -38,7 +38,7 @@ var deleteCmd = &cobra.Command{
 		} else if resourceType == "env" {
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
-				return err
+				return cmdError.NewCmdError(1, err.Error())
 			}
 
 			envKey := args[1]
@@ -65,20 +65,20 @@ var deleteCmd = &cobra.Command{
 
 				err = exec.DeleteEnv(envKey, workspaceId, applicationId)
 				if err != nil {
-					return err
+					return cmdError.NewCmdError(1, err.Error())
 				}
 			}
 		} else if resourceType == "global_env" || resourceType == "ge" {
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
-				return err
+				return cmdError.NewCmdError(1, err.Error())
 			}
 
 			envKey := args[1]
 
 			err = exec.DeleteGlobalEnv(envKey, workspaceId)
 			if err != nil {
-				return err
+				return cmdError.NewCmdError(1, err.Error())
 			}
 		} else {
 			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
