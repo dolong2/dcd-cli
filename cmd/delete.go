@@ -47,4 +47,6 @@ func init() {
 	rootCmd.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	deleteCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기 위한 라벨.\nex). -l test-label-1 -l test-label-2")
+	deleteCmd.Flags().StringP("application", "a", "", "애플리케이션 아이디")
 }
