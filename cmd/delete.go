@@ -27,11 +27,56 @@ var deleteCmd = &cobra.Command{
 		} else if resourceType == "application" {
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
-				return err
+				return cmdError.NewCmdError(1, err.Error())
 			}
 
 			var applicationId = args[1]
 			err = exec.DeleteApplication(workspaceId, applicationId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+		} else if resourceType == "env" {
+			workspaceId, err := util.GetWorkspaceId(cmd)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+
+			envKey := args[1]
+
+			labels, err := cmd.Flags().GetStringArray("label")
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+
+			if len(labels) > 0 {
+				err := exec.DeleteEnvWithLabels(envKey, workspaceId, labels)
+				if err != nil {
+					return cmdError.NewCmdError(1, err.Error())
+				}
+			} else {
+				applicationId, err := cmd.Flags().GetString("application")
+				if err != nil {
+					return cmdError.NewCmdError(1, err.Error())
+				}
+
+				if applicationId == "" {
+					return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되지 않았습니다.")
+				}
+
+				err = exec.DeleteEnv(envKey, workspaceId, applicationId)
+				if err != nil {
+					return cmdError.NewCmdError(1, err.Error())
+				}
+			}
+		} else if resourceType == "global_env" || resourceType == "ge" {
+			workspaceId, err := util.GetWorkspaceId(cmd)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+
+			envKey := args[1]
+
+			err = exec.DeleteGlobalEnv(envKey, workspaceId)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
@@ -47,4 +92,6 @@ func init() {
 	rootCmd.AddCommand(deleteCmd)
 
 	deleteCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
+	deleteCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기 위한 라벨.\nex). -l test-label-1 -l test-label-2")
+	deleteCmd.Flags().StringP("application", "a", "", "애플리케이션 아이디")
 }
