@@ -35,6 +35,39 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+		} else if resourceType == "env" {
+			workspaceId, err := util.GetWorkspaceId(cmd)
+			if err != nil {
+				return err
+			}
+
+			envKey := args[1]
+
+			labels, err := cmd.Flags().GetStringArray("label")
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+
+			if len(labels) > 0 {
+				err := exec.DeleteEnvWithLabels(envKey, workspaceId, labels)
+				if err != nil {
+					return cmdError.NewCmdError(1, err.Error())
+				}
+			} else {
+				applicationId, err := cmd.Flags().GetString("application")
+				if err != nil {
+					return cmdError.NewCmdError(1, err.Error())
+				}
+
+				if applicationId == "" {
+					return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되지 않았습니다.")
+				}
+
+				err = exec.DeleteEnv(envKey, workspaceId, applicationId)
+				if err != nil {
+					return err
+				}
+			}
 		} else {
 			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
 		}
