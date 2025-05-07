@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/util"
@@ -30,7 +29,7 @@ var logsCmd = &cobra.Command{
 		}
 
 		for _, log := range logs {
-			fmt.Println(log)
+			cmd.Println(log)
 		}
 		return nil
 	},
