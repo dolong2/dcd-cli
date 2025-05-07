@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/util"
@@ -43,7 +42,7 @@ var execCmd = &cobra.Command{
 			// 사용자 입력을 기다리며 메시지를 서버로 전송
 			reader := bufio.NewReader(os.Stdin)
 			for {
-				fmt.Print(workingDir + " > ")
+				cmd.Print(workingDir + " > ")
 				input, _, _ := reader.ReadLine() // 사용자 입력 받기
 
 				// 인터럽트 신호 처리 (Ctrl+C)
@@ -76,10 +75,10 @@ var execCmd = &cobra.Command{
 						break
 					}
 
-					fmt.Print(message)
+					cmd.Print(message)
 				}
 
-				fmt.Println()
+				cmd.Println()
 			}
 		} else {
 			workspaceId, err := util.GetWorkspaceId(cmd)
@@ -98,7 +97,7 @@ var execCmd = &cobra.Command{
 			}
 
 			for _, result := range cmdResult {
-				fmt.Println(result)
+				cmd.Println(result)
 			}
 		}
 
