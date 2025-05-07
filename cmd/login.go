@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/spf13/cobra"
@@ -22,9 +21,9 @@ var loginCmd = &cobra.Command{
 		}
 		password := ""
 		if existsPassword {
-			fmt.Print("Enter password: ")
+			cmd.Print("Enter password: ")
 			bytePassword, err := term.ReadPassword(int(os.Stdin.Fd()))
-			fmt.Println()
+			cmd.Println()
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
