@@ -90,7 +90,9 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 	}
 
 	resourceType := data.Metadata.ResourceType
-	if resourceType == "WORKSPACE" {
+
+	switch resourceType {
+	case "WORKSPACE":
 		var workspace template.WorkspaceTemplate
 		err = unmarshal(content, &workspace)
 		if err != nil {
@@ -111,7 +113,7 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 		if err != nil {
 			return err
 		}
-	} else if resourceType == "APPLICATION" {
+	case "APPLICATION":
 		workspaceId, err := getWorkspaceId()
 		if err != nil {
 			return err
@@ -132,7 +134,7 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 		if err != nil {
 			return err
 		}
-	} else {
+	default:
 		return errors.New("지원되지 않는 리소스 타입입니다")
 	}
 
