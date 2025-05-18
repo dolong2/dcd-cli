@@ -70,7 +70,8 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 
 	resourceType := data.Metadata.ResourceType
 
-	if resourceType == "WORKSPACE" {
+	switch resourceType {
+	case "WORKSPACE":
 		var workspace template.WorkspaceTemplate
 		err = unmarshal(content, &workspace)
 		if err != nil {
@@ -99,7 +100,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 		}
 
 		return createWorkspaceResponse.WorkspaceId, nil
-	} else if resourceType == "APPLICATION" {
+	case "APPLICATION":
 		var application template.ApplicationTemplate
 		err := unmarshal(content, &application)
 		if err != nil {
@@ -134,7 +135,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 		}
 
 		return createApplicationResponse.ApplicationId, nil
-	} else if resourceType == "ENV" {
+	case "ENV":
 		var envTemplate template.EnvTemplate
 		err := unmarshal(content, &envTemplate)
 		if err != nil {
@@ -170,7 +171,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 		}
 
 		return "", nil
-	} else if resourceType == "GLOBAL_ENV" || resourceType == "GE" {
+	case "GLOBAL_ENV", "GE":
 		var globalEnvTemplate template.GlobalEnvTemplate
 		err := unmarshal(content, &globalEnvTemplate)
 		if err != nil {
@@ -188,7 +189,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 		}
 
 		return "", nil
-	} else {
+	default:
 		return "", errors.New("지원되지 않는 리소스 타입입니다")
 	}
 }

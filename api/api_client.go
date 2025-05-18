@@ -96,7 +96,10 @@ func sendHttpReq(method string, targetUrl string, header map[string]string, para
 			return []byte(""), err
 		}
 		errorResponse := apiErrorResponse{}
-		json.Unmarshal(rawErrorResponse, &errorResponse)
+		err = json.Unmarshal(rawErrorResponse, &errorResponse)
+		if err != nil {
+			return []byte(""), err
+		}
 		return []byte(""), httpErr.NewHttpError(errorResponse.Status, errorResponse.Message)
 	}
 

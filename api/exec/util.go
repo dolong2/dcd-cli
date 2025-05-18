@@ -50,7 +50,7 @@ getTokenInfo:
 		}
 		goto getTokenInfo
 	} else if now.After(refreshTokenExp) {
-		return "", errors.New("login info is expired.\nplease retry login.")
+		return "", errors.New("로그인 정보가 만료되었습니다.\n다시 로그인해주세요.")
 	}
 
 	tokenInfo := tokenResponse{
