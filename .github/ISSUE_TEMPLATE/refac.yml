@@ -1,11 +1,12 @@
-name: "Todo"
-description: "신규 기능 개발 혹은 리펙토링 같은 상황에 사용"
+name: "Refac"
+description: "기능 리펙토링"
+labels:
+  - 'enhancement'
 body:
-
   - type: textarea
     attributes:
       label: Description
       description: |
         이번에 작업해야하는 내용을 간략하게 설명
       placeholder: |
-        deploy 커맨드를 추가합니다.
+        deploy 커맨드에 코루틴을 적용합니다.
