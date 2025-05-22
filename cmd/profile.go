@@ -9,7 +9,7 @@ import (
 var profileCmd = &cobra.Command{
 	Use:   "profile",
 	Short: "현재 프로필 조회",
-	Long:  `로그인된 유저 정보의 프로필을 조회합니다.`,
+	Long:  `로그인된 유저 정보의 프로필을 트리 구조로 출력하는 커맨드 입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		profile, err := exec.GetProfile()
 		if err != nil {
