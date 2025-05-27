@@ -7,6 +7,12 @@ INSTALL_DIR="/usr/local/bin"
 # 임시 작업 디렉토리
 TEMP_DIR=$(mktemp -d)
 
+# 루트 권한 확인
+if [ "$EUID" -ne 0 ]; then
+  echo "이 스크립트는 루트 권한이 필요합니다. sudo로 실행해주세요."
+  exit 1
+fi
+
 echo "git 저장소에서 클론 중: $REPO_URL"
 git clone "$REPO_URL" "$TEMP_DIR"
 
