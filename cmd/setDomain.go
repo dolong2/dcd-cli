@@ -24,8 +24,11 @@ var setDomainCmd = &cobra.Command{
 		applicationId := args[0]
 
 		domainName, err := cmd.Flags().GetString("name")
-		if domainName == "" || err != nil {
+		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
+		}
+		if domainName == "" {
+			return cmdError.NewCmdError(1, "도메인 이름이 입력되어야합니다.")
 		}
 
 		err = exec.SetDomain(workspaceId, applicationId, domainName)
