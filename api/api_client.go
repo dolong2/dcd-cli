@@ -95,6 +95,9 @@ func sendHttpReq(method string, targetUrl string, header map[string]string, para
 		if err != nil {
 			return []byte(""), err
 		}
+		if len(rawErrorResponse) == 0 {
+			return []byte(""), httpErr.NewHttpError(httpResponse.StatusCode, "알 수 없는 에러")
+		}
 		errorResponse := apiErrorResponse{}
 		err = json.Unmarshal(rawErrorResponse, &errorResponse)
 		if err != nil {
