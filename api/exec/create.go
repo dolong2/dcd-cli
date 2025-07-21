@@ -189,6 +189,40 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 		}
 
 		return "", nil
+	case "DOMAIN":
+		var domainTemplate template.DomainTemplate
+		err := unmarshal(content, &domainTemplate)
+		if err != nil {
+			return "", err
+		}
+
+		err = domainTemplate.ValidateMetadata()
+		if err != nil {
+			return "", err
+		}
+
+		request, err := json.Marshal(domainTemplate.ToRequest())
+		if err != nil {
+			return "", err
+		}
+
+		workspaceId, err := getWorkspaceId()
+		if err != nil {
+			return "", err
+		}
+
+		result, err := api.SendPost("/"+workspaceId+"/domain", header, map[string]string{}, request)
+		if err != nil {
+			return "", err
+		}
+
+		createDomainResponse := response.CreateDomainResponse{}
+		err = json.Unmarshal(result, &createDomainResponse)
+		if err != nil {
+			return "", err
+		}
+
+		return createDomainResponse.DomainId, nil
 	default:
 		return "", errors.New("지원되지 않는 리소스 타입입니다")
 	}
