@@ -196,6 +196,11 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
+		err = domainTemplate.ValidateMetadata()
+		if err != nil {
+			return "", err
+		}
+
 		request, err := json.Marshal(domainTemplate.ToRequest())
 		if err != nil {
 			return "", err
