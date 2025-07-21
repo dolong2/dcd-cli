@@ -1,0 +1,4 @@
+metadata:
+  resourceType: DOMAIN
+  name: test-yml
+  description: '테스트 yml 애플리케이션의 도메인 예시'
