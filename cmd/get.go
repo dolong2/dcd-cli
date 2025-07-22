@@ -123,6 +123,22 @@ func getApplication(cmd *cobra.Command) error {
 	return nil
 }
 
+func getDomain(cmd *cobra.Command) error {
+	workspaceId, err := util.GetWorkspaceId(cmd)
+	if err != nil {
+		return err
+	}
+
+	domainListResponse, err := exec.GetDomains(workspaceId)
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	}
+
+	printDomainList(domainListResponse.Domains)
+
+	return nil
+}
+
 func init() {
 	rootCmd.AddCommand(getCmd)
 
@@ -261,4 +277,29 @@ func printApplicationTypes() error {
 	table.Render()
 
 	return nil
+}
+
+func printDomainList(domainList []response.DomainResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_CENTER)
+
+	table.SetHeader([]string{"ID", "NAME", "Description", "STATUS", "APPLICATION"})
+
+	for _, domain := range domainList {
+
+		var status, applicationName string
+		if domain.Application != nil {
+			status = "CONNECTED"
+			applicationName = domain.Application.Name
+		} else {
+			status = "UNCONNECTED"
+			applicationName = ""
+		}
+
+		row := []string{domain.DomainId, domain.Name, domain.Description, status, applicationName}
+		table.Append(row)
+	}
+
+	table.Render()
 }
