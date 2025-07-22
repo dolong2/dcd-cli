@@ -18,9 +18,10 @@ var getCmd = &cobra.Command{
 	Short: "리소스를 조회하는 커맨드",
 	Long: `이 커맨드는 리소스를 조회하기 위해서 사용됩니다.
 리소스 타입:
-	workspaces - 이 리소스 타입은 여러 애플리케이션을 가지고, 작업구역(네트워크)를 나눌때 사용합니다.
+	workspaces - 이 리소스 타입은 여러 애플리케이션을 가지고, 작업구역을 나눌때 사용합니다.
 	applications - 이 리소스 타입은 특정 라이브러리 혹은 프레임워크가 컨테이너에서 동작하게 하는 리소스 타입입니다.
-	types - 애플리케이션의 타입 종류를 나타내는 리소스 타입입니다.`,
+	types - 애플리케이션의 타입 종류를 나타내는 리소스 타입입니다.
+	domains - 해당 리소스타입은 애플리케이션을 HTTPS로 외부에 공개할때 사용되는 리소스 타입입니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "리소스 타입이 입력되어야 합니다.")
@@ -39,6 +40,11 @@ var getCmd = &cobra.Command{
 			}
 		} else if resourceType == "types" {
 			err := printApplicationTypes()
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+		} else if resourceType == "domains" {
+			err := getDomain(cmd)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
@@ -119,6 +125,22 @@ func getApplication(cmd *cobra.Command) error {
 	}
 
 	printApplication(*application)
+
+	return nil
+}
+
+func getDomain(cmd *cobra.Command) error {
+	workspaceId, err := util.GetWorkspaceId(cmd)
+	if err != nil {
+		return err
+	}
+
+	domainListResponse, err := exec.GetDomains(workspaceId)
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	}
+
+	printDomainList(domainListResponse.Domains)
 
 	return nil
 }
@@ -261,4 +283,29 @@ func printApplicationTypes() error {
 	table.Render()
 
 	return nil
+}
+
+func printDomainList(domainList []response.DomainResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_CENTER)
+
+	table.SetHeader([]string{"ID", "NAME", "Description", "STATUS", "APPLICATION"})
+
+	for _, domain := range domainList {
+
+		var status, applicationName string
+		if domain.Application != nil {
+			status = "CONNECTED"
+			applicationName = domain.Application.Name
+		} else {
+			status = "UNCONNECTED"
+			applicationName = ""
+		}
+
+		row := []string{domain.DomainId, domain.Name, domain.Description, status, applicationName}
+		table.Append(row)
+	}
+
+	table.Render()
 }
