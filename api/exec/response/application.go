@@ -22,3 +22,9 @@ type ApplicationResponse struct {
 type ApplicationListResponse struct {
 	Applications []ApplicationResponse `json:"list"`
 }
+
+type applicationSimpleResponse struct {
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
