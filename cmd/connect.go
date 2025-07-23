@@ -21,8 +21,8 @@ var connectCmd = &cobra.Command{
 			return err
 		}
 
-		if len(args) < 2 {
-			return cmdError.NewCmdError(1, "필요한 변수가 부족합니다.")
+		if len(args) != 2 {
+			return cmdError.NewCmdError(1, "필요한 인자는 2개입니다.\n커맨드 사용법을 확인해주세요.")
 		}
 
 		domainId := args[0]
