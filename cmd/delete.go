@@ -80,6 +80,17 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+		} else if resourceType == "domain" {
+			workspaceId, err := util.GetWorkspaceId(cmd)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+
+			domainId := args[1]
+			err = exec.DeleteDomain(workspaceId, domainId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		} else {
 			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
 		}
