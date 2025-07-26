@@ -4,6 +4,7 @@ import (
 	"github.com/dolong2/dcd-cli/api/exec"
 	"github.com/dolong2/dcd-cli/api/exec/response"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
+	"github.com/dolong2/dcd-cli/cmd/resource"
 	"github.com/dolong2/dcd-cli/cmd/util"
 	"github.com/olekukonko/tablewriter"
 	"github.com/spf13/cobra"
@@ -26,30 +27,34 @@ var getCmd = &cobra.Command{
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "리소스 타입이 입력되어야 합니다.")
 		}
-		resourceType := args[0]
+		resourceType := resource.Type(args[0])
+		if !resourceType.IsValid() {
+			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
+		}
 
-		if resourceType == "applications" {
+		switch {
+		case resourceType.IsEqual(resource.Application):
 			err := getApplication(cmd)
 			if err != nil {
 				return err
 			}
-		} else if resourceType == "workspaces" {
+		case resourceType.IsEqual(resource.Workspace):
 			err := getWorkspace(cmd)
 			if err != nil {
 				return err
 			}
-		} else if resourceType == "types" {
+		case resourceType.IsEqual(resource.ApplicationType):
 			err := printApplicationTypes()
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
-		} else if resourceType == "domains" {
+		case resourceType.IsEqual(resource.Domain):
 			err := getDomain(cmd)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
-		} else {
-			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
+		default:
+			return cmdError.NewCmdError(1, "조회할 수 없는 리소스 타입입니다.")
 		}
 
 		return nil
