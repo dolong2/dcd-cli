@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
+	"github.com/dolong2/dcd-cli/cmd/resource"
 	"github.com/dolong2/dcd-cli/cmd/util"
 	"github.com/spf13/cobra"
 )
@@ -17,14 +18,19 @@ var deleteCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, "리소스 타입과 리소스 아이디가 입력되어야합니다.")
 		}
 
-		resourceType := args[0]
-		if resourceType == "workspace" {
+		resourceType := resource.Type(args[0])
+		if !resourceType.IsValid() {
+			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
+		}
+
+		switch {
+		case resourceType.IsEqual(resource.Workspace):
 			var workspaceId = args[1]
 			err := exec.DeleteWorkspace(workspaceId)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
-		} else if resourceType == "application" {
+		case resourceType.IsEqual(resource.Application):
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
@@ -35,7 +41,7 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
-		} else if resourceType == "env" {
+		case resourceType.IsEqual(resource.Env):
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
@@ -68,7 +74,7 @@ var deleteCmd = &cobra.Command{
 					return cmdError.NewCmdError(1, err.Error())
 				}
 			}
-		} else if resourceType == "global_env" || resourceType == "ge" {
+		case resourceType.IsEqual(resource.GlobalEnv):
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
@@ -80,7 +86,7 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
-		} else if resourceType == "domain" {
+		case resourceType.IsEqual(resource.Domain):
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
@@ -91,8 +97,8 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
-		} else {
-			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
+		default:
+			return cmdError.NewCmdError(1, "삭제할 수 없는 리소스 타입입니다.")
 		}
 
 		return nil
