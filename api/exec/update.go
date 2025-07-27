@@ -125,6 +125,9 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 		}
 
 		updateApplicationRequest, err := application.ToRequest()
+		if err != nil {
+			return err
+		}
 		request, err := json.Marshal(updateApplicationRequest)
 		if err != nil {
 			return err
