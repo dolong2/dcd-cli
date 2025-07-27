@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-var baseUrl = "http://localhost:8081"
+var baseUrl string
 
 type apiErrorResponse struct {
 	Status  int    `json:"status"`
@@ -63,6 +63,8 @@ func SendPut(targetUrl string, header map[string]string, param map[string]string
 }
 
 func sendHttpReq(method string, targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
+	fmt.Println(baseUrl)
+
 	if len(param) != 0 {
 		query := url.Values{}
 		for key, value := range param {
