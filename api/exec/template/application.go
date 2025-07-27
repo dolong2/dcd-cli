@@ -10,7 +10,7 @@ type ApplicationTemplate struct {
 	Spec     applicationSpecTemplate `json:"spec" yaml:"spec"`
 }
 
-func (template ApplicationTemplate) ValidateMetadata() error {
+func (template ApplicationTemplate) validateMetadata() error {
 	if template.Metadata.Name == nil || template.Metadata.Description == nil {
 		return errors.New("애플리케이션 메타데이터 정보가 올바르지 않습니다")
 	}
@@ -26,8 +26,13 @@ type applicationSpecTemplate struct {
 	Labels          []string `json:"labels" yaml:"labels"`
 }
 
-func (template ApplicationTemplate) ToRequest() request.ApplicationRequest {
-	return request.ApplicationRequest{
+func (template ApplicationTemplate) ToRequest() (*request.ApplicationRequest, error) {
+	err := template.validateMetadata()
+	if err != nil {
+		return nil, err
+	}
+
+	return &request.ApplicationRequest{
 		Name:            *template.Metadata.Name,
 		Description:     *template.Metadata.Description,
 		GithubUrl:       template.Spec.GithubUrl,
@@ -35,5 +40,5 @@ func (template ApplicationTemplate) ToRequest() request.ApplicationRequest {
 		Port:            template.Spec.Port,
 		Version:         template.Spec.Version,
 		Labels:          template.Spec.Labels,
-	}
+	}, nil
 }
