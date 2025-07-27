@@ -99,12 +99,11 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 			return err
 		}
 
-		err = workspace.ValidateMetadata()
+		updateWorkspaceRequest, err := workspace.ToRequest()
 		if err != nil {
 			return err
 		}
-
-		request, err := json.Marshal(workspace.ToRequest())
+		request, err := json.Marshal(updateWorkspaceRequest)
 		if err != nil {
 			return err
 		}
@@ -125,7 +124,8 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 			return err
 		}
 
-		request, err := json.Marshal(application.ToRequest())
+		updateApplicationRequest, err := application.ToRequest()
+		request, err := json.Marshal(updateApplicationRequest)
 		if err != nil {
 			return err
 		}
