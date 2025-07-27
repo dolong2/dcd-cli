@@ -78,12 +78,11 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		err = workspace.ValidateMetadata()
+		createWorkspaceRequest, err := workspace.ToRequest()
 		if err != nil {
 			return "", err
 		}
-
-		request, err := json.Marshal(workspace.ToRequest())
+		request, err := json.Marshal(createWorkspaceRequest)
 		if err != nil {
 			return "", err
 		}
@@ -107,12 +106,11 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		err = application.ValidateMetadata()
+		createApplicationRequest, err := application.ToRequest()
 		if err != nil {
 			return "", err
 		}
-
-		request, err := json.Marshal(application.ToRequest())
+		request, err := json.Marshal(createApplicationRequest)
 		if err != nil {
 			return "", err
 		}
@@ -196,12 +194,11 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		err = domainTemplate.ValidateMetadata()
+		createDomainRequest, err := domainTemplate.ToRequest()
 		if err != nil {
 			return "", err
 		}
-
-		request, err := json.Marshal(domainTemplate.ToRequest())
+		request, err := json.Marshal(createDomainRequest)
 		if err != nil {
 			return "", err
 		}
