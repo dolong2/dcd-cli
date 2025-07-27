@@ -63,8 +63,6 @@ func SendPut(targetUrl string, header map[string]string, param map[string]string
 }
 
 func sendHttpReq(method string, targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
-	fmt.Println(baseUrl)
-
 	if len(param) != 0 {
 		query := url.Values{}
 		for key, value := range param {
