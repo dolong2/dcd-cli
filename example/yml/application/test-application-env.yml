@@ -1,6 +1,6 @@
 metadata:
-  "resourceType": ENV
-  "Name": test-yml-env
+  resourceType: ENV
+  name: test-yml-env
   description: '테스트 yml 환경변수'
 spec:
   applications:
