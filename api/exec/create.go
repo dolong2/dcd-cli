@@ -9,7 +9,6 @@ import (
 	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
 func CreateByPath(fileDirectory string) error {
@@ -150,40 +149,13 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		if envTemplate.Spec.Labels == nil && envTemplate.Spec.ApplicationId == nil {
+		if envTemplate.Spec.ApplicationLabelList == nil && envTemplate.Spec.ApplicationIdList == nil {
 			return "", errors.New("애플리케이션 아이디 혹은 라벨이 입력되어야함")
-		} else if envTemplate.Spec.Labels != nil {
-			param := map[string]string{"labels": strings.Join(envTemplate.Spec.Labels, ",")}
-
-			_, err := api.SendPut("/"+workspaceId+"/application/env", header, param, request)
+		} else {
+			_, err := api.SendPost("/"+workspaceId+"/env", header, map[string]string{}, request)
 			if err != nil {
 				return "", err
 			}
-		} else if envTemplate.Spec.ApplicationId != nil {
-			applicationId := *envTemplate.Spec.ApplicationId
-
-			_, err := api.SendPut("/"+workspaceId+"/application/"+applicationId+"/env", header, map[string]string{}, request)
-			if err != nil {
-				return "", err
-			}
-		}
-
-		return "", nil
-	case "GLOBAL_ENV", "GE":
-		var globalEnvTemplate template.GlobalEnvTemplate
-		err := unmarshal(content, &globalEnvTemplate)
-		if err != nil {
-			return "", err
-		}
-
-		request, err := json.Marshal(globalEnvTemplate.ToRequest())
-		if err != nil {
-			return "", err
-		}
-
-		_, err = api.SendPut("/workspace/"+globalEnvTemplate.Spec.WorkspaceId+"/env", header, map[string]string{}, request)
-		if err != nil {
-			return "", err
 		}
 
 		return "", nil
