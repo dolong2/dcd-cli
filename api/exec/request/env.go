@@ -7,5 +7,9 @@ type EnvPutRequest struct {
 }
 
 type EnvPutListRequest struct {
-	EnvList []EnvPutRequest `json:"envList"`
+	Name                 string          `json:"name"`
+	Description          string          `json:"description"`
+	Details              []EnvPutRequest `json:"details"`
+	ApplicationIdList    []string        `json:"applicationIdList"`
+	ApplicationLabelList []string        `json:"applicationLabelList"`
 }

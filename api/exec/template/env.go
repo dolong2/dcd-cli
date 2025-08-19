@@ -8,9 +8,9 @@ type EnvTemplate struct {
 }
 
 type envSpecTemplate struct {
-	EnvList       []envListTemplate `json:"envList" yaml:"envList"`
-	Labels        []string          `json:"labels" yaml:"labels"`
-	ApplicationId *string           `json:"applicationId,omitempty" yaml:"applicationId,omitempty"`
+	EnvList              []envListTemplate `json:"envList" yaml:"envList"`
+	ApplicationIdList    []string          `json:"applications" yaml:"applications"`
+	ApplicationLabelList []string          `json:"applicationLabels" yaml:"applicationLabels"`
 }
 
 type envListTemplate struct {
@@ -31,5 +31,11 @@ func (template EnvTemplate) ToRequest() request.EnvPutListRequest {
 		})
 	}
 
-	return request.EnvPutListRequest{EnvList: envRequestList}
+	return request.EnvPutListRequest{
+		Name:                 *template.Metadata.Name,
+		Description:          *template.Metadata.Description,
+		Details:              envRequestList,
+		ApplicationIdList:    template.Spec.ApplicationIdList,
+		ApplicationLabelList: template.Spec.ApplicationLabelList,
+	}
 }
