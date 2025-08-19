@@ -159,24 +159,6 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 		}
 
 		return "", nil
-	case "GLOBAL_ENV", "GE":
-		var globalEnvTemplate template.GlobalEnvTemplate
-		err := unmarshal(content, &globalEnvTemplate)
-		if err != nil {
-			return "", err
-		}
-
-		request, err := json.Marshal(globalEnvTemplate.ToRequest())
-		if err != nil {
-			return "", err
-		}
-
-		_, err = api.SendPut("/workspace/"+globalEnvTemplate.Spec.WorkspaceId+"/env", header, map[string]string{}, request)
-		if err != nil {
-			return "", err
-		}
-
-		return "", nil
 	case "DOMAIN":
 		var domainTemplate template.DomainTemplate
 		err := unmarshal(content, &domainTemplate)
