@@ -1,9 +1,13 @@
 {
   "metadata": {
-    "resourceType": "ENV"
+    "resourceType": "ENV",
+    "name": "test-json-env",
+    "description": "테스트용 json env"
   },
   "spec": {
-    "labels": ["test-with-json"],
+    "applicationLabels": [
+      "test-with-json"
+    ],
     "envList": [
       {
         "key": "test",

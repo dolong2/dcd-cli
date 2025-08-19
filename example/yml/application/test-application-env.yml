@@ -1,7 +1,10 @@
 metadata:
   "resourceType": ENV
+  "Name": test-yml-env
+  description: '테스트 yml 환경변수'
 spec:
-  applicationId: 63383664-6230-3236-2d61-6235312d3464
+  applications:
+    - '63383664-6230-3236-2d61-6235312d3464'
   envList:
     - key: test
       value: '1234'
