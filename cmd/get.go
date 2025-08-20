@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	"github.com/dolong2/dcd-cli/api/exec/response"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
@@ -339,4 +340,17 @@ func printEnv(env response.EnvResponse) {
 	}
 
 	detailTable.Render()
+}
+
+func printEnvList(envList response.EnvListResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+
+	table.SetHeader([]string{"ID", "NAME", "DESCRIPTION"})
+	for _, envSimpleResponse := range envList.List {
+		table.Append([]string{envSimpleResponse.Id, envSimpleResponse.Name, envSimpleResponse.Description})
+	}
+
+	table.Render()
 }
