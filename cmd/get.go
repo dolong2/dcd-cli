@@ -314,3 +314,29 @@ func printDomainList(domainList []response.DomainResponse) {
 
 	table.Render()
 }
+
+func printEnv(env response.EnvResponse) {
+	metaDataTable := tablewriter.NewWriter(os.Stdout)
+	metaDataTable.SetAutoWrapText(false)
+	metaDataTable.SetAlignment(tablewriter.ALIGN_LEFT)
+
+	//메타데이터 출력
+	metaDataTable.SetHeader([]string{"METADATA"})
+	metaDataTable.Append([]string{fmt.Sprintf("ID          : %s", env.Id)})
+	metaDataTable.Append([]string{fmt.Sprintf("NAME        : %s", env.Name)})
+	metaDataTable.Append([]string{fmt.Sprintf("DESCRIPTION : %s", env.Description)})
+
+	metaDataTable.Render()
+
+	detailTable := tablewriter.NewWriter(os.Stdout)
+	detailTable.SetAutoWrapText(false)
+	detailTable.SetAlignment(tablewriter.ALIGN_LEFT)
+
+	//환경변수 디테일 출력
+	detailTable.SetHeader([]string{"KEY", "VALUE", "ENCRYPTION"})
+	for _, detail := range env.Details {
+		detailTable.Append([]string{detail.Key, detail.Value, fmt.Sprintf("%v", detail.Encryption)})
+	}
+
+	detailTable.Render()
+}
