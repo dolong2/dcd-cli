@@ -23,7 +23,9 @@ var getCmd = &cobra.Command{
 	workspaces - 이 리소스 타입은 여러 애플리케이션을 가지고, 작업구역을 나눌때 사용합니다.
 	applications - 이 리소스 타입은 특정 라이브러리 혹은 프레임워크가 컨테이너에서 동작하게 하는 리소스 타입입니다.
 	types - 애플리케이션의 타입 종류를 나타내는 리소스 타입입니다.
-	domains - 해당 리소스타입은 애플리케이션을 HTTPS로 외부에 공개할때 사용되는 리소스 타입입니다.`,
+	domains - 해당 리소스타입은 애플리케이션을 HTTPS로 외부에 공개할때 사용되는 리소스 타입입니다.
+	envs - 애플리케이션에서 사용될 수 있는 환경변수를 나타내는 리소스 타입입니다.
+`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "리소스 타입이 입력되어야 합니다.")
