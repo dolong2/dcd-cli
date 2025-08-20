@@ -54,6 +54,11 @@ var getCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+		case resourceType.IsEqual(resource.Env):
+			err := getEnv(cmd)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		default:
 			return cmdError.NewCmdError(1, "조회할 수 없는 리소스 타입입니다.")
 		}
@@ -147,6 +152,34 @@ func getDomain(cmd *cobra.Command) error {
 	}
 
 	printDomainList(domainListResponse.Domains)
+
+	return nil
+}
+
+func getEnv(cmd *cobra.Command) error {
+	workspaceId, err := util.GetWorkspaceId(cmd)
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	}
+
+	envId, err := cmd.Flags().GetString("id")
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	} else if envId == "" {
+		envListResponse, err := exec.GetEnvList(workspaceId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+
+		printEnvList(*envListResponse)
+	} else {
+		envResponse, err := exec.GetEnv(workspaceId, envId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+
+		printEnv(*envResponse)
+	}
 
 	return nil
 }
