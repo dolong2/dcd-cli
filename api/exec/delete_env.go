@@ -2,10 +2,9 @@ package exec
 
 import (
 	"github.com/dolong2/dcd-cli/api"
-	"strings"
 )
 
-func DeleteEnv(key string, workspaceId string, applicationId string) error {
+func DeleteEnv(workspaceId string, envId string) error {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -13,10 +12,7 @@ func DeleteEnv(key string, workspaceId string, applicationId string) error {
 	}
 	header["Authorization"] = "Bearer " + accessToken
 
-	param := make(map[string]string)
-	param["key"] = key
-
-	_, err = api.SendDelete("/"+workspaceId+"/application/"+applicationId+"/env", header, param)
+	_, err = api.SendDelete("/"+workspaceId+"/env/"+envId, header, map[string]string{})
 	if err != nil {
 		return err
 	}
