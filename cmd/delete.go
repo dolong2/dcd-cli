@@ -47,32 +47,11 @@ var deleteCmd = &cobra.Command{
 				return cmdError.NewCmdError(1, err.Error())
 			}
 
-			envKey := args[1]
+			envId := args[1]
 
-			labels, err := cmd.Flags().GetStringArray("label")
+			err = exec.DeleteEnv(workspaceId, envId)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
-			}
-
-			if len(labels) > 0 {
-				err := exec.DeleteEnvWithLabels(envKey, workspaceId, labels)
-				if err != nil {
-					return cmdError.NewCmdError(1, err.Error())
-				}
-			} else {
-				applicationId, err := cmd.Flags().GetString("application")
-				if err != nil {
-					return cmdError.NewCmdError(1, err.Error())
-				}
-
-				if applicationId == "" {
-					return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되지 않았습니다.")
-				}
-
-				err = exec.DeleteEnv(envKey, workspaceId, applicationId)
-				if err != nil {
-					return cmdError.NewCmdError(1, err.Error())
-				}
 			}
 		case resourceType.IsEqual(resource.GlobalEnv):
 			workspaceId, err := util.GetWorkspaceId(cmd)
