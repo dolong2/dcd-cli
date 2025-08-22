@@ -53,18 +53,6 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
-		case resourceType.IsEqual(resource.GlobalEnv):
-			workspaceId, err := util.GetWorkspaceId(cmd)
-			if err != nil {
-				return cmdError.NewCmdError(1, err.Error())
-			}
-
-			envKey := args[1]
-
-			err = exec.DeleteGlobalEnv(envKey, workspaceId)
-			if err != nil {
-				return cmdError.NewCmdError(1, err.Error())
-			}
 		case resourceType.IsEqual(resource.Domain):
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
