@@ -279,10 +279,6 @@ func printWorkspace(workspace response.WorkspaceDetailResponse) {
 	table.Append(id)
 	table.Append(title)
 	table.Append(description)
-	for key, value := range workspace.GlobalEnv {
-		env := []string{"ENV", key + " : " + value}
-		table.Append(env)
-	}
 
 	table.Render()
 }
