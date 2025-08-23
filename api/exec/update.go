@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 )
 
-func UpdateByTemplate(workspaceId string, rawTemplate string) error {
-	err := update(workspaceId, []byte(rawTemplate), json.Unmarshal)
+func UpdateByTemplate(resourceId string, rawTemplate string) error {
+	err := update(resourceId, []byte(rawTemplate), json.Unmarshal)
 	if err != nil {
 		return err
 	}
@@ -19,7 +19,7 @@ func UpdateByTemplate(workspaceId string, rawTemplate string) error {
 	return nil
 }
 
-func UpdateByPath(workspaceId string, fileDirectory string) error {
+func UpdateByPath(resourceId string, fileDirectory string) error {
 	content, err := os.ReadFile(fileDirectory)
 	if err != nil {
 		return err
@@ -28,12 +28,12 @@ func UpdateByPath(workspaceId string, fileDirectory string) error {
 	ext := filepath.Ext(fileDirectory)
 	switch ext {
 	case ".json":
-		err = update(workspaceId, content, json.Unmarshal)
+		err = update(resourceId, content, json.Unmarshal)
 		if err != nil {
 			return err
 		}
 	case ".yml", ".yaml":
-		err = update(workspaceId, content, yaml.Unmarshal)
+		err = update(resourceId, content, yaml.Unmarshal)
 		if err != nil {
 			return err
 		}
@@ -134,6 +134,29 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 		}
 
 		_, err = api.SendPut("/"+workspaceId+"/application/"+resourceId, header, map[string]string{}, request)
+		if err != nil {
+			return err
+		}
+	case "ENV":
+		workspaceId, err := getWorkspaceId()
+		if err != nil {
+			return err
+		}
+
+		var env template.EnvTemplate
+		err = unmarshal(content, &env)
+		if err != nil {
+			return err
+		}
+
+		updateEnvRequest := env.ToRequest()
+
+		request, err := json.Marshal(updateEnvRequest)
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPut("/"+workspaceId+"/env/"+resourceId, header, map[string]string{}, request)
 		if err != nil {
 			return err
 		}
