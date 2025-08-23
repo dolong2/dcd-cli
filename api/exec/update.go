@@ -137,6 +137,29 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 		if err != nil {
 			return err
 		}
+	case "ENV":
+		workspaceId, err := getWorkspaceId()
+		if err != nil {
+			return err
+		}
+
+		var env template.EnvTemplate
+		err = unmarshal(content, &env)
+		if err != nil {
+			return err
+		}
+
+		updateEnvRequest := env.ToRequest()
+
+		request, err := json.Marshal(updateEnvRequest)
+		if err != nil {
+			return err
+		}
+
+		_, err = api.SendPut("/"+workspaceId+"/env/"+resourceId, header, map[string]string{}, request)
+		if err != nil {
+			return err
+		}
 	default:
 		return errors.New("지원되지 않는 리소스 타입입니다")
 	}
