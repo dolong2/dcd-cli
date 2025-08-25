@@ -26,6 +26,9 @@ func UpdateByPath(resourceId string, fileDirectory string) error {
 	}
 
 	unmarshal, err := resolveFileExtension(fileDirectory)
+	if err != nil {
+		return err
+	}
 	err = update(resourceId, content, unmarshal)
 
 	return nil

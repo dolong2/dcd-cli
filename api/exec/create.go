@@ -16,6 +16,9 @@ func CreateByPath(fileDirectory string) error {
 	}
 
 	unmarshal, err := resolveFileExtension(fileDirectory)
+	if err != nil {
+		return err
+	}
 	resourceId, err := create(content, unmarshal)
 	if err != nil {
 		return err
