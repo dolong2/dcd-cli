@@ -3,6 +3,7 @@ package exec
 import (
 	"encoding/json"
 	"errors"
+	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
 	"time"
@@ -151,4 +152,17 @@ func GetResourceIdByFilePath(fileDirectory string) (string, error) {
 	}
 
 	return resourceId, nil
+}
+
+func resolveFileExtension(fileDirectory string) (func([]byte, interface{}) (err error), error) {
+	ext := filepath.Ext(fileDirectory)
+
+	switch ext {
+	case ".json":
+		return json.Unmarshal, nil
+	case ".yml", ".yaml":
+		return yaml.Unmarshal, nil
+	default:
+		return nil, errors.New("지원되지 않는 파일 확장자입니다.")
+	}
 }
