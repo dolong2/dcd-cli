@@ -25,21 +25,8 @@ func UpdateByPath(resourceId string, fileDirectory string) error {
 		return err
 	}
 
-	ext := filepath.Ext(fileDirectory)
-	switch ext {
-	case ".json":
-		err = update(resourceId, content, json.Unmarshal)
-		if err != nil {
-			return err
-		}
-	case ".yml", ".yaml":
-		err = update(resourceId, content, yaml.Unmarshal)
-		if err != nil {
-			return err
-		}
-	default:
-		return errors.New("지원되지 않는 파일 확장자입니다.")
-	}
+	unmarshal, err := resolveFileExtension(fileDirectory)
+	err = update(resourceId, content, unmarshal)
 
 	return nil
 }
