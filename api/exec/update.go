@@ -139,7 +139,10 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 			return err
 		}
 
-		updateEnvRequest := env.ToRequest()
+		updateEnvRequest, err := env.ToRequest()
+		if err != nil {
+			return err
+		}
 
 		request, err := json.Marshal(updateEnvRequest)
 		if err != nil {
