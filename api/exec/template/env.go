@@ -1,6 +1,9 @@
 package template
 
-import "github.com/dolong2/dcd-cli/api/exec/request"
+import (
+	"errors"
+	"github.com/dolong2/dcd-cli/api/exec/request"
+)
 
 type EnvTemplate struct {
 	Metadata metaData        `json:"metadata" yaml:"metadata"`
@@ -19,7 +22,12 @@ type envListTemplate struct {
 	Encryption bool   `json:"encryption" yaml:"encryption"`
 }
 
-func (template EnvTemplate) ToRequest() request.EnvPutListRequest {
+func (template EnvTemplate) ToRequest() (*request.EnvPutListRequest, error) {
+	err := template.validateMetadata()
+	if err != nil {
+		return nil, err
+	}
+
 	var envRequestList []request.EnvPutRequest
 
 	envList := template.Spec.EnvList
@@ -31,11 +39,19 @@ func (template EnvTemplate) ToRequest() request.EnvPutListRequest {
 		})
 	}
 
-	return request.EnvPutListRequest{
+	return &request.EnvPutListRequest{
 		Name:                 *template.Metadata.Name,
 		Description:          *template.Metadata.Description,
 		Details:              envRequestList,
 		ApplicationIdList:    template.Spec.ApplicationIdList,
 		ApplicationLabelList: template.Spec.ApplicationLabelList,
+	}, nil
+}
+
+func (template EnvTemplate) validateMetadata() error {
+	if template.Metadata.Name == nil || template.Metadata.Description == nil {
+		return errors.New("환경변수 메타데이터 정보가 올바르지 않습니다")
 	}
+
+	return nil
 }
