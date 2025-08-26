@@ -129,7 +129,12 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		request, err := json.Marshal(envTemplate.ToRequest())
+		createEnvRequest, err := envTemplate.ToRequest()
+		if err != nil {
+			return "", err
+		}
+
+		request, err := json.Marshal(createEnvRequest)
 		if err != nil {
 			return "", err
 		}
