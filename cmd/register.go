@@ -29,13 +29,11 @@ var registerCmd = &cobra.Command{
 
 	enterCode:
 		cmd.Print("인증 코드: ")
-		byteCode, err := term.ReadPassword(int(os.Stdin.Fd()))
-		cmd.Println()
+		var authCode string
+		_, err = fmt.Scanf("%s", &authCode)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}
-
-		authCode := string(byteCode)
 		err = exec.CertificateAuthCode(email, authCode)
 		if err != nil {
 			cmd.Println(err.Error())
