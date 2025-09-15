@@ -187,6 +187,32 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 		}
 
 		return createDomainResponse.DomainId, nil
+	case "VOLUME":
+		var volume template.VolumeTemplate
+		err := unmarshal(content, &volume)
+		if err != nil {
+			return "", err
+		}
+
+		createVolumeRequest, err := volume.ToRequest()
+		if err != nil {
+			return "", err
+		}
+		request, err := json.Marshal(createVolumeRequest)
+		if err != nil {
+			return "", err
+		}
+
+		workspaceId, err := getWorkspaceId()
+		if err != nil {
+			return "", err
+		}
+
+		_, err = api.SendPost("/"+workspaceId+"/volume", header, map[string]string{}, request)
+		if err != nil {
+			return "", err
+		}
+		return "", nil
 	default:
 		return "", errors.New("지원되지 않는 리소스 타입입니다")
 	}
