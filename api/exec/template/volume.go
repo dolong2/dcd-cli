@@ -6,7 +6,7 @@ import (
 )
 
 type VolumeTemplate struct {
-	Metadata metaData `json:"metaData" yaml:"metaData"`
+	Metadata metaData `json:"metadata" yaml:"metadata"`
 }
 
 func (template VolumeTemplate) ToRequest() (*request.VolumeRequest, error) {
