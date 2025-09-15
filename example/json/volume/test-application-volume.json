@@ -1,0 +1,7 @@
+{
+  "metadata": {
+    "resourceType": "VOLUME",
+    "name": "test-json-volume",
+    "description": "테스트 json 애플리케이션 볼륨"
+  }
+}
