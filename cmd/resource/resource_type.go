@@ -9,9 +9,10 @@ var (
 	Env             = definedType{"ENV", "environment", "environments", "env"}
 	Domain          = definedType{"DOMAIN", "domain", "domains", "dom"}
 	ApplicationType = definedType{"TYPE", "type", "types", "ts"}
+	VOLUME          = definedType{"VOLUME", "volume", "volumes", "vol"}
 )
 
-var allResourceTypes = []definedType{Workspace, Application, Env, Domain, ApplicationType}
+var allResourceTypes = []definedType{Workspace, Application, Env, Domain, ApplicationType, VOLUME}
 
 func (rt Type) IsValid() bool {
 	for _, definedResource := range allResourceTypes {
