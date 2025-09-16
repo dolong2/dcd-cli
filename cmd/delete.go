@@ -64,6 +64,17 @@ var deleteCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+		case resourceType.IsEqual(resource.VOLUME):
+			workspaceId, err := util.GetWorkspaceId(cmd)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
+
+			volumeId := args[1]
+			err = exec.DeleteVolume(workspaceId, volumeId)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		default:
 			return cmdError.NewCmdError(1, "삭제할 수 없는 리소스 타입입니다.")
 		}
