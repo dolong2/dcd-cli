@@ -207,7 +207,11 @@ func getVolume(cmd *cobra.Command) error {
 		}
 		printVolumeList(*volumeList)
 	} else {
-
+		volumeDetail, err := exec.GetVolume(workspaceId, volumeId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		printVolume(*volumeDetail)
 	}
 
 	return nil
@@ -426,4 +430,34 @@ func printVolumeList(volumeList response.VolumeListResponse) {
 	}
 
 	table.Render()
+}
+
+func printVolume(volume response.VolumeDetailResponse) {
+	metaDataTable := tablewriter.NewWriter(os.Stdout)
+	metaDataTable.SetAutoWrapText(false)
+	metaDataTable.SetAlignment(tablewriter.ALIGN_LEFT)
+
+	//메타데이터 출력
+	metaDataTable.SetHeader([]string{"METADATA"})
+	metaDataTable.Append([]string{fmt.Sprintf("ID          : %s", volume.Id)})
+	metaDataTable.Append([]string{fmt.Sprintf("NAME        : %s", volume.Name)})
+	metaDataTable.Append([]string{fmt.Sprintf("DESCRIPTION : %s", volume.Description)})
+
+	metaDataTable.Render()
+
+	if len(volume.MountList) != 0 {
+		mountTable := tablewriter.NewWriter(os.Stdout)
+		mountTable.SetAutoWrapText(false)
+		mountTable.SetAlignment(tablewriter.ALIGN_LEFT)
+		mountTable.SetAutoMergeCells(true)
+
+		mountTable.SetHeader([]string{"MOUNT PATH", "READ ONLY", "APPLICATION ID", "APPLICATION NAME"})
+		for _, mount := range volume.MountList {
+			applicationInfo := mount.ApplicationInfo
+			mountTable.Append([]string{mount.MountPath, strconv.FormatBool(mount.ReadOnly), applicationInfo.Id, applicationInfo.Name})
+		}
+
+		mountTable.Render()
+	}
+
 }
