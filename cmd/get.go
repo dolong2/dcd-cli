@@ -186,6 +186,28 @@ func getEnv(cmd *cobra.Command) error {
 	return nil
 }
 
+func getVolume(cmd *cobra.Command) error {
+	workspaceId, err := util.GetWorkspaceId(cmd)
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	}
+
+	volumeId, err := cmd.Flags().GetString("id")
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	} else if volumeId == "" {
+		volumeList, err := exec.GetVolumeList(workspaceId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		printVolumeList(*volumeList)
+	} else {
+
+	}
+
+	return nil
+}
+
 func init() {
 	rootCmd.AddCommand(getCmd)
 
@@ -381,6 +403,21 @@ func printEnvList(envList response.EnvListResponse) {
 	table.SetHeader([]string{"ID", "NAME", "DESCRIPTION"})
 	for _, envSimpleResponse := range envList.List {
 		table.Append([]string{envSimpleResponse.Id, envSimpleResponse.Name, envSimpleResponse.Description})
+	}
+
+	table.Render()
+}
+
+func printVolumeList(volumeList response.VolumeListResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_CENTER)
+
+	table.SetHeader([]string{"ID", "Name", "Description"})
+
+	for _, volume := range volumeList.List {
+		row := []string{volume.Id, volume.Name, volume.Description}
+		table.Append(row)
 	}
 
 	table.Render()
