@@ -61,6 +61,11 @@ var getCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+		case resourceType.IsEqual(resource.VOLUME):
+			err := getVolume(cmd)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		default:
 			return cmdError.NewCmdError(1, "조회할 수 없는 리소스 타입입니다.")
 		}
@@ -181,6 +186,32 @@ func getEnv(cmd *cobra.Command) error {
 		}
 
 		printEnv(*envResponse)
+	}
+
+	return nil
+}
+
+func getVolume(cmd *cobra.Command) error {
+	workspaceId, err := util.GetWorkspaceId(cmd)
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	}
+
+	volumeId, err := cmd.Flags().GetString("id")
+	if err != nil {
+		return cmdError.NewCmdError(1, err.Error())
+	} else if volumeId == "" {
+		volumeList, err := exec.GetVolumeList(workspaceId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		printVolumeList(*volumeList)
+	} else {
+		volumeDetail, err := exec.GetVolume(workspaceId, volumeId)
+		if err != nil {
+			return cmdError.NewCmdError(1, err.Error())
+		}
+		printVolume(*volumeDetail)
 	}
 
 	return nil
@@ -384,4 +415,49 @@ func printEnvList(envList response.EnvListResponse) {
 	}
 
 	table.Render()
+}
+
+func printVolumeList(volumeList response.VolumeListResponse) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAutoWrapText(false)
+	table.SetAlignment(tablewriter.ALIGN_CENTER)
+
+	table.SetHeader([]string{"ID", "Name", "Description"})
+
+	for _, volume := range volumeList.List {
+		row := []string{volume.Id, volume.Name, volume.Description}
+		table.Append(row)
+	}
+
+	table.Render()
+}
+
+func printVolume(volume response.VolumeDetailResponse) {
+	metaDataTable := tablewriter.NewWriter(os.Stdout)
+	metaDataTable.SetAutoWrapText(false)
+	metaDataTable.SetAlignment(tablewriter.ALIGN_LEFT)
+
+	//메타데이터 출력
+	metaDataTable.SetHeader([]string{"METADATA"})
+	metaDataTable.Append([]string{fmt.Sprintf("ID          : %s", volume.Id)})
+	metaDataTable.Append([]string{fmt.Sprintf("NAME        : %s", volume.Name)})
+	metaDataTable.Append([]string{fmt.Sprintf("DESCRIPTION : %s", volume.Description)})
+
+	metaDataTable.Render()
+
+	if len(volume.MountList) != 0 {
+		mountTable := tablewriter.NewWriter(os.Stdout)
+		mountTable.SetAutoWrapText(false)
+		mountTable.SetAlignment(tablewriter.ALIGN_LEFT)
+		mountTable.SetAutoMergeCells(true)
+
+		mountTable.SetHeader([]string{"MOUNT PATH", "READ ONLY", "APPLICATION ID", "APPLICATION NAME"})
+		for _, mount := range volume.MountList {
+			applicationInfo := mount.ApplicationInfo
+			mountTable.Append([]string{mount.MountPath, strconv.FormatBool(mount.ReadOnly), applicationInfo.Id, applicationInfo.Name})
+		}
+
+		mountTable.Render()
+	}
+
 }
