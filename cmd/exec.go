@@ -83,7 +83,7 @@ var execCmd = &cobra.Command{
 		} else {
 			workspaceId, err := util.GetWorkspaceId(cmd)
 			if err != nil {
-				return err
+				return cmdError.NewCmdError(1, err.Error())
 			}
 
 			command, err := cmd.Flags().GetString("command")

@@ -105,7 +105,7 @@ func getWorkspace(cmd *cobra.Command) error {
 func getApplication(cmd *cobra.Command) error {
 	workspaceId, err := util.GetWorkspaceId(cmd)
 	if err != nil {
-		return err
+		return cmdError.NewCmdError(1, err.Error())
 	}
 
 	applicationId, err := cmd.Flags().GetString("id")
@@ -150,7 +150,7 @@ func getApplication(cmd *cobra.Command) error {
 func getDomain(cmd *cobra.Command) error {
 	workspaceId, err := util.GetWorkspaceId(cmd)
 	if err != nil {
-		return err
+		return cmdError.NewCmdError(1, err.Error())
 	}
 
 	domainListResponse, err := exec.GetDomains(workspaceId)

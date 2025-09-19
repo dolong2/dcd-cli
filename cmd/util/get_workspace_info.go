@@ -3,7 +3,6 @@ package util
 import (
 	"encoding/json"
 	"errors"
-	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -13,7 +12,7 @@ func GetWorkspaceId(cmd *cobra.Command) (string, error) {
 	if err != nil || workspaceId == "" {
 		workspaceId, err = getWorkspaceInfo()
 		if err != nil {
-			return "", cmdError.NewCmdError(1, "워크스페이스 아이디가 입력되어야합니다.")
+			return "", errors.New("워크스페이스 아이디가 입력되어야합니다.")
 		}
 	}
 	return workspaceId, nil

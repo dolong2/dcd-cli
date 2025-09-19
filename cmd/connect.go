@@ -18,7 +18,7 @@ var connectCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
-			return err
+			return cmdError.NewCmdError(1, err.Error())
 		}
 
 		if len(args) != 2 {
