@@ -27,3 +27,25 @@ func GetVolumeList(workspaceId string) (*response.VolumeListResponse, error) {
 
 	return &volumeListResponse, nil
 }
+
+func GetVolume(workspaceId string, volumeId string) (*response.VolumeDetailResponse, error) {
+	header := make(map[string]string)
+	accessToken, err := GetAccessToken()
+	if err != nil {
+		return nil, err
+	}
+	header["Authorization"] = "Bearer " + accessToken
+
+	result, err := api.SendGet("/"+workspaceId+"/volume/"+volumeId, header, map[string]string{})
+	if err != nil {
+		return nil, err
+	}
+
+	var volumeDetailResponse response.VolumeDetailResponse
+	err = json.Unmarshal(result, &volumeDetailResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &volumeDetailResponse, nil
+}
