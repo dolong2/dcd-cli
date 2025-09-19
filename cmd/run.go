@@ -16,7 +16,7 @@ var runCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		workspaceId, err := util.GetWorkspaceId(cmd)
 		if err != nil {
-			return err
+			return cmdError.NewCmdError(1, err.Error())
 		}
 
 		labels, err := cmd.Flags().GetStringArray("label")
