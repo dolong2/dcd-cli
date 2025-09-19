@@ -61,6 +61,11 @@ var getCmd = &cobra.Command{
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+		case resourceType.IsEqual(resource.VOLUME):
+			err := getVolume(cmd)
+			if err != nil {
+				return cmdError.NewCmdError(1, err.Error())
+			}
 		default:
 			return cmdError.NewCmdError(1, "조회할 수 없는 리소스 타입입니다.")
 		}
