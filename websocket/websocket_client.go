@@ -9,8 +9,10 @@ import (
 	"os/signal"
 )
 
+var baseUrl string
+
 func Connect(applicationId string) (*websocket.Conn, error) {
-	serverUrl := "wss://dcd-api.dolong2.co.kr/application/exec?applicationId=" + applicationId
+	serverUrl := baseUrl + "/application/exec?applicationId=" + applicationId
 
 	header := http.Header{}
 	accessToken, err := exec.GetAccessToken()

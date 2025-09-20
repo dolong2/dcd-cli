@@ -26,7 +26,7 @@ fi
 cd "$TEMP_DIR" || exit 1
 
 echo "Go 빌드 중..."
-go build -ldflags="-X github.com/dolong2/dcd-cli/api.baseUrl=https://dcd-api.dolong2.co.kr" -o "$BINARY_NAME"
+go build -ldflags="-X github.com/dolong2/dcd-cli/api.baseUrl=https://dcd-api.dolong2.co.kr -X github.com/dolong2/dcd-cli/websocket.baseUrl=wss://dcd-api.dolong2.co.kr" -o "$BINARY_NAME"
 
 if [ ! -f "$BINARY_NAME" ]; then
   echo "빌드 실패"
