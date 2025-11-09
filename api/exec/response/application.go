@@ -16,6 +16,7 @@ type ApplicationResponse struct {
 	Version         string            `json:"version"`
 	Status          string            `json:"status"`
 	FailureReason   string            `json:"failureReason"`
+	InitialScripts  []string          `json:"initialScripts"`
 	Labels          []string          `json:"labels"`
 }
 
