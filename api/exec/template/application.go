@@ -23,6 +23,7 @@ type applicationSpecTemplate struct {
 	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
 	Port            int      `json:"port" yaml:"port"`
 	Version         string   `json:"version" yaml:"version"`
+	InitialScripts  []string `json:"initialScripts" yaml:"initialScripts"`
 	Labels          []string `json:"labels" yaml:"labels"`
 }
 
@@ -39,6 +40,7 @@ func (template ApplicationTemplate) ToRequest() (*request.ApplicationRequest, er
 		ApplicationType: template.Spec.ApplicationType,
 		Port:            template.Spec.Port,
 		Version:         template.Spec.Version,
+		InitialScripts:  template.Spec.InitialScripts,
 		Labels:          template.Spec.Labels,
 	}, nil
 }
