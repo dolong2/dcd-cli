@@ -7,6 +7,6 @@ type ApplicationRequest struct {
 	ApplicationType string   `json:"applicationType"`
 	Port            int      `json:"port"`
 	Version         string   `json:"version"`
-	InitialScripts  []string `json:"initialScript"`
+	InitialScripts  []string `json:"initialScripts"`
 	Labels          []string `json:"labels"`
 }
