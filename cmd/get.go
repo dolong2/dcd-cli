@@ -240,6 +240,7 @@ func printApplication(application response.ApplicationResponse) {
 	version := []string{"Version", application.Version}
 	status := []string{"Status", application.Status}
 	failureReason := []string{"Failure Reason", application.FailureReason}
+	failureReasonDetail := []string{"Failure Reason Detail", application.FailureReasonDetail}
 
 	table.Append(id)
 	table.Append(name)
@@ -261,6 +262,7 @@ func printApplication(application response.ApplicationResponse) {
 	table.Append(version)
 	table.Append(status)
 	table.Append(failureReason)
+	table.Append(failureReasonDetail)
 
 	table.Render()
 }
