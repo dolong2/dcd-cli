@@ -2,9 +2,10 @@ package exec
 
 import (
 	"encoding/json"
+	"strings"
+
 	"github.com/dolong2/dcd-cli/api"
 	"github.com/dolong2/dcd-cli/api/exec/response"
-	"strings"
 )
 
 func GetApplications(workspaceId string) (*response.ApplicationListResponse, error) {
@@ -54,7 +55,7 @@ func GetApplicationsByLabels(workspaceId string, labels []string) (*response.App
 	return &applicationListResponse, nil
 }
 
-func GetApplication(workspaceId string, applicationId string) (*response.ApplicationResponse, error) {
+func GetApplication(workspaceId string, applicationId string) (*response.ApplicationDetailResponse, error) {
 	header := make(map[string]string)
 	accessToken, err := GetAccessToken()
 	if err != nil {
@@ -67,11 +68,11 @@ func GetApplication(workspaceId string, applicationId string) (*response.Applica
 		return nil, err
 	}
 
-	var applicationResponse response.ApplicationResponse
-	err = json.Unmarshal(result, &applicationResponse)
+	var applicationDetailResponse response.ApplicationDetailResponse
+	err = json.Unmarshal(result, &applicationDetailResponse)
 	if err != nil {
 		return nil, err
 	}
 
-	return &applicationResponse, nil
+	return &applicationDetailResponse, nil
 }
