@@ -21,8 +21,21 @@ type ApplicationDetailResponse struct {
 	Labels              []string          `json:"labels"`
 }
 
+type ApplicationResponse struct {
+	Id              string    `json:"id"`
+	Name            string    `json:"name"`
+	Description     string    `json:"description"`
+	ApplicationType string    `json:"applicationType"`
+	GithubUrl       string    `json:"githubUrl"`
+	Port            int       `json:"port"`
+	ExternalPort    int       `json:"externalPort"`
+	Version         string    `json:"version"`
+	Status          string    `json:"status"`
+	Labels          []string  `json:"labels"`
+}
+
 type ApplicationListResponse struct {
-	Applications []ApplicationDetailResponse `json:"list"`
+	Applications []ApplicationResponse `json:"list"`
 }
 
 type applicationSimpleResponse struct {

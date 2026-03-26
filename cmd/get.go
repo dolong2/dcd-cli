@@ -268,7 +268,7 @@ func printApplication(application response.ApplicationDetailResponse) {
 	table.Render()
 }
 
-func printApplicationList(applicationList []response.ApplicationDetailResponse) {
+func printApplicationList(applicationList []response.ApplicationResponse) {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAutoWrapText(false)
 	table.SetAlignment(tablewriter.ALIGN_CENTER)
