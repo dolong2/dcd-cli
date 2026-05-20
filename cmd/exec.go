@@ -9,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"os/signal"
-	"strings"
 )
 
 // execCmd represents the exec command
@@ -30,55 +29,56 @@ var execCmd = &cobra.Command{
 		}
 
 		if ws {
-			workingDir := "/"
 			conn, err := websocket.Connect(applicationId)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
 			}
+			defer websocket.Close(conn)
+
 			// 인터럽트 신호를 받기 위한 채널
 			interrupt := make(chan os.Signal, 1)
 			signal.Notify(interrupt, os.Interrupt)
 
-			// 사용자 입력을 기다리며 메시지를 서버로 전송
-			reader := bufio.NewReader(os.Stdin)
-			for {
-				cmd.Print(workingDir + " > ")
-				input, _, _ := reader.ReadLine() // 사용자 입력 받기
+			// 에러를 전송받기 위한 채널
+			errChan := make(chan error, 1)
 
-				// 인터럽트 신호 처리 (Ctrl+C)
-				select {
-				case <-interrupt:
-					err := websocket.Close(conn)
-					if err != nil {
-						return cmdError.NewCmdError(1, err.Error())
-					}
-					return nil
-				default:
-				}
-
-				err := websocket.SendMessage(conn, string(input))
-				if err != nil {
-					return cmdError.NewCmdError(1, err.Error())
-				}
-
+			// [1] 메시지 수신을 위한 독립적인 고루틴 실행
+			go func() {
 				for {
-					workingDirPrefix := "current dir = "
-					endPrefix := "cmd end"
 					message, err := websocket.ReadMessage(conn)
 					if err != nil {
-						return cmdError.NewCmdError(1, err.Error())
+						errChan <- err
+						return
 					}
-					if strings.HasPrefix(message, workingDirPrefix) {
-						workingDir = strings.TrimPrefix(message, workingDirPrefix)
-						continue
-					} else if strings.HasPrefix(message, endPrefix) {
-						break
-					}
-
-					cmd.Print(message)
+					// 서버가 빈 메시지를 주든 아니든, 오는 대로 바로 출력
+					cmd.Print(message) 
 				}
+			}()
 
-				cmd.Println()
+			// [2] 메시지 송신 루프 (메인 흐름)
+			go func() {
+				reader := bufio.NewReader(os.Stdin)
+				for {
+					input, _, err := reader.ReadLine()
+					if err != nil {
+						errChan <- err
+						return
+					}
+
+					err = websocket.SendMessage(conn, string(input))
+					if err != nil {
+						errChan <- err
+						return
+					}
+				}
+			}()
+
+			// [3] 인터럽트 및 에러 대기 제어
+			select {
+			case <-interrupt:
+				return nil
+			case err := <-errChan:
+				return cmdError.NewCmdError(1, err.Error())
 			}
 		} else {
 			workspaceId, err := util.GetWorkspaceId(cmd)
