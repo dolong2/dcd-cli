@@ -26,6 +26,7 @@ var getCmd = &cobra.Command{
 	type(ts) - 애플리케이션의 타입 종류를 나타내는 리소스 타입입니다.
 	domain(dom) - 해당 리소스타입은 애플리케이션을 HTTPS로 외부에 공개할때 사용되는 리소스 타입입니다.
 	env - 애플리케이션에서 사용될 수 있는 환경변수를 나타내는 리소스 타입입니다.
+	volume(vol) - 애플리케이션의 영속성있는 저장 공간을 선언하는 리소스 타입입니다.
 `,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
