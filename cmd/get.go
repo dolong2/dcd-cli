@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"strings"
+
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/resource"
 	"github.com/dolong2/dcd-cli/cmd/util"
@@ -24,7 +26,7 @@ var getCmd = &cobra.Command{
 		if len(args) == 0 {
 			return cmdError.NewCmdError(1, "리소스 타입이 입력되어야 합니다.")
 		}
-		resourceType := resource.Type(args[0])
+		resourceType := resource.Type(strings.ToLower(args[0]))
 		if !resourceType.IsValid() {
 			return cmdError.NewCmdError(1, "올바르지 않은 리소스 타입입니다.")
 		}

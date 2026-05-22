@@ -4,12 +4,12 @@ type Type string
 type definedType []string
 
 var (
-	Workspace       = definedType{"WORKSPACE", "workspace", "workspaces", "ws"}
-	Application     = definedType{"APPLICATION", "application", "applications", "app"}
-	Env             = definedType{"ENV", "environment", "environments", "env"}
-	Domain          = definedType{"DOMAIN", "domain", "domains", "dom"}
-	ApplicationType = definedType{"TYPE", "type", "types", "ts"}
-	VOLUME          = definedType{"VOLUME", "volume", "volumes", "vol"}
+	Workspace       = definedType{"workspace", "workspaces", "ws"}
+	Application     = definedType{"application", "applications", "app"}
+	Env             = definedType{"environment", "environments", "env"}
+	Domain          = definedType{"domain", "domains", "dom"}
+	ApplicationType = definedType{"type", "types", "ts"}
+	VOLUME          = definedType{"volume", "volumes", "vol"}
 )
 
 var allResourceTypes = []definedType{Workspace, Application, Env, Domain, ApplicationType, VOLUME}
