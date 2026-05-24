@@ -2,13 +2,15 @@ package cmd
 
 import (
 	"bufio"
+	"context"
+	"os"
+	"os/signal"
+
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/util"
 	"github.com/dolong2/dcd-cli/websocket"
 	"github.com/spf13/cobra"
-	"os"
-	"os/signal"
 )
 
 // execCmd represents the exec command
@@ -29,6 +31,9 @@ var execCmd = &cobra.Command{
 		}
 
 		if ws {
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+
 			conn, err := websocket.Connect(applicationId)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
@@ -45,13 +50,17 @@ var execCmd = &cobra.Command{
 			// [1] 메시지 수신을 위한 독립적인 고루틴 실행
 			go func() {
 				for {
-					message, err := websocket.ReadMessage(conn)
-					if err != nil {
-						errChan <- err
+					select {
+					case <-ctx.Done():
 						return
+					default:
+						message, err := websocket.ReadMessage(conn)
+						if err != nil {
+							errChan <- err
+							return
+						}
+						cmd.Print(message)
 					}
-					// 서버가 빈 메시지를 주든 아니든, 오는 대로 바로 출력
-					cmd.Print(message) 
 				}
 			}()
 
@@ -59,16 +68,21 @@ var execCmd = &cobra.Command{
 			go func() {
 				reader := bufio.NewReader(os.Stdin)
 				for {
-					input, _, err := reader.ReadLine()
-					if err != nil {
-						errChan <- err
+					select {
+					case <-ctx.Done():
 						return
-					}
+					default:
+						input, _, err := reader.ReadLine()
+						if err != nil {
+							errChan <- err
+							return
+						}
 
-					err = websocket.SendMessage(conn, string(input))
-					if err != nil {
-						errChan <- err
-						return
+						err = websocket.SendMessage(conn, string(input))
+						if err != nil {
+							errChan <- err
+							return
+						}
 					}
 				}
 			}()
