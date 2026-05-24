@@ -1,9 +1,11 @@
 package websocket
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/dolong2/dcd-cli/api/exec"
 	"github.com/gorilla/websocket"
-	"net/http"
 )
 
 var baseUrl string
@@ -27,7 +29,16 @@ func Connect(applicationId string) (*websocket.Conn, error) {
 }
 
 func Close(conn *websocket.Conn) error {
-	return conn.Close()
+	err := conn.SetWriteDeadline(time.Now().Add(time.Second))
+	if err != nil {
+		return err
+	}
+    err = conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+    if err != nil {
+        return err
+    }
+    err = conn.Close()
+    return err
 }
 
 func SendMessage(conn *websocket.Conn, message string) error {
