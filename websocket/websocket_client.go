@@ -1,12 +1,9 @@
 package websocket
 
 import (
-	"fmt"
 	"github.com/dolong2/dcd-cli/api/exec"
 	"github.com/gorilla/websocket"
 	"net/http"
-	"os"
-	"os/signal"
 )
 
 var baseUrl string
@@ -34,20 +31,6 @@ func Close(conn *websocket.Conn) error {
 }
 
 func SendMessage(conn *websocket.Conn, message string) error {
-	// 인터럽트 신호를 받기 위한 채널
-	interrupt := make(chan os.Signal, 1)
-	signal.Notify(interrupt, os.Interrupt)
-
-	select {
-	case <-interrupt:
-		fmt.Println("인터럽트 신호를 받았습니다.\n커넥션을 종료합니다...")
-		err := conn.Close()
-		if err != nil {
-			return err
-		}
-		return nil
-	default:
-	}
 	return conn.WriteMessage(websocket.TextMessage, []byte(message))
 }
 

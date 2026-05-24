@@ -2,13 +2,15 @@ package cmd
 
 import (
 	"bufio"
+	"context"
+	"os"
+	"os/signal"
+
 	"github.com/dolong2/dcd-cli/api/exec"
 	cmdError "github.com/dolong2/dcd-cli/cmd/err"
 	"github.com/dolong2/dcd-cli/cmd/util"
 	"github.com/dolong2/dcd-cli/websocket"
 	"github.com/spf13/cobra"
-	"os"
-	"os/signal"
 )
 
 // execCmd represents the exec command
@@ -29,6 +31,9 @@ var execCmd = &cobra.Command{
 		}
 
 		if ws {
+			ctx, cancel := context.WithCancel(context.Background())
+			defer cancel()
+
 			conn, err := websocket.Connect(applicationId)
 			if err != nil {
 				return cmdError.NewCmdError(1, err.Error())
@@ -45,30 +50,57 @@ var execCmd = &cobra.Command{
 			// [1] 메시지 수신을 위한 독립적인 고루틴 실행
 			go func() {
 				for {
-					message, err := websocket.ReadMessage(conn)
-					if err != nil {
-						errChan <- err
+					select {
+					case <-ctx.Done():
 						return
+					default:
+						message, err := websocket.ReadMessage(conn)
+						if err != nil {
+							errChan <- err
+							return
+						}
+						cmd.Print(message)
 					}
-					// 서버가 빈 메시지를 주든 아니든, 오는 대로 바로 출력
-					cmd.Print(message) 
 				}
 			}()
 
 			// [2] 메시지 송신 루프 (메인 흐름)
 			go func() {
-				reader := bufio.NewReader(os.Stdin)
-				for {
-					input, _, err := reader.ReadLine()
-					if err != nil {
-						errChan <- err
-						return
-					}
+				type lineResult struct {
+					line string
+					err  error
+				}
+				lineChan := make(chan lineResult, 1)
 
-					err = websocket.SendMessage(conn, string(input))
-					if err != nil {
-						errChan <- err
+				reader := bufio.NewReader(os.Stdin)
+				// stdin 읽기 전용 내부 고루틴: ReadLine이 블로킹되므로 분리
+				go func() {
+					for {
+						line, _, err := reader.ReadLine()
+						select {
+						case lineChan <- lineResult{string(line), err}:
+						case <-ctx.Done():
+							return
+						}
+						if err != nil {
+							return
+						}
+					}
+				}()
+
+				for {
+					select {
+					case <-ctx.Done():
 						return
+					case result := <-lineChan:
+						if result.err != nil {
+							errChan <- result.err
+							return
+						}
+						if err := websocket.SendMessage(conn, result.line); err != nil {
+							errChan <- err
+							return
+						}
 					}
 				}
 			}()
@@ -76,6 +108,7 @@ var execCmd = &cobra.Command{
 			// [3] 인터럽트 및 에러 대기 제어
 			select {
 			case <-interrupt:
+				cmd.Println()
 				return nil
 			case err := <-errChan:
 				return cmdError.NewCmdError(1, err.Error())
