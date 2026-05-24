@@ -76,6 +76,7 @@ var execCmd = &cobra.Command{
 			// [3] 인터럽트 및 에러 대기 제어
 			select {
 			case <-interrupt:
+				cmd.Println()
 				return nil
 			case err := <-errChan:
 				return cmdError.NewCmdError(1, err.Error())
