@@ -66,20 +66,38 @@ var execCmd = &cobra.Command{
 
 			// [2] 메시지 송신 루프 (메인 흐름)
 			go func() {
+				type lineResult struct {
+					line string
+					err  error
+				}
+				lineChan := make(chan lineResult, 1)
+
 				reader := bufio.NewReader(os.Stdin)
+				// stdin 읽기 전용 내부 고루틴: ReadLine이 블로킹되므로 분리
+				go func() {
+					for {
+						line, _, err := reader.ReadLine()
+						select {
+						case lineChan <- lineResult{string(line), err}:
+						case <-ctx.Done():
+							return
+						}
+						if err != nil {
+							return
+						}
+					}
+				}()
+
 				for {
 					select {
 					case <-ctx.Done():
 						return
-					default:
-						input, _, err := reader.ReadLine()
-						if err != nil {
-							errChan <- err
+					case result := <-lineChan:
+						if result.err != nil {
+							errChan <- result.err
 							return
 						}
-
-						err = websocket.SendMessage(conn, string(input))
-						if err != nil {
+						if err := websocket.SendMessage(conn, result.line); err != nil {
 							errChan <- err
 							return
 						}
