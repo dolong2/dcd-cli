@@ -51,6 +51,21 @@ func printApplication(application response.ApplicationDetailResponse) {
 	table.Append(failureReasonDetail)
 
 	table.Render()
+
+	if len(application.InitialScripts) != 0 {
+		initialScriptsTable := tablewriter.NewWriter(os.Stdout)
+		initialScriptsTable.SetAutoWrapText(false)
+		initialScriptsTable.SetAlignment(tablewriter.ALIGN_CENTER)
+
+		initialScriptsTable.SetHeader([]string{"InitialScripts"})
+
+		for _, initialScript := range application.InitialScripts {
+			initialScriptsTable.Append([]string{initialScript})
+		}
+
+
+		initialScriptsTable.Render()	
+	}
 }
 
 func printApplicationList(applicationList []response.ApplicationResponse) {
