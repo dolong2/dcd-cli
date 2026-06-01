@@ -37,9 +37,6 @@ func printApplication(application response.ApplicationDetailResponse) {
 		env := []string{"ENV", key + " : " + value}
 		table.Append(env)
 	}
-	for _, initialScript := range application.InitialScripts {
-		table.Append([]string{"Initial Script", initialScript})
-	}
 	for _, label := range application.Labels {
 		table.Append([]string{"Label", label})
 	}
