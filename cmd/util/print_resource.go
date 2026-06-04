@@ -45,6 +45,21 @@ func printApplication(application response.ApplicationDetailResponse) {
 
 	table.Render()
 
+	if len(application.Env) != 0 {
+		envTable := tablewriter.NewWriter(os.Stdout)
+		envTable.SetAutoWrapText(false)
+		envTable.SetAlignment(tablewriter.ALIGN_LEFT)
+
+		envTable.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
+		envTable.SetHeader([]string{"ENV"})
+
+		for key, value := range application.Env {
+			envTable.Append([]string{key + " : " + value})
+		}
+
+		envTable.Render()
+	}
+
 	if len(application.InitialScripts) != 0 {
 		initialScriptsTable := tablewriter.NewWriter(os.Stdout)
 		initialScriptsTable.SetAutoWrapText(false)
