@@ -33,10 +33,6 @@ func printApplication(application response.ApplicationDetailResponse) {
 	table.Append(description)
 	table.Append(applicationType)
 	table.Append(githubUrl)
-	for key, value := range application.Env {
-		env := []string{"ENV", key + " : " + value}
-		table.Append(env)
-	}
 	for _, label := range application.Labels {
 		table.Append([]string{"Label", label})
 	}
@@ -48,6 +44,21 @@ func printApplication(application response.ApplicationDetailResponse) {
 	table.Append(failureReasonDetail)
 
 	table.Render()
+
+	if len(application.Env) != 0 {
+		envTable := tablewriter.NewWriter(os.Stdout)
+		envTable.SetAutoWrapText(false)
+		envTable.SetAlignment(tablewriter.ALIGN_LEFT)
+
+		envTable.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
+		envTable.SetHeader([]string{"ENV"})
+
+		for key, value := range application.Env {
+			envTable.Append([]string{key + " : " + value})
+		}
+
+		envTable.Render()
+	}
 
 	if len(application.InitialScripts) != 0 {
 		initialScriptsTable := tablewriter.NewWriter(os.Stdout)
