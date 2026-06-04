@@ -33,10 +33,6 @@ func printApplication(application response.ApplicationDetailResponse) {
 	table.Append(description)
 	table.Append(applicationType)
 	table.Append(githubUrl)
-	for key, value := range application.Env {
-		env := []string{"ENV", key + " : " + value}
-		table.Append(env)
-	}
 	for _, label := range application.Labels {
 		table.Append([]string{"Label", label})
 	}
