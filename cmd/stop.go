@@ -45,4 +45,6 @@ var stopCmd = &cobra.Command{
 
 func init() {
 	applicationCmd.AddCommand(stopCmd)
+
+	stopCmd.PersistentFlags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n이 플래그를 사용할때 명시한 애플리케이션 아이디는 무시됩니다.\nex). -l test-label-1 -l test-label-2")
 }
