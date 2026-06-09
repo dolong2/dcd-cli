@@ -10,8 +10,8 @@ const volumeId contextKey = "volume"
 
 var volumeCmd = &cobra.Command{
 	Use:   "volume",
-	Short: "애플리케이션 관련 작업을 식별하기 위한 커맨드",
-	Long:  `애플리케이션에 관련된 작업을 수행하는 커맨드입니다.`,
+	Short: "볼륨 관련 작업을 식별하기 위한 커맨드",
+	Long:  `볼륨에 관련된 작업을 수행하는 커맨드입니다.`,
 	Aliases: []string{"vol"},
 	TraverseChildren: true,
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
