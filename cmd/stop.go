@@ -31,10 +31,10 @@ var stopCmd = &cobra.Command{
 			return nil
 		}
 
-		if len(args) == 0 {
+		applicationId, ok := cmd.Context().Value(applicationId).(string)
+		if !ok {
 			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
 		}
-		applicationId := args[0]
 		err = exec.StopApplication(workspaceId, applicationId)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
@@ -44,8 +44,5 @@ var stopCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(stopCmd)
-
-	stopCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
-	stopCmd.Flags().StringArrayP("label", "l", []string{}, "애플리케이션을 식별하기위한 라벨.\n이 플래그를 사용한다면 명시한 애플리케이션 아이디는 무시됩니다.\nex). -l test-label-1 -l test-label-2")
+	applicationCmd.AddCommand(stopCmd)
 }
