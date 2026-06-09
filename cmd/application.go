@@ -6,12 +6,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// context에 값을 담을 때 사용할 전용 커스텀 타입 (충돌 방지)
-type contextKey string
 const applicationId contextKey = "application"
 
 var applicationCmd = &cobra.Command{
-	Use:   "application [applicationId]",
+	Use:   "application",
 	Short: "애플리케이션 관련 작업을 식별하기 위한 커맨드",
 	Long:  `애플리케이션에 관련된 작업을 수행하는 커맨드입니다.`,
 	Aliases: []string{"app"},

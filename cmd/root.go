@@ -28,6 +28,9 @@ import (
 	"os"
 )
 
+// context에 값을 담을 때 사용할 전용 커스텀 타입 (충돌 방지)
+type contextKey string
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "dcd",

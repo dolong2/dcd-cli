@@ -19,12 +19,9 @@ var unmountCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, err.Error())
 		}
 
-		if len(args) != 1 {
-			return cmdError.NewCmdError(1, "볼륨 아이디가 입력되지 않았습니다.")
-		}
-		volumeId := args[0]
-		if volumeId == "" {
-			return cmdError.NewCmdError(1, "볼륨 아이디가 입력되지 않았습니다.")
+		volumeId, ok := cmd.Context().Value(volumeId).(string)
+		if !ok {
+			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
 		}
 
 		applicationId, err := cmd.Flags().GetString("application")
@@ -45,7 +42,7 @@ var unmountCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(unmountCmd)
+	volumeCmd.AddCommand(unmountCmd)
 
 	unmountCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 	unmountCmd.Flags().StringP("application", "a", "", "볼륨을 마운트할 애플리케이션 아이디")
