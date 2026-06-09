@@ -21,13 +21,11 @@ var disconnectCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, err.Error())
 		}
 
-		if len(args) == 0 {
+		domainId, ok := cmd.Context().Value(domainId).(string)
+		if !ok {
 			return cmdError.NewCmdError(1, "도메인 아이디가 입력되어야합니다.")
-		} else if len(args) > 1 {
-			return cmdError.NewCmdError(1, "도메인 아이디만 입력되어야합니다.")
 		}
-
-		domainId := args[0]
+		
 		err = exec.DisconnectDomain(workspaceId, domainId)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
@@ -38,7 +36,7 @@ var disconnectCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(disconnectCmd)
+	domainCmd.AddCommand(disconnectCmd)
 
 	disconnectCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 }
