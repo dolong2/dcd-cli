@@ -25,7 +25,10 @@ var connectCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, "필요한 인자는 2개입니다.\n커맨드 사용법을 확인해주세요.")
 		}
 
-		domainId := args[0]
+		domainId, ok := cmd.Context().Value(domainId).(string)
+		if !ok {
+			return cmdError.NewCmdError(1, "도메인 아이디가 입력되어야합니다.")
+		}
 		applicationId := args[1]
 
 		err = exec.ConnectDomain(workspaceId, domainId, applicationId)
@@ -38,7 +41,7 @@ var connectCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(connectCmd)
+	domainCmd.AddCommand(connectCmd)
 
 	connectCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 }

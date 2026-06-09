@@ -21,9 +21,9 @@ var mountCmd = &cobra.Command{
 		if len(args) != 2 {
 			return cmdError.NewCmdError(1, "볼륨 아이디 혹은 마운트 경로가 입력되지 않았습니다.")
 		}
-		volumeId := args[0]
-		if volumeId == "" {
-			return cmdError.NewCmdError(1, "볼륨 아이디가 입력되지 않았습니다.")
+		volumeId, ok := cmd.Context().Value(volumeId).(string)
+		if !ok {
+			return cmdError.NewCmdError(1, "볼륨 아이디가 입력되어야합니다.")
 		}
 		mountPath := args[1]
 		if mountPath == "" {
@@ -53,9 +53,8 @@ var mountCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(mountCmd)
+	volumeCmd.AddCommand(mountCmd)
 
-	mountCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 	mountCmd.Flags().StringP("application", "a", "", "볼륨을 마운트할 애플리케이션 아이디")
 	mountCmd.Flags().BoolP("readOnly", "", false, "읽기 전용으로 마운트")
 }

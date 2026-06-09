@@ -20,10 +20,10 @@ var execCmd = &cobra.Command{
 	Long: `이 커맨드는 애플리케이션에 커맨드를 실행할 수 있는 커맨드입니다.
 웹소켓을 통해서 애플리케이션 내부에 접근할 수 있습니다.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
+		applicationId, ok := cmd.Context().Value(applicationId).(string)
+		if !ok {
 			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
 		}
-		applicationId := args[0]
 
 		ws, err := cmd.Flags().GetBool("ws")
 		if err != nil {
@@ -139,9 +139,8 @@ var execCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(execCmd)
+	applicationCmd.AddCommand(execCmd)
 
 	execCmd.Flags().StringP("command", "c", "", "애플리케이션에 실행할 명령")
-	execCmd.Flags().StringP("workspace", "w", "", "워크스페이스 아이디")
 	execCmd.Flags().Bool("ws", false, "웹소켓 사용 여부")
 }
