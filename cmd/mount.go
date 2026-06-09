@@ -23,7 +23,7 @@ var mountCmd = &cobra.Command{
 		}
 		volumeId, ok := cmd.Context().Value(volumeId).(string)
 		if !ok {
-			return cmdError.NewCmdError(1, "애플리케이션 아이디가 입력되어야합니다.")
+			return cmdError.NewCmdError(1, "볼륨 아이디가 입력되어야합니다.")
 		}
 		mountPath := args[1]
 		if mountPath == "" {
