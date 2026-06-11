@@ -146,14 +146,20 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 
 		if envTemplate.Spec.ApplicationLabelList == nil && envTemplate.Spec.ApplicationIdList == nil {
 			return "", errors.New("애플리케이션 아이디 혹은 라벨이 입력되어야함")
-		} else {
-			_, err := api.SendPost("/"+workspaceId+"/env", header, map[string]string{}, request)
-			if err != nil {
-				return "", err
-			}
 		}
 
-		return "", nil
+		result, err := api.SendPost("/"+workspaceId+"/env", header, map[string]string{}, request)
+		if err != nil {
+			return "", err
+		}
+
+		putEnvResponse := response.PutEnvResponse{}
+		err = json.Unmarshal(result, &putEnvResponse)
+		if err != nil {
+			return "", err
+		}
+
+		return putEnvResponse.EnvId, nil
 	case "DOMAIN":
 		var domainTemplate template.DomainTemplate
 		err := unmarshal(content, &domainTemplate)
@@ -208,11 +214,18 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		_, err = api.SendPost("/"+workspaceId+"/volume", header, map[string]string{}, request)
+		result, err := api.SendPost("/"+workspaceId+"/volume", header, map[string]string{}, request)
 		if err != nil {
 			return "", err
 		}
-		return "", nil
+
+		createVolumeResponse := response.CreateVolumeResponse{}
+		err = json.Unmarshal(result, &createVolumeResponse)
+		if err != nil {
+			return "", err
+		}
+
+		return createVolumeResponse.VolumeId, nil
 	default:
 		return "", errors.New("지원되지 않는 리소스 타입입니다")
 	}
