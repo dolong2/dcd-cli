@@ -1,5 +1,9 @@
 package response
 
+type PutEnvResponse struct {
+	EnvId string `json:"envId"`
+}
+
 type EnvListResponse struct {
 	List []envSimpleResponse `json:"list"`
 }
