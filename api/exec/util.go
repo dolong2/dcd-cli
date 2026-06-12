@@ -4,10 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
-	"path/filepath"
 	"time"
-
-	"gopkg.in/yaml.v3"
 )
 
 func GetAccessToken() (string, error) {
@@ -62,17 +59,4 @@ getTokenInfo:
 		RefreshTokenExp: refreshTokenExp,
 	}
 	return tokenInfo.AccessToken, nil
-}
-
-func resolveFileExtension(fileDirectory string) (func([]byte, interface{}) (err error), error) {
-	ext := filepath.Ext(fileDirectory)
-
-	switch ext {
-	case ".json":
-		return json.Unmarshal, nil
-	case ".yml", ".yaml":
-		return yaml.Unmarshal, nil
-	default:
-		return nil, errors.New("지원되지 않는 파일 확장자입니다.")
-	}
 }

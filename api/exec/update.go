@@ -27,7 +27,7 @@ func UpdateByPath(resourceId string, fileDirectory string) error {
 		return err
 	}
 
-	unmarshal, err := resolveFileExtension(fileDirectory)
+	unmarshal, err := util.ResolveFileExtension(fileDirectory)
 	if err != nil {
 		return err
 	}

@@ -17,7 +17,7 @@ func CreateByPath(fileDirectory string) error {
 		return err
 	}
 
-	unmarshal, err := resolveFileExtension(fileDirectory)
+	unmarshal, err := util.ResolveFileExtension(fileDirectory)
 	if err != nil {
 		return err
 	}
