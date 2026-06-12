@@ -1,5 +1,9 @@
 package response
 
+type CreateVolumeResponse struct {
+	VolumeId string `json:"volumeId"`
+}
+
 type VolumeListResponse struct {
 	List []volumeSimpleResponse `json:"list"`
 }
