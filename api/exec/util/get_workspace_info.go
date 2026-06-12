@@ -19,7 +19,15 @@ func GetWorkspaceId() (string, error) {
 		return "", errors.New("워크스페이스 정보가 올바르지 않습니다.")
 	}
 
-	workspaceId := workspaceInfo["workspaceId"].(string)
+	val, ok := workspaceInfo["workspaceId"]
+    if !ok {
+        return "", errors.New("워크스페이스 ID(workspaceId) 키가 존재하지 않습니다.")
+    }
+
+    workspaceId, ok := val.(string)
+    if !ok {
+        return "", errors.New("워크스페이스 ID가 올바른 문자열 형식이 아닙니다.")
+    }
 
 	return workspaceId, nil
 }
