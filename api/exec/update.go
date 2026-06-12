@@ -3,11 +3,13 @@ package exec
 import (
 	"encoding/json"
 	"errors"
-	"github.com/dolong2/dcd-cli/api"
-	"github.com/dolong2/dcd-cli/api/exec/template"
-	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
+
+	"github.com/dolong2/dcd-cli/api"
+	"github.com/dolong2/dcd-cli/api/exec/template"
+	"github.com/dolong2/dcd-cli/api/exec/util"
+	"gopkg.in/yaml.v3"
 )
 
 func UpdateByTemplate(resourceId string, rawTemplate string) error {
@@ -35,7 +37,7 @@ func UpdateByPath(resourceId string, fileDirectory string) error {
 }
 
 func UpdateByOnlyPath(fileDirectory string) error {
-	resourceId, err := GetResourceIdByFilePath(fileDirectory)
+	resourceId, err := util.GetResourceIdByFilePath(fileDirectory)
 
 	if err != nil {
 		return errors.New("파일이랑 매핑되는 리소스 아이디가 존재하지 않습니다.")

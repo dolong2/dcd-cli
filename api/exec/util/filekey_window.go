@@ -8,7 +8,7 @@ import (
 	"syscall"
 )
 
-func GetFileKey(path string) (string, error) {
+func getFileKey(path string) (string, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return "", err

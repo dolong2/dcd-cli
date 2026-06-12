@@ -3,10 +3,12 @@ package exec
 import (
 	"encoding/json"
 	"errors"
+	"os"
+
 	"github.com/dolong2/dcd-cli/api"
 	"github.com/dolong2/dcd-cli/api/exec/response"
 	"github.com/dolong2/dcd-cli/api/exec/template"
-	"os"
+	"github.com/dolong2/dcd-cli/api/exec/util"
 )
 
 func CreateByPath(fileDirectory string) error {
@@ -25,7 +27,7 @@ func CreateByPath(fileDirectory string) error {
 	}
 
 	if resourceId != "" {
-		err := MapFileToResourceId(fileDirectory, resourceId)
+		err := util.MapFileToResourceId(fileDirectory, resourceId)
 		if err != nil {
 			return err
 		}
