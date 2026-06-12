@@ -105,7 +105,7 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 			return err
 		}
 	case "APPLICATION":
-		workspaceId, err := getWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId()
 		if err != nil {
 			return err
 		}
@@ -130,7 +130,7 @@ func update(resourceId string, content []byte, unmarshal func([]byte, interface{
 			return err
 		}
 	case "ENV":
-		workspaceId, err := getWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId()
 		if err != nil {
 			return err
 		}

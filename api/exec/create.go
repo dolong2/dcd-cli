@@ -106,7 +106,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		workspaceId, err := getWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId()
 		if err != nil {
 			return "", err
 		}
@@ -141,7 +141,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		workspaceId, err := getWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId()
 		if err != nil {
 			return "", err
 		}
@@ -178,7 +178,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		workspaceId, err := getWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId()
 		if err != nil {
 			return "", err
 		}
@@ -211,7 +211,7 @@ func create(content []byte, unmarshal func([]byte, interface{}) (err error)) (st
 			return "", err
 		}
 
-		workspaceId, err := getWorkspaceId()
+		workspaceId, err := util.GetWorkspaceId()
 		if err != nil {
 			return "", err
 		}
