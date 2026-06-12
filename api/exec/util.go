@@ -3,10 +3,12 @@ package exec
 import (
 	"encoding/json"
 	"errors"
-	"gopkg.in/yaml.v3"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/dolong2/dcd-cli/api/exec/util"
+	"gopkg.in/yaml.v3"
 )
 
 func GetAccessToken() (string, error) {
@@ -94,7 +96,11 @@ func MapFileToResourceId(fileDirectory string, resourceId string) error {
 		return errors.New("dcd-info 정보 디렉토리를 생성하는데 실패했습니다.")
 	}
 
-	fileName := filepath.Base(fileDirectory)
+	fileKey, err := util.GetFileKey(fileDirectory)
+	if err != nil {
+		return err
+	}
+
 	// JSON 파일 읽기 또는 파일이 없을 경우 새로 생성
 	file, err := os.ReadFile(resourceMappingInfoPath)
 	var data map[string]string
@@ -112,7 +118,7 @@ func MapFileToResourceId(fileDirectory string, resourceId string) error {
 	}
 
 	// 새로운 key:value 쌍 추가
-	data[fileName] = resourceId
+	data[fileKey] = resourceId
 
 	// 수정된 맵을 JSON으로 마셜링
 	updatedJSON, err := json.MarshalIndent(data, "", "  ")
@@ -144,8 +150,11 @@ func GetResourceIdByFilePath(fileDirectory string) (string, error) {
 		return "", err
 	}
 
-	templateName := filepath.Base(fileDirectory)
-	resourceId := data[templateName]
+	fileKey, err := util.GetFileKey(fileDirectory)
+	if err != nil {
+		return "", err
+	}
+	resourceId := data[fileKey]
 
 	if resourceId == "" {
 		return "", errors.New("해당 템플릿에 매핑된 리소스 아이디를 찾을 수 없음")
