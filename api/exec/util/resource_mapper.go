@@ -51,7 +51,11 @@ func MapFileToResourceId(fileDirectory string, resourceId string) error {
 	}
 
 	// JSON 파일에 저장
-	if err := os.WriteFile(resourceMappingInfoPath, updatedJSON, 0644); err != nil {
+	tmpPath := resourceMappingInfoPath + ".tmp"
+	if err := os.WriteFile(tmpPath, updatedJSON, 0644); err != nil {
+	   return err
+	}
+	if err := os.Rename(tmpPath, resourceMappingInfoPath); err != nil {
 		return err
 	}
 
