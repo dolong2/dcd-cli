@@ -8,6 +8,7 @@ type SendAuthCodeRequest struct {
 type CertificateAuthCodeRequest struct {
 	Email string `json:"email"`
 	Code  string `json:"code"`
+	Usage string `json:"usage"`
 }
 
 type SignUpRequest struct {

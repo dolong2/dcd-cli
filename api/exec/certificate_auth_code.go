@@ -6,8 +6,8 @@ import (
 	"github.com/dolong2/dcd-cli/api/exec/request"
 )
 
-func CertificateAuthCode(email string, code string) error {
-	certificateAuthCodeRequest, err := json.Marshal(request.CertificateAuthCodeRequest{Email: email, Code: code})
+func CertificateAuthCode(email string, code string, usage string) error {
+	certificateAuthCodeRequest, err := json.Marshal(request.CertificateAuthCodeRequest{Email: email, Code: code, Usage: usage})
 	if err != nil {
 		return err
 	}

@@ -34,7 +34,7 @@ var registerCmd = &cobra.Command{
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}
-		err = exec.CertificateAuthCode(email, authCode)
+		err = exec.CertificateAuthCode(email, authCode, "SIGNUP")
 		if err != nil {
 			cmd.Println(err.Error())
 			goto enterCode
