@@ -32,12 +32,12 @@ var fileAddCmd = &cobra.Command{
 			return cmdError.NewCmdError(1, "볼륨 내 저장할 경로가 입력되지 않았습니다.")
 		}
 
-		createDirectory, err := cmd.Flags().GetBool("createDirectory")
+		createDirectory, err := cmd.Flags().GetBool("directory")
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}
 
-		err = exec.UploadVolumeFile(workspaceId, volumeId, localFilePath, targetPath, createDirectory)
+		err = exec.UploadVolumeFile(cmd.Context(), workspaceId, volumeId, localFilePath, targetPath, createDirectory)
 		if err != nil {
 			return cmdError.NewCmdError(1, err.Error())
 		}
