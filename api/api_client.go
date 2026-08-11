@@ -2,10 +2,12 @@ package api
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	httpErr "github.com/dolong2/dcd-cli/api/err"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 )
@@ -62,18 +64,42 @@ func SendPut(targetUrl string, header map[string]string, param map[string]string
 	return result, nil
 }
 
-func sendHttpReq(method string, targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
-	if len(param) != 0 {
-		query := url.Values{}
-		for key, value := range param {
-			query.Add(key, value)
-		}
+func SendPostMultipart(ctx context.Context, targetUrl string, header map[string]string, param map[string]string, fileFieldName string, fileName string, fileContent io.Reader) ([]byte, error) {
+	pipeReader, pipeWriter := io.Pipe()
+	writer := multipart.NewWriter(pipeWriter)
 
-		targetUrl = fmt.Sprintf("%s?%s", targetUrl, query.Encode())
+	go func() {
+		part, err := writer.CreateFormFile(fileFieldName, fileName)
+		if err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		if _, err := io.Copy(part, fileContent); err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		if err := writer.Close(); err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		pipeWriter.Close()
+	}()
+
+	request, err := http.NewRequestWithContext(ctx, "POST", baseUrl+withQuery(targetUrl, param), pipeReader)
+	if err != nil {
+		return []byte(""), err
 	}
 
-	httpClient := &http.Client{}
-	request, err := http.NewRequest(method, baseUrl+targetUrl, bytes.NewBuffer(body))
+	request.Header.Set("Content-Type", writer.FormDataContentType())
+	for key, value := range header {
+		request.Header.Set(key, value)
+	}
+
+	return doRequest(request)
+}
+
+func sendHttpReq(method string, targetUrl string, header map[string]string, param map[string]string, body []byte) ([]byte, error) {
+	request, err := http.NewRequest(method, baseUrl+withQuery(targetUrl, param), bytes.NewBuffer(body))
 	if err != nil {
 		return []byte(""), err
 	}
@@ -83,6 +109,24 @@ func sendHttpReq(method string, targetUrl string, header map[string]string, para
 		request.Header.Set(key, value)
 	}
 
+	return doRequest(request)
+}
+
+func withQuery(targetUrl string, param map[string]string) string {
+	if len(param) == 0 {
+		return targetUrl
+	}
+
+	query := url.Values{}
+	for key, value := range param {
+		query.Add(key, value)
+	}
+
+	return fmt.Sprintf("%s?%s", targetUrl, query.Encode())
+}
+
+func doRequest(request *http.Request) ([]byte, error) {
+	httpClient := &http.Client{}
 	httpResponse, err := httpClient.Do(request)
 	if err != nil {
 		return []byte(""), err
