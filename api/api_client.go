@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	httpErr "github.com/dolong2/dcd-cli/api/err"
@@ -63,23 +64,28 @@ func SendPut(targetUrl string, header map[string]string, param map[string]string
 	return result, nil
 }
 
-// SendPostMultipart 파일 업로드와 같이 multipart/form-data로 파일을 전송해야 하는 요청에 사용
-func SendPostMultipart(targetUrl string, header map[string]string, param map[string]string, fileFieldName string, fileName string, fileContent io.Reader) ([]byte, error) {
-	body := &bytes.Buffer{}
-	writer := multipart.NewWriter(body)
+func SendPostMultipart(ctx context.Context, targetUrl string, header map[string]string, param map[string]string, fileFieldName string, fileName string, fileContent io.Reader) ([]byte, error) {
+	pipeReader, pipeWriter := io.Pipe()
+	writer := multipart.NewWriter(pipeWriter)
 
-	part, err := writer.CreateFormFile(fileFieldName, fileName)
-	if err != nil {
-		return []byte(""), err
-	}
-	if _, err := io.Copy(part, fileContent); err != nil {
-		return []byte(""), err
-	}
-	if err := writer.Close(); err != nil {
-		return []byte(""), err
-	}
+	go func() {
+		part, err := writer.CreateFormFile(fileFieldName, fileName)
+		if err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		if _, err := io.Copy(part, fileContent); err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		if err := writer.Close(); err != nil {
+			pipeWriter.CloseWithError(err)
+			return
+		}
+		pipeWriter.Close()
+	}()
 
-	request, err := http.NewRequest("POST", baseUrl+withQuery(targetUrl, param), body)
+	request, err := http.NewRequestWithContext(ctx, "POST", baseUrl+withQuery(targetUrl, param), pipeReader)
 	if err != nil {
 		return []byte(""), err
 	}
