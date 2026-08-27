@@ -9,7 +9,7 @@ type ApplicationDetailResponse struct {
 	Name                string            `json:"name"`
 	Description         string            `json:"description"`
 	ApplicationType     string            `json:"applicationType"`
-	GithubUrl           string            `json:"githubUrl"`
+	GitRepoUrl           string           `json:"gitRepoUrl"`
 	Env                 map[string]string `json:"env"`
 	Port                int               `json:"port"`
 	ExternalPort        int               `json:"externalPort"`
@@ -26,7 +26,7 @@ type ApplicationResponse struct {
 	Name            string    `json:"name"`
 	Description     string    `json:"description"`
 	ApplicationType string    `json:"applicationType"`
-	GithubUrl       string    `json:"githubUrl"`
+	GitRepoUrl       string   `json:"gitRepoUrl"`
 	Port            int       `json:"port"`
 	ExternalPort    int       `json:"externalPort"`
 	Version         string    `json:"version"`
