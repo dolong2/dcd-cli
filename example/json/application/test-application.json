@@ -5,7 +5,7 @@
     "description": "application created by json"
   },
   "spec": {
-    "githubUrl": "",
+    "gitRepoUrl": "",
     "applicationType": "REDIS",
     "port": 3306,
     "version": "latest",

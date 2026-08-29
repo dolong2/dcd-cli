@@ -19,7 +19,7 @@ func (template ApplicationTemplate) validateMetadata() error {
 }
 
 type applicationSpecTemplate struct {
-	GithubUrl       string   `json:"githubUrl" yaml:"githubUrl"`
+	GitRepoUrl      string   `json:"gitRepoUrl" yaml:"gitRepoUrl"`
 	ApplicationType string   `json:"applicationType" yaml:"applicationType"`
 	Port            int      `json:"port" yaml:"port"`
 	Version         string   `json:"version" yaml:"version"`
@@ -36,7 +36,7 @@ func (template ApplicationTemplate) ToRequest() (*request.ApplicationRequest, er
 	return &request.ApplicationRequest{
 		Name:            *template.Metadata.Name,
 		Description:     *template.Metadata.Description,
-		GithubUrl:       template.Spec.GithubUrl,
+		GitRepoUrl:      template.Spec.GitRepoUrl,
 		ApplicationType: template.Spec.ApplicationType,
 		Port:            template.Spec.Port,
 		Version:         template.Spec.Version,

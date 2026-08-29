@@ -20,7 +20,7 @@ func printApplication(application response.ApplicationDetailResponse) {
 	name := []string{"Name", application.Name}
 	description := []string{"Description", application.Description}
 	applicationType := []string{"Application Type", application.ApplicationType}
-	githubUrl := []string{"GitHub Url", application.GithubUrl}
+	gitRepoUrl := []string{"Git Repo Url", application.GitRepoUrl}
 	port := []string{"Port", strconv.Itoa(application.Port)}
 	externalPort := []string{"External Port", strconv.Itoa(application.ExternalPort)}
 	version := []string{"Version", application.Version}
@@ -32,7 +32,7 @@ func printApplication(application response.ApplicationDetailResponse) {
 	table.Append(name)
 	table.Append(description)
 	table.Append(applicationType)
-	table.Append(githubUrl)
+	table.Append(gitRepoUrl)
 	for _, label := range application.Labels {
 		table.Append([]string{"Label", label})
 	}
@@ -81,7 +81,7 @@ func printApplicationList(applicationList []response.ApplicationResponse) {
 	table.SetAutoWrapText(false)
 	table.SetAlignment(tablewriter.ALIGN_CENTER)
 
-	table.SetHeader([]string{"ID", "Name", "Description", "Application Type", "Github URL", "Port", "External Port", "Version", "Status", "Labels"})
+	table.SetHeader([]string{"ID", "Name", "Description", "Application Type", "Git Repo URL", "Port", "External Port", "Version", "Status", "Labels"})
 
 	for _, application := range applicationList {
 		labels := application.Labels
@@ -99,7 +99,7 @@ func printApplicationList(applicationList []response.ApplicationResponse) {
 			application.Name,
 			application.Description,
 			application.ApplicationType,
-			application.GithubUrl,
+			application.GitRepoUrl,
 			strconv.Itoa(application.Port),
 			strconv.Itoa(application.ExternalPort),
 			application.Version,

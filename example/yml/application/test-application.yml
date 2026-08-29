@@ -3,7 +3,7 @@ metadata:
   name: test application with yml
   description: application created by yml
 spec:
-  githubUrl: ''
+  gitRepoUrl: ''
   applicationType: REDIS
   port: 3306
   version: latest
